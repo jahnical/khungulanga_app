@@ -8,6 +8,7 @@ import 'package:khungulanga_app/widgets/appointment/appointments_page.dart';
 import 'package:khungulanga_app/widgets/dermatologists/dermatologists_list.dart';
 import 'package:khungulanga_app/widgets/diseases/diseases_page.dart';
 import 'package:khungulanga_app/widgets/history/history_page.dart';
+import 'package:khungulanga_app/widgets/notification/notifications_page.dart';
 import '../profile/patient_profile.dart';
 import '../scan/scan_page.dart';
 
@@ -21,7 +22,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<String> _titles = ['History', 'Scan', 'Dermatologists'];
 
-  final List<Widget> _pages = [const HistoryPage(), const ScanPage(), DermatologistList(userLocation: [0.0, 0.0],),];
+  final List<Widget> _pages = [const HistoryPage(), ScanPage(), DermatologistList(userLocation: [0.0, 0.0],),];
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +36,7 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(Icons.notifications),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => AppointmentChats(),
+                      builder: (context) => NotificationsPage(),
                     ));
                   },
                 ),
@@ -183,7 +184,11 @@ class _HomePageState extends State<HomePage> {
     return BottomNavigationBar(
       currentIndex: _getCurrentIndex(),
       onTap: (int index) {
-        context.read<HomeNavigationBloc>().add(events[index]);
+        if (index == 1 && _getCurrentIndex() == 1) {
+          (_pages[1] as ScanPage).captureCall();
+        } else {
+          context.read<HomeNavigationBloc>().add(events[index]);
+        }
       },
       items: const [
         BottomNavigationBarItem(
@@ -191,9 +196,9 @@ class _HomePageState extends State<HomePage> {
           label: 'History',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.camera_alt, size: 42, color: Colors.purpleAccent,),
+          icon: Icon(Icons.camera, size: 42, color: Colors.purpleAccent,),
           label: 'Scan',
-          activeIcon: Icon(Icons.camera_alt, size: 42),
+          activeIcon: Icon(Icons.camera, size: 42),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.people),

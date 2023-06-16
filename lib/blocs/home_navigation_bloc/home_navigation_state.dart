@@ -12,3 +12,5 @@ class HomeNavigationDermatologists extends HomeNavigationState {}
 class HomeNavigationAppointments extends HomeNavigationState {}
 
 class HomeNavigationSlots extends HomeNavigationState {}
+
+class HomeNavigationResults extends HomeNavigationState {}

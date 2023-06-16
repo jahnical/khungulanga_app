@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -51,6 +52,18 @@ class DiagnosisRepository {
         throw Exception(e.message);
       }
       rethrow;
+    }
+  }
+
+  Future<Diagnosis> updateDiagnosis(Diagnosis diagnosis) async {
+    final response = await _dio.put('$DIAGNOSIS_URL/${diagnosis.id}', options: putOptions(), data: jsonEncode(diagnosis.toJson()));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update diagnosis');
+    } else {
+      final diagnosisJson = response.data as Map<String, dynamic>;
+      final diagnosis = Diagnosis.fromJson(diagnosisJson);
+      return diagnosis;
     }
   }
 

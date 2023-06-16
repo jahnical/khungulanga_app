@@ -8,10 +8,13 @@ import 'package:khungulanga_app/util/common.dart';
 import 'package:khungulanga_app/api_connection/endpoints.dart';
 import 'package:khungulanga_app/widgets/diagnosis/diagnosis_page.dart';
 
+import 'derm_diagnosis_page.dart';
+
 class DiagnosesList extends StatelessWidget {
   final List<Diagnosis> diagnoses;
+  final bool isHistory;
 
-  const DiagnosesList({Key? key, required this.diagnoses}) : super(key: key);
+  const DiagnosesList({Key? key, required this.diagnoses, this.isHistory = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class DiagnosesList extends StatelessWidget {
             return InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => DiagnosisPage(diagnosis: diagnosis),
+                  builder: (context) => isHistory ? DiagnosisPage(diagnosis: diagnosis) : DermDiagnosisPage(diagnosis: diagnosis),
                 ));
               },
               child: Padding(
@@ -62,7 +65,7 @@ class DiagnosesList extends StatelessWidget {
                         ),
                       ),
                       title: Text(
-                        toTitleCase(diagnosis.predictions[0].disease.name),
+                        isHistory? toTitleCase(diagnosis.predictions[0].disease.name) : 'Results From ${diagnosis.patient.user?.firstName} ${diagnosis.patient.user?.lastName}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(

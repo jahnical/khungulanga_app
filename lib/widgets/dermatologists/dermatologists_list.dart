@@ -8,7 +8,9 @@ import 'package:khungulanga_app/widgets/profile/derm_profile.dart';
 import 'package:khungulanga_app/widgets/slots/book_slot.dart';
 import 'package:khungulanga_app/widgets/slots/derm_slots.dart';
 
-class DermatologistList extends StatelessWidget {
+import '../../repositories/diagnosis_repository.dart';
+
+class DermatologistList extends StatefulWidget {
   final List<double> userLocation;
   final Diagnosis? diagnosis;
 
@@ -16,6 +18,13 @@ class DermatologistList extends StatelessWidget {
     required this.userLocation,
     this.diagnosis,
   });
+
+  @override
+  _DermatologistListState createState() => _DermatologistListState();
+}
+
+class _DermatologistListState extends State<DermatologistList> {
+  bool _isUpdating = false;
 
   Widget _buildLoadingIndicator() {
     return Center(
@@ -31,7 +40,8 @@ class DermatologistList extends StatelessWidget {
           Text(errorMessage),
           SizedBox(height: 16.0),
           ElevatedButton(
-              onPressed: () => context.read<DermatologistsBloc>().add(LoadDermatologistsEvent()),
+            onPressed: () =>
+                context.read<DermatologistsBloc>().add(LoadDermatologistsEvent()),
             child: Text('Retry'),
           ),
         ],
@@ -44,14 +54,17 @@ class DermatologistList extends StatelessWidget {
     Navigator.push(context, MaterialPageRoute(builder: (_) {
       return BookSlotPage(
         dermatologist: dermatologist,
-        diagnosis: diagnosis,
+        diagnosis: widget.diagnosis,
       );
     }));
   }
 
   void _viewDetails(BuildContext context, Dermatologist dermatologist) {
     Navigator.push(context, MaterialPageRoute(builder: (_) {
-      return DermatologistProfilePage(dermatologist: dermatologist, diagnosis: diagnosis,);
+      return DermatologistProfilePage(
+        dermatologist: dermatologist,
+        diagnosis: widget.diagnosis,
+      );
     }));
   }
 
@@ -72,7 +85,8 @@ class DermatologistList extends StatelessWidget {
     );
   }
 
-  Widget _buildDermatologistsList(List<Dermatologist> dermatologists, BuildContext context) {
+  Widget _buildDermatologistsList(
+      List<Dermatologist> dermatologists, BuildContext context) {
     return ListView.builder(
       itemCount: dermatologists.length,
       itemBuilder: (BuildContext context, int index) {
@@ -81,7 +95,10 @@ class DermatologistList extends StatelessWidget {
           children: [
             SizedBox(height: 8.0),
             ListTile(
-              leading: Text('\$${dermatologist.hourlyRate}', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),),
+              leading: Text(
+                '\$${dermatologist.hourlyRate}',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+              ),
               title: Text(
                 '${dermatologist.user.firstName} ${dermatologist.user.lastName}',
                 style: const TextStyle(
@@ -99,8 +116,20 @@ class DermatologistList extends StatelessWidget {
                 ],
               ),
               trailing: IconButton(
-                icon: Icon(Icons.book, color: Theme.of(context).primaryColor),
-                onPressed: () => _bookAppointment(context, dermatologist),
+                icon: Icon(
+                  widget.diagnosis != null &&
+                      widget.diagnosis?.dermatologist == null &&
+                      dermatologist.hourlyRate < 1
+                      ? Icons.send
+                      : Icons.book,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onPressed: () =>
+                widget.diagnosis != null &&
+                    widget.diagnosis?.dermatologist == null &&
+                    dermatologist.hourlyRate < 1
+                    ? _sendResults(context, dermatologist)
+                    : _bookAppointment(context, dermatologist),
               ),
               onTap: () => _viewDetails(context, dermatologist),
             ),
@@ -110,5 +139,89 @@ class DermatologistList extends StatelessWidget {
         );
       },
     );
+  }
+
+  _sendResults(BuildContext context, Dermatologist dermatologist) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String additionalInfo = '';
+
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text('Confirm Sending Results'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Please provide any additional information concerning your problem:'),
+                  SizedBox(height: 16.0),
+                  TextField(
+                    onChanged: (value) {
+                      additionalInfo = value;
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Additional Information',
+                    ),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    setState(() {
+                      _isUpdating = true;
+                    });
+
+                    await _updateDiagnosis(context, dermatologist, additionalInfo);
+                    Navigator.of(context).pop();
+                  },
+                  child: _isUpdating
+                      ? CircularProgressIndicator()
+                      : Text('Send'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _updateDiagnosis(
+      BuildContext context, Dermatologist dermatologist, String additionalInfo) async {
+    setState(() {
+      _isUpdating = true;
+    });
+
+    final repo = RepositoryProvider.of<DiagnosisRepository>(context);
+    try {
+      widget.diagnosis!.dermatologist = dermatologist;
+      widget.diagnosis!.extraDermInfo = additionalInfo;
+      await repo.updateDiagnosis(widget.diagnosis!);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Results sent successfully'),
+        ),
+      );
+      Navigator.pop(context);
+    } catch (e) {
+      widget.diagnosis!.dermatologist = null;
+      widget.diagnosis!.extraDermInfo = null;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to send results'),
+        ),
+      );
+    } finally {
+      setState(() {
+        _isUpdating = false;
+      });
+    }
   }
 }

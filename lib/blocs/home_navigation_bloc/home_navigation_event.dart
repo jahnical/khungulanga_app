@@ -12,3 +12,5 @@ class NavigateToDermatologists extends HomeNavigationEvent {}
 class NavigateToSlots extends HomeNavigationEvent {}
 
 class NavigateToAppointments extends HomeNavigationEvent {}
+
+class NavigateToResults extends HomeNavigationEvent {}

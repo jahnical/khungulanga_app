@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:khungulanga_app/util/common.dart';
 import 'package:meta/meta.dart';
 import '../../models/diagnosis.dart';
+import '../../models/disease.dart';
+import '../../models/prediction.dart';
 import '../../repositories/diagnosis_repository.dart';
 part 'diagnosis_event.dart';
 part 'diagnosis_state.dart';

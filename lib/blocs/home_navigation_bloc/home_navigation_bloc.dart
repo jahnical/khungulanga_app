@@ -19,6 +19,8 @@ class HomeNavigationBloc extends Bloc<HomeNavigationEvent, HomeNavigationState> 
         emit(HomeNavigationAppointments());
       } else if (event is NavigateToSlots) {
         emit(HomeNavigationSlots());
+      } else if (event is NavigateToResults) {
+        emit(HomeNavigationResults());
       }
     });
   }

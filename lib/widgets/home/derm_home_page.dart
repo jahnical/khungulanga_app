@@ -5,6 +5,8 @@ import 'package:khungulanga_app/blocs/auth_bloc/auth_bloc.dart';
 import 'package:khungulanga_app/blocs/home_navigation_bloc/home_navigation_bloc.dart';
 import 'package:khungulanga_app/widgets/appointment/appointments_page.dart';
 
+import '../notification/notifications_page.dart';
+import '../results/results_page.dart';
 import '../slots/derm_slots.dart';
 
 class DermHomePage extends StatefulWidget {
@@ -15,11 +17,12 @@ class DermHomePage extends StatefulWidget {
 }
 
 class _DermHomePageState extends State<DermHomePage> {
-  final List<String> _titles = ['Appointments', 'Slots'];
+  final List<String> _titles = ['Appointments', 'Slots', 'Results'];
 
   final List<Widget> _pages = [
     AppointmentList(completed: false),
     DermatologistSlotsPage(),
+    ResultsPage(),
   ];
 
   @override
@@ -29,6 +32,16 @@ class _DermHomePageState extends State<DermHomePage> {
           return Scaffold(
             appBar: AppBar(
               title: Text(_titles[_getCurrentIndex()]),
+              actions: [
+                IconButton(
+                  icon: Icon(Icons.notifications),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => NotificationsPage(),
+                    ));
+                  },
+                ),
+              ],
             ),
             drawer: _buildDrawer(),
             body: _pages[_getCurrentIndex()],
@@ -155,7 +168,8 @@ class _DermHomePageState extends State<DermHomePage> {
 
   final events = [
     NavigateToAppointments(),
-    NavigateToSlots()
+    NavigateToSlots(),
+    NavigateToResults(),
   ];
   _buildBottomNavigation() {
     return BottomNavigationBar(
@@ -172,11 +186,16 @@ class _DermHomePageState extends State<DermHomePage> {
           icon: Icon(Icons.calendar_view_week),
           label: 'Slots',
         ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.assignment_outlined),
+          label: 'Results',
+        ),
       ],
     );
   }
 
   int _getCurrentIndex() {
-    return context.read<HomeNavigationBloc>().state is HomeNavigationAppointments ? 0 : 1;
+    return context.read<HomeNavigationBloc>().state is HomeNavigationAppointments ? 0 :
+      context.read<HomeNavigationBloc>().state is HomeNavigationSlots ? 1 : 2;
   }
 }

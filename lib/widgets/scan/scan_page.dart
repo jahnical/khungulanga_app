@@ -7,8 +7,9 @@ import 'extra_info_page.dart';
 
 CameraDescription? camera;
 class ScanPage extends StatefulWidget {
+  var captureCall = () async {};
 
-  const ScanPage({Key? key}) : super(key: key);
+  ScanPage({Key? key}) : super(key: key);
 
   @override
   _ScanPageState createState() => _ScanPageState();
@@ -26,6 +27,7 @@ class _ScanPageState extends State<ScanPage> {
   void initState() {
     super.initState();
     _initializeCamera();
+    widget.captureCall = captureImage;
   }
 
   Future<void> _initializeCamera() async {
@@ -36,6 +38,17 @@ class _ScanPageState extends State<ScanPage> {
     _controller.setFlashMode(FlashMode.off);
     _controller.setFocusMode(FocusMode.auto);
     _maxZoomLevel = await _controller.getMaxZoomLevel();
+  }
+
+  Future<Null> captureImage() async {
+    try {
+      await _initializeControllerFuture;
+      final image = await _controller.takePicture();
+      _navigateToExtraInfo(image);
+      //dispose();
+    } catch (e) {
+      // Error handling
+    }
   }
 
   @override
@@ -121,20 +134,11 @@ class _ScanPageState extends State<ScanPage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          FloatingActionButton(
-                            onPressed: () async {
-                              try {
-                                await _initializeControllerFuture;
-                                final image = await _controller.takePicture();
-                                _navigateToExtraInfo(image);
-                                //dispose();
-                              } catch (e) {
-                                // Error handling
-                              }
-                            },
+                          /*FloatingActionButton(
+                            onPressed: captureImage,
                             child: const Icon(Icons.camera_alt),
-                          ),
-                          SizedBox(width: 16.0),
+                          ),*/
+                          //SizedBox(width: 16.0),
                           Icon(Icons.remove, color: Colors.white),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 2.0),
@@ -154,7 +158,7 @@ class _ScanPageState extends State<ScanPage> {
                           SizedBox(width: 16.0),
                           FloatingActionButton(
                             onPressed: _pickImage,
-                            backgroundColor: Colors.blue.withOpacity(0.3),
+                            backgroundColor: Colors.blue,
                             child: const Icon(Icons.photo_library),
                           ),
                         ],

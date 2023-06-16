@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:khungulanga_app/models/appointment.dart';
 import 'package:khungulanga_app/repositories/appointment_repository.dart';
+import 'package:khungulanga_app/repositories/user_repository.dart';
 
 import '../../blocs/home_navigation_bloc/home_navigation_bloc.dart';
 import 'appointment_detail_page.dart';
@@ -90,17 +92,20 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
                 return Column(
                   children: [
                     ListTile(
-                      leading: const Icon(Icons.calendar_today_outlined),
+                      leading: const Icon(Icons.calendar_today_outlined, color: Colors.blueAccent,),
                       tileColor: Colors.grey[50],
                       title: Text(
-                        'Dermatologist: ${appointment.dermatologist.user.firstName} ${appointment.dermatologist.user.lastName}',
+                        RepositoryProvider.of<UserRepository>(context).patient != null?
+                          'Dermatologist: ${appointment.dermatologist.user.firstName} ${appointment.dermatologist.user.lastName}'
+                            : 'Patient: ${appointment.patient?.user?.firstName} ${appointment.patient?.user?.lastName}'
+                        ,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
                       ),
                       subtitle: Text(
-                        'Appointment Time: ${appointment.appoTime}',
+                        'Time: ${DateFormat('EEEE, MMM d yyyy').format(appointment.appoTime!)}',
                         style: TextStyle(
                           fontSize: 14,
                         ),

@@ -19,4 +19,14 @@ class Disease {
       treatments: json['treatments'].map((e) => Treatment.fromJson(e)).toList().cast<Treatment>(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'description': description,
+      'severity': severity,
+      'treatments': treatments.map((e) => e.toJson()).toList(),
+    };
+  }
 }

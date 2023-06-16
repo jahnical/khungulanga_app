@@ -28,3 +28,31 @@ class UpdateDiagnosis extends DiagnosisEvent {
 
   UpdateDiagnosis(this.diagnosis);
 }
+
+class SubmitTreatmentPressed extends DiagnosisEvent {
+  final Diagnosis diagnosis;
+  final Prediction prediction;
+  final String treatment;
+
+  SubmitTreatmentPressed({
+    required this.diagnosis,
+    required this.prediction,
+    required this.treatment
+  });
+}
+
+class ReferTreatmentPressed extends DiagnosisEvent {
+  final Diagnosis diagnosis;
+  final Prediction prediction;
+
+  ReferTreatmentPressed({
+    required this.diagnosis,
+    required this.prediction
+});
+}
+
+class RejectDiagnosisPressed extends DiagnosisEvent {
+  final Diagnosis diagnosis;
+
+  RejectDiagnosisPressed(this.diagnosis);
+}
