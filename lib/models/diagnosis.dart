@@ -11,8 +11,8 @@ class Diagnosis {
   final DateTime date;
   final List<Prediction> predictions;
   final int id;
-  final bool approved;
-  final String action;
+  bool approved;
+  String action;
   final Patient patient;
   Dermatologist? dermatologist;
   String? extraDermInfo;

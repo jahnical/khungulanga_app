@@ -12,6 +12,10 @@ class DiagnosisInitial extends DiagnosisState {
   DiagnosisInitial(super.diagnoses);
 }
 
+class DiagnosisUpdated extends DiagnosisState {
+  DiagnosisUpdated(super.diagnoses);
+}
+
 class DiagnosisLoading extends DiagnosisState {
   DiagnosisLoading(super.diagnoses);
 }

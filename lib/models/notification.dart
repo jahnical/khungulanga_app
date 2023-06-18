@@ -26,15 +26,15 @@ class NotificationModel {
 
   factory NotificationModel.fromJson(Map<String, dynamic> json) {
     return NotificationModel(
-      id: json['id'] as int,
+      id: json['id'] as int? ?? 0,
       title: json['title'] as String,
       message: json['message'] as String,
       timestamp: DateTime.parse(json['timestamp']),
-      isRead: json['isRead'] as bool,
-      route: json['route'] as String,
+      isRead: json['is_read'] as bool? ?? false,
+      route: json['route'] as String? ?? '',
       relatedId: json['related_id'] as int?,
       relatedName: json['related_name'] as String?,
-      user: User.fromJson(json['user']),
+      user: json['user'] != null? User.fromJson(json['user']) : null,
     );
   }
 
@@ -45,7 +45,7 @@ class NotificationModel {
       'title': title,
       'message': message,
       'timestamp': dateFormat.format(timestamp),
-      'isRead': isRead,
+      'is_read': isRead,
       'route': route,
       'related_id': relatedId,
       'related_name': relatedName,

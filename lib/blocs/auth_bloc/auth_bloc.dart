@@ -7,6 +7,8 @@ import 'package:khungulanga_app/models/auth_user.dart';
 import 'package:khungulanga_app/repositories/user_repository.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
+import '../../repositories/notifications_repository.dart';
+
 part 'auth_event.dart';
 part 'auth_state.dart';
 
@@ -39,6 +41,7 @@ class AuthBloc
         } else if (userRepository.dermatologist != null) {
           yield AuthAuthenticatedDermatologist(user);
         }
+        NotificationRepository().initialize();
       } else {
         yield AuthUnauthenticated();
       }

@@ -30,5 +30,13 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-    </application>
+
+       <!-- Define the notification channel -->
+       <channel
+           android:id="Notifications"
+           android:name="App Notifications"
+           android:description="This channel is used for notifications from the app"
+           android:importance="high" />
+
+   </application>
 </manifest>

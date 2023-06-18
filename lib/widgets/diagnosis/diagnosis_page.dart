@@ -35,7 +35,7 @@ class DiagnosisPage extends StatelessWidget {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Results${!diagnosis.approved? ' (Not Approved)' : ' (Approved)'}'),
+          title: Text('Results${!diagnosis.approved? diagnosis.action == 'Referral' ? ' (Incorrect)' : ' (Not Approved)' : ' (Approved)'}'),
           actions: [
             IconButton(
               icon: Icon(Icons.delete),

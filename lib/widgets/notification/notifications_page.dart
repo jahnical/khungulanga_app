@@ -1,6 +1,15 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:khungulanga_app/models/notification.dart';
+import 'package:khungulanga_app/repositories/notifications_repository.dart';
+import 'package:khungulanga_app/widgets/diagnosis/derm_diagnosis_page.dart';
+
+import '../../repositories/diagnosis_repository.dart';
+import '../../repositories/user_repository.dart';
+import '../diagnosis/diagnosis_page.dart';
 
 class NotificationsPage extends StatefulWidget {
   @override
@@ -8,40 +17,51 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  List<NotificationModel> notifications = [
-    NotificationModel(
-      id: 1,
-      title: 'New Message',
-      message: 'You have a new message.',
-      timestamp: DateTime.now(),
-      isRead: false,
-      route: '/message', user: null,
-    ),
-    NotificationModel(
-      id: 2,
-      title: 'Event Reminder',
-      message: 'Don\'t forget about the upcoming event.',
-      timestamp: DateTime.now().subtract(const Duration(days: 1)),
-      isRead: true,
-      route: '/event',
-    ),
-    // Add more sample notifications here
-  ];
+  late NotificationRepository _notificationRepository;
+  List<NotificationModel> notifications = [];
+  bool isLoading = false;
+  bool isError = false;
 
-  bool isAllRead = false;
+  @override
+  void initState() {
+    super.initState();
+    _notificationRepository = NotificationRepository();
+    _loadNotifications();
+  }
+
+  Future<void> _loadNotifications() async {
+    setState(() {
+      isLoading = true;
+      isError = false;
+    });
+
+    try {
+      notifications = await _notificationRepository.getNotifications();
+    } catch (error) {
+      log(error.toString());
+      setState(() {
+        isError = true;
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
 
   void markAllNotificationsAsRead() {
     setState(() {
       notifications.forEach((notification) {
         notification.isRead = true;
+        _notificationRepository.updateNotification(notification);
       });
-      isAllRead = true;
     });
   }
 
   void markNotificationAsRead(NotificationModel notification) {
     setState(() {
       notification.isRead = true;
+      _notificationRepository.updateNotification(notification);
     });
   }
 
@@ -67,7 +87,25 @@ class _NotificationsPageState extends State<NotificationsPage> {
             ),
         ],
       ),
-      body: notifications.isEmpty
+      body: isLoading
+          ? Center(
+        child: CircularProgressIndicator(),
+      )
+          : isError
+          ? Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Failed to load notifications.'),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _loadNotifications,
+              child: Text('Retry'),
+            ),
+          ],
+        ),
+      )
+          : notifications.isEmpty
           ? Center(
         child: Text('No notifications.'),
       )
@@ -77,7 +115,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
           final group = groupedNotifications[index];
           final groupDate = group['date'];
           final groupNotifications = group['notifications'];
-          final isLastGroup = index == groupedNotifications.length - 1;
+          final isLastGroup =
+              index == groupedNotifications.length - 1;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +124,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  DateFormat('EEEE, MMM d').format(groupDate),
+                  DateFormat('EEEE, MMM d')
+                      .format(groupDate),
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -99,11 +139,12 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 physics: ClampingScrollPhysics(),
                 itemCount: groupNotifications.length,
                 itemBuilder: (context, index) {
-                  final notification = groupNotifications[index];
+                  final notification =
+                  groupNotifications[index];
                   final isLastNotification =
                       index == groupNotifications.length - 1;
-                  final formattedTime =
-                  DateFormat.jm().format(notification.timestamp);
+                  final formattedTime = DateFormat.jm()
+                      .format(notification.timestamp);
 
                   return Column(
                     children: [
@@ -116,10 +157,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                         child: ListTile(
                           contentPadding: EdgeInsets.all(8),
                           onTap: () {
-                            markNotificationAsRead(notification);
-                            // Handle navigation to notification route
-                            Navigator.pushNamed(
-                                context, notification.route);
+                            notificationTaped(notification, context);
                           },
                           title: Text(
                             notification.title,
@@ -130,7 +168,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                             ),
                           ),
                           subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                            crossAxisAlignment:
+                            CrossAxisAlignment.start,
                             children: [
                               Text(
                                 notification.message,
@@ -178,7 +217,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
     final groupedNotifications = <Map<String, dynamic>>[];
 
     for (final notification in notifications) {
-      final date = DateFormat('yyyy-MM-dd').format(notification.timestamp);
+      final date =
+      DateFormat('yyyy-MM-dd').format(notification.timestamp);
       if (groupedMap.containsKey(date)) {
         groupedMap[date]!.add(notification);
       } else {
@@ -195,5 +235,28 @@ class _NotificationsPageState extends State<NotificationsPage> {
     });
 
     return groupedNotifications;
+  }
+
+  @override
+  void dispose() {
+    _notificationRepository.dispose();
+    super.dispose();
+  }
+
+  void notificationTaped(NotificationModel notification, BuildContext context) {
+    markNotificationAsRead(notification);
+    if (notification.relatedName == 'Diagnosis') {
+      final repo = RepositoryProvider.of<DiagnosisRepository>(context);
+      final userRepo = RepositoryProvider.of<UserRepository>(context);
+      final diagnosis = repo.getDiagnosis(notification.relatedId!);
+      if (userRepo.patient == null) {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DermDiagnosisPage(diagnosis: diagnosis)));
+      } else {
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) => DiagnosisPage(diagnosis: diagnosis)));
+      }
+
+    } else if (notification.relatedName == 'Appointment') {
+
+    }
   }
 }

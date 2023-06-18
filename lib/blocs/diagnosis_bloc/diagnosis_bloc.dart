@@ -56,6 +56,44 @@ class DiagnosisBloc extends Bloc<DiagnosisEvent, DiagnosisState> {
         log("Error", error: e);
         yield DiagnosingErrorAny(_repository.diagnoses, e.toString().startsWith("Exception")? e.toString().substring(11) : e.toString());
       }
+    } else if (event is RejectDiagnosisPressed) {
+      yield DiagnosisLoading(_repository.diagnoses);
+      event.diagnosis.approved = false;
+      event.diagnosis.action = "Referral";
+      try {
+        await _repository.updateDiagnosis(event.diagnosis);
+        yield DiagnosisUpdated(_repository.diagnoses);
+        add(FetchDiagnoses());
+      } catch (e) {
+        yield DiagnosisError(_repository.diagnoses, message: 'Failed to reject diagnosis');
+      }
+    } else if (event is ReferTreatmentPressed) {
+      yield DiagnosisLoading(_repository.diagnoses);
+      event.diagnosis.approved = true;
+      event.diagnosis.action = "Referral";
+      event.prediction.approved = true;
+      try {
+        await _repository.updateDiagnosis(event.diagnosis);
+        await _repository.updatePrediction(event.prediction);
+        yield DiagnosisUpdated(_repository.diagnoses);
+        add(FetchDiagnoses());
+      } catch (e) {
+        yield DiagnosisError(_repository.diagnoses, message: 'Failed to refer diagnosis');
+      }
+    } else if (event is SubmitTreatmentPressed) {
+      yield DiagnosisLoading(_repository.diagnoses);
+      event.diagnosis.approved = true;
+      event.diagnosis.action = "Treatment";
+      event.prediction.approved = true;
+      event.prediction.treatment = event.treatment;
+      try {
+        await _repository.updateDiagnosis(event.diagnosis);
+        await _repository.updatePrediction(event.prediction);
+        yield DiagnosisUpdated(_repository.diagnoses);
+        add(FetchDiagnoses());
+      } catch (e) {
+        yield DiagnosisError(_repository.diagnoses, message: 'Failed to submit treatment');
+      }
     }
   }
 }

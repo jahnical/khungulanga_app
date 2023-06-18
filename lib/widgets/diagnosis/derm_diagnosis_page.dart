@@ -28,197 +28,208 @@ class _DermDiagnosisPageState extends State<DermDiagnosisPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocListener<DiagnosisBloc, DiagnosisState>(
+      listener: (context, state) {
+        if (state is DiagnosisUpdated) {
+          Navigator.of(context).pop();
+        }
+      },
+    child: Scaffold(
       appBar: AppBar(
         title: const Text('Dermatologist Diagnosis'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              height: 200,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(1.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    offset: Offset(0.0, 2.0),
-                    blurRadius: 4.0,
+      body: BlocBuilder<DiagnosisBloc, DiagnosisState>(
+        builder: (context, state) {
+          return state is DiagnosisLoading? CircularProgressIndicator() : SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: 200,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(1.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        offset: Offset(0.0, 2.0),
+                        blurRadius: 4.0,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(0.0),
-                child: Image.network(
-                  BASE_URL + widget.diagnosis.imageUrl,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16),
-            if (widget.diagnosis.extraDermInfo != null)
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.info),
-                    const SizedBox(width: 16),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Additional Information',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            widget.diagnosis.extraDermInfo!,
-                            style: TextStyle(fontSize: 14),
-                          ),
-                        ],
-                      ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(0.0),
+                    child: Image.network(
+                      BASE_URL + widget.diagnosis.imageUrl,
+                      fit: BoxFit.cover,
                     ),
-                  ],
+                  ),
                 ),
-              ),
-            const SizedBox(height: 16),
-            for (var i = 0; i < widget.diagnosis.predictions.length; i++)
-              PredictionItem(
-                prediction: widget.diagnosis.predictions[i],
-                isSelected: selectedPrediction == i,
-                onTap: () {
-                  setState(() {
-                    if (selectedPrediction == i) {
-                      selectedPrediction = -1;
-                    } else {
-                      selectedPrediction = i;
-                    }
-                  });
-                },
-              ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                if (selectedPrediction != -1) {
-                  final prediction =
-                  widget.diagnosis.predictions[selectedPrediction];
-
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Submit Treatment'),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          TextField(
-                            controller: treatmentController,
-                            onChanged: (value) {
-                              setState(() {
-                                isTreatmentFilled = value.isNotEmpty;
-                              });
-                            },
-                            maxLines: 3,
-                            decoration: const InputDecoration
-
-                              (
-                              hintText: 'Prescribe treatment...',
-                            ),
-                          ),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            if (isTreatmentFilled) {
-                              // Submit treatment
-                              final treatment = treatmentController.text;
-                              context.read<DiagnosisBloc>().add(
-                                SubmitTreatmentPressed(
-                                    diagnosis: widget.diagnosis,
-                                    treatment: treatment,
-                                    prediction: prediction
+                const SizedBox(height: 16),
+                if (widget.diagnosis.extraDermInfo != null)
+                  Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        Icon(Icons.info),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Additional Information',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              );
-                            } else {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: const Text('No Treatment Entered'),
-                                  content: const Text('Please enter the prescribed treatment.'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.of(context).pop(),
-                                      child: const Text('OK'),
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                widget.diagnosis.extraDermInfo!,
+                                style: TextStyle(fontSize: 14),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                const SizedBox(height: 16),
+                for (var i = 0; i < widget.diagnosis.predictions.length; i++)
+                  PredictionItem(
+                    prediction: widget.diagnosis.predictions[i],
+                    isSelected: selectedPrediction == i,
+                    onTap: () {
+                      setState(() {
+                        if (selectedPrediction == i) {
+                          selectedPrediction = -1;
+                        } else {
+                          selectedPrediction = i;
+                        }
+                      });
+                    },
+                  ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    if (selectedPrediction != -1) {
+                      final prediction =
+                      widget.diagnosis.predictions[selectedPrediction];
+
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('Submit Treatment'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              TextField(
+                                controller: treatmentController,
+                                onChanged: (value) {
+                                  setState(() {
+                                    isTreatmentFilled = value.isNotEmpty;
+                                  });
+                                },
+                                maxLines: 3,
+                                decoration: const InputDecoration
+
+                                  (
+                                  hintText: 'Prescribe treatment...',
+                                ),
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                if (isTreatmentFilled) {
+                                  // Submit treatment
+                                  final treatment = treatmentController.text;
+                                  context.read<DiagnosisBloc>().add(
+                                    SubmitTreatmentPressed(
+                                        diagnosis: widget.diagnosis,
+                                        treatment: treatment,
+                                        prediction: prediction
                                     ),
-                                  ],
-                                ),
-                              );
-                            }
-                          },
-                          child: const Text('Submit Treatment'),
+                                  );
+                                } else {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('No Treatment Entered'),
+                                      content: const Text('Please enter the prescribed treatment.'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.of(context).pop(),
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              },
+                              child: const Text('Submit Treatment'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                // Refer treatment
+                                context.read<DiagnosisBloc>().add(
+                                  ReferTreatmentPressed(diagnosis: widget.diagnosis, prediction: prediction),
+                                );
+                              },
+                              child: const Text('Refer Treatment'),
+                            ),
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('Cancel'),
+                            ),
+                          ],
                         ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            // Refer treatment
-                            context.read<DiagnosisBloc>().add(
-                              ReferTreatmentPressed(diagnosis: widget.diagnosis, prediction: prediction),
-                            );
-                          },
-                          child: const Text('Refer Treatment'),
+                      );
+                    } else {
+                      showDialog(
+                        context: context,
+                        builder: (context) => AlertDialog(
+                          title: const Text('No Diagnosis Selected'),
+                          content: const Text('Please select a diagnosis or indicate that none of them is correct.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              child: const Text('OK'),
+                            ),
+                          ],
                         ),
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('Cancel'),
-                        ),
-                      ],
-                    ),
-                  );
-                } else {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('No Diagnosis Selected'),
-                      content: const Text('Please select a diagnosis or indicate that none of them is correct.'),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              },
-              child: const Text('Confirm Diagnosis'),
+                      );
+                    }
+                  },
+                  child: const Text('Confirm Diagnosis'),
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    context.read<DiagnosisBloc>().add(RejectDiagnosisPressed(widget.diagnosis));
+                    Navigator.of(context).pop();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.redAccent,
+                  ),
+                  child: const Text('Reject Diagnosis'),
+                ),
+                const SizedBox(height: 16),
+              ],
             ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                context.read<DiagnosisBloc>().add(RejectDiagnosisPressed(widget.diagnosis));
-                Navigator.of(context).pop();
-              },
-              style: ElevatedButton.styleFrom(
-                primary: Colors.redAccent,
-              ),
-              child: const Text('Reject Diagnosis'),
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
+          );
+        }
       ),
-    );
+    ),
+);
   }
 }
 

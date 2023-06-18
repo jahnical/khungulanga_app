@@ -17,12 +17,12 @@ class DermHomePage extends StatefulWidget {
 }
 
 class _DermHomePageState extends State<DermHomePage> {
-  final List<String> _titles = ['Appointments', 'Slots', 'Results'];
+  final List<String> _titles = ['Results', 'Appointments', 'Slots'];
 
   final List<Widget> _pages = [
+    ResultsPage(),
     AppointmentList(completed: false),
     DermatologistSlotsPage(),
-    ResultsPage(),
   ];
 
   @override
@@ -167,9 +167,9 @@ class _DermHomePageState extends State<DermHomePage> {
   }
 
   final events = [
+    NavigateToResults(),
     NavigateToAppointments(),
     NavigateToSlots(),
-    NavigateToResults(),
   ];
   _buildBottomNavigation() {
     return BottomNavigationBar(
@@ -179,6 +179,10 @@ class _DermHomePageState extends State<DermHomePage> {
       },
       items: const [
         BottomNavigationBarItem(
+          icon: Icon(Icons.assignment_outlined),
+          label: 'Results',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.calendar_today_outlined),
           label: 'Appointments',
         ),
@@ -186,16 +190,12 @@ class _DermHomePageState extends State<DermHomePage> {
           icon: Icon(Icons.calendar_view_week),
           label: 'Slots',
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.assignment_outlined),
-          label: 'Results',
-        ),
       ],
     );
   }
 
   int _getCurrentIndex() {
-    return context.read<HomeNavigationBloc>().state is HomeNavigationAppointments ? 0 :
-      context.read<HomeNavigationBloc>().state is HomeNavigationSlots ? 1 : 2;
+    return context.read<HomeNavigationBloc>().state is HomeNavigationAppointments ? 1 :
+      context.read<HomeNavigationBloc>().state is HomeNavigationSlots ? 2 : 0;
   }
 }

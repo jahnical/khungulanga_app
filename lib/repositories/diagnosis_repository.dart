@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:khungulanga_app/models/diagnosis.dart';
 import 'package:khungulanga_app/api_connection/endpoints.dart';
+import 'package:khungulanga_app/models/prediction.dart';
 
 import '../api_connection/api_client.dart';
 import '../api_connection/con_options.dart';
@@ -75,5 +76,21 @@ class DiagnosisRepository {
     } on DioError catch (e) {
       throw Exception(e.message);
     }
+  }
+
+  Future<Prediction> updatePrediction(Prediction prediction) async {
+    final response = await _dio.put('$PREDICTION_URL/${prediction.id}/', options: putOptions(), data: jsonEncode(prediction.toJson()));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update prediction');
+    } else {
+      final predictionJson = response.data as Map<String, dynamic>;
+      final prediction = Prediction.fromJson(predictionJson);
+      return prediction;
+    }
+  }
+
+  getDiagnosis(int id) {
+    return diagnoses.firstWhere((diagnosis) => diagnosis.id == id);
   }
 }

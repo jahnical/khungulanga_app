@@ -1,5 +1,9 @@
 import 'dart:developer';
 import 'package:camera/camera.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:khungulanga_app/repositories/notifications_repository.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khungulanga_app/blocs/auth_bloc/auth_bloc.dart';
@@ -66,8 +70,37 @@ Future<void> initCamera() async {
 
 class App extends StatelessWidget {
   final UserRepository userRepository;
+  late NotificationRepository notificationRepository;
 
-  const App({Key? key, required this.userRepository}) : super(key: key);
+  App({Key? key, required this.userRepository}) : super(key: key) {
+    // Initialize Firebase
+    initializeFirebase();
+  }
+
+  void initializeFirebase() async {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+    notificationRepository = NotificationRepository();
+
+    setupInteractedMessage();
+  }
+
+  Future<void> setupInteractedMessage() async {
+    RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    log('Handling a background message ${message.messageId}');
+    log(message.data.toString());
+    log(message.notification.toString());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +110,7 @@ class App extends StatelessWidget {
         RepositoryProvider(create: (context) => userRepository),
         RepositoryProvider(create: (context) => DiseaseRepository()),
         RepositoryProvider(create: (context) => AppointmentRepository()),
+        RepositoryProvider(create: (context) => notificationRepository),
       ],
       child: MultiBlocProvider(
           providers: [

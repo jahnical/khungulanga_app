@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "292099944624",
+    "project_id": "khungulanga",
+    "storage_bucket": "khungulanga.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:292099944624:android:bbc96f9585794299c30b75",
+        "android_client_info": {
+          "package_name": "com.ictp7.khungulanga_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "292099944624-2i29h8btp61q3l1gr8lp8okcooe49nd6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4kOIyU3kcp8PpcPRuhynZf_M0qlneDT4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "292099944624-2i29h8btp61q3l1gr8lp8okcooe49nd6.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "292099944624-te23dks8u5gu23a5atsbuo2kjv232lcm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.ictp7.khungulangaApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

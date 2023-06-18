@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>292099944624-te23dks8u5gu23a5atsbuo2kjv232lcm.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.292099944624-te23dks8u5gu23a5atsbuo2kjv232lcm</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBldP3Rewm36SNEDTXNDIISaqBAHGpyUpY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>292099944624</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.ictp7.khungulangaApp</string>
+	<key>PROJECT_ID</key>
+	<string>khungulanga</string>
+	<key>STORAGE_BUCKET</key>
+	<string>khungulanga.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:292099944624:ios:9de1484fb9903ae1c30b75</string>
+</dict>
+</plist>
