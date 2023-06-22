@@ -127,7 +127,7 @@ class _ExtraInfoPageState extends State<ExtraInfoPage> {
                                 ),
                                 DropdownMenuItem(
                                   value: 'Upper Body',
-                                  child: Text('Upper Body'),
+                                  child: Text('Upper Body (+ Cranium)'),
                                 ),
                                 DropdownMenuItem(
                                   value: 'Arms Hands',
@@ -154,7 +154,7 @@ class _ExtraInfoPageState extends State<ExtraInfoPage> {
                                 return null;
                               },
                             ),
-                            const SizedBox(height: 16.0),
+                            /*const SizedBox(height: 16.0),
                             const Text(
                               'Is it itchy?',
                               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
@@ -168,7 +168,7 @@ class _ExtraInfoPageState extends State<ExtraInfoPage> {
                                 });
                               },
                               title: Text(_isItchy ? 'Yes' : 'No'),
-                            ),
+                            ),*/
                             const SizedBox(height: 24.0),
                             ElevatedButton(
                               onPressed: state is Diagnosing ? null : () => { _onSubmitForm(context, BlocProvider.of<DiagnosisBloc>(context)) },

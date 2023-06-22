@@ -97,8 +97,8 @@ class AppointmentChatBloc extends Bloc<AppointmentChatEvent, AppointmentChatStat
       yield UpdatingAppointment();
       try {
         final appointment = chat!.appointment.copyWith();
-        appointment.patientApproved = DateTime.now();
-        appointment.patientRejected = null;
+        appointment.patientRemoved = DateTime.now();
+        appointment.patientCancelled = null;
         chat?.appointment = await _appointmentChatRepository.updateAppointment(appointment);
         yield AppointmentUpdated(chat!);
       } on DioError catch (e) {
@@ -110,8 +110,8 @@ class AppointmentChatBloc extends Bloc<AppointmentChatEvent, AppointmentChatStat
       yield UpdatingAppointment();
       try {
         final appointment = chat!.appointment.copyWith();
-        appointment.patientRejected = DateTime.now();
-        appointment.patientApproved = null;
+        appointment.patientCancelled = DateTime.now();
+        appointment.patientRemoved = null;
         chat?.appointment = await _appointmentChatRepository.updateAppointment(appointment);
         yield AppointmentUpdated(chat!);
       } on DioError catch (e) {

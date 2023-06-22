@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:khungulanga_app/models/appointment.dart';
+import 'package:khungulanga_app/repositories/appointment_repository.dart';
 import 'package:khungulanga_app/repositories/user_repository.dart';
 
 import '../diagnosis/diagnosis_page.dart';
@@ -28,8 +29,13 @@ class AppointmentDetailPage extends StatelessWidget {
             ),
             TextButton(
               child: Text('Confirm'),
-              onPressed: () {
+              onPressed: () async {
                 // Perform cancellation logic here
+                final _isPatient = RepositoryProvider.of<UserRepository>(context).patient != null;
+                appointment.slot = null;
+                if (_isPatient) appointment.patientCancelled = DateTime.now();
+                else appointment.dermatologistCancelled = DateTime.now();
+                await RepositoryProvider.of<AppointmentRepository>(context).updateAppointment(appointment);
                 Navigator.of(context).pop();
               },
             ),
@@ -55,7 +61,9 @@ class AppointmentDetailPage extends StatelessWidget {
             ),
             TextButton(
               child: Text('Confirm'),
-              onPressed: () {
+              onPressed: () async {
+                appointment.done = true;
+                await RepositoryProvider.of<AppointmentRepository>(context).updateAppointment(appointment);
                 // Perform mark as done logic here
                 Navigator.of(context).pop();
               },
@@ -147,7 +155,7 @@ class AppointmentDetailPage extends StatelessWidget {
               },
               title: 'Diagnosis',
               icon: Icons.local_hospital,
-              content: appointment.diagnosis?.predictions[0].disease.name.toUpperCase() ?? 'N/A',
+              content: appointment.diagnosis == null? 'N/A' : appointment.diagnosis!.predictions.isNotEmpty? appointment.diagnosis!.predictions[0].disease.name : "No Disease",
             ),
           ],
         ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khungulanga_app/models/dermatologist.dart';
+import 'package:khungulanga_app/repositories/user_repository.dart';
 
 import '../../models/diagnosis.dart';
 import '../slots/book_slot.dart';
@@ -68,7 +70,7 @@ class DermatologistProfilePage extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 16),
-              Text(
+              const Text(
                 'Email',
                 style: TextStyle(
                   fontSize: 18,
@@ -104,17 +106,18 @@ class DermatologistProfilePage extends StatelessWidget {
                 style: TextStyle(fontSize: 16),
               ),
               SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return BookSlotPage(
-                      dermatologist: dermatologist,
-                      diagnosis: diagnosis,
-                    );
-                  }));
-                },
-                child: Text('Book Appointment'),
-              ),
+              if (RepositoryProvider.of<UserRepository>(context).patient != null)
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) {
+                      return BookSlotPage(
+                        dermatologist: dermatologist,
+                        diagnosis: diagnosis,
+                      );
+                    }));
+                  },
+                  child: Text('Book Appointment'),
+                ),
             ],
           ),
         ),

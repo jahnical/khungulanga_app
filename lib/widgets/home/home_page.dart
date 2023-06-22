@@ -102,6 +102,15 @@ class _HomePageState extends State<HomePage> {
                   ));
                 },
               ),
+              ListTile(
+                title: Text('Cancelled Appointments'),
+                leading: Icon(Icons.cancel),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => AppointmentsPage(completed: false, cancelled: true),
+                  ));
+                },
+              ),
             ],
           ),
           ListTile(

@@ -9,6 +9,11 @@ import 'package:khungulanga_app/models/notification.dart';
 
 import '../api_connection/endpoints.dart';
 
+Future<void> _handleBackgroundMessage(RemoteMessage message) async {
+  // Handle background notifications when the app is terminated
+  log('Handling background message: ${message.data}');
+}
+
 class NotificationRepository {
   final FirebaseMessaging _firebaseMessaging;
   final List<NotificationModel> _notifications = [];
@@ -20,25 +25,21 @@ class NotificationRepository {
   StreamController<List<NotificationModel>>.broadcast();
 
   NotificationRepository() : _firebaseMessaging = FirebaseMessaging.instance {
-    /*FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       _handleMessage(message);
-    });*/
+    });
 
-    //FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
+    FirebaseMessaging.onBackgroundMessage(_handleBackgroundMessage);
     //initialize();
   }
 
   Future<void> _handleMessage(RemoteMessage message) async {
     final notificationJson = message.data;
-    final notification = NotificationModel.fromJson(notificationJson);
+    log("New Notification: "  + notificationJson.toString());
+    //final notification = NotificationModel.fromJson(notificationJson);
 
-    _notifications.insert(0, notification);
-    _notificationsStreamController.add(_notifications);
-  }
-
-  Future<void> _handleBackgroundMessage(RemoteMessage message) async {
-    // Handle background notifications when the app is terminated
-    log('Handling background message: ${message.data}');
+    // _notifications.insert(0, notification);
+    // _notificationsStreamController.add(_notifications);
   }
 
   Future<String?> getFCMToken() async {

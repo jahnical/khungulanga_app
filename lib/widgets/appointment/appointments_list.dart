@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:khungulanga_app/models/appointment.dart';
 import 'package:khungulanga_app/repositories/appointment_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:khungulanga_app/repositories/user_repository.dart';
 
-import '../../blocs/home_navigation_bloc/home_navigation_bloc.dart';
 import 'appointment_detail_page.dart';
 
 class AppointmentList extends StatefulWidget {
   final AppointmentRepository appointmentRepository = AppointmentRepository();
   final bool completed;
+  bool cancelled = false;
 
-  AppointmentList({required this.completed});
+  AppointmentList({required this.completed, this.cancelled=false});
 
   @override
   _AppointmentListState createState() => _AppointmentListState();
@@ -18,7 +19,8 @@ class AppointmentList extends StatefulWidget {
 
 class _AppointmentListState extends State<AppointmentList> {
   Future<List<Appointment>> _appointmentsFuture = Future.value([]);
-
+  bool _isUpdating = false;
+  bool _isPatient = false;
   @override
   void initState() {
     super.initState();
@@ -28,7 +30,8 @@ class _AppointmentListState extends State<AppointmentList> {
   void _loadAppointments() {
     setState(() {
       _appointmentsFuture =
-          widget.appointmentRepository.getAppointments(widget.completed);
+          widget.appointmentRepository.getAppointments(widget.completed, cancelled: widget.cancelled);
+      _isPatient = RepositoryProvider.of<UserRepository>(context).patient != null;
     });
   }
 
@@ -56,7 +59,7 @@ class _AppointmentListState extends State<AppointmentList> {
 
           if (appointments.isEmpty) {
             final appointmentType =
-            widget.completed ? 'Completed' : 'Scheduled';
+                widget.cancelled? "Cancelled" : widget.completed ? 'Completed' :  'Scheduled';
             final message = 'No $appointmentType Appointments.';
 
             return Center(
@@ -80,10 +83,14 @@ class _AppointmentListState extends State<AppointmentList> {
               return Column(
                 children: [
                   ListTile(
-                    leading: const Icon(Icons.calendar_today_outlined, color: Colors.green,),
+                    leading: const Icon(
+                      Icons.calendar_today_outlined,
+                      color: Colors.green,
+                    ),
                     tileColor: Colors.grey[50],
                     title: Text(
-                      'Patient: ${appointment.patient?.user?.firstName} ${appointment.patient?.user?.lastName}',
+                      !_isPatient? 'Patient: ${appointment.patient?.user?.firstName} ${appointment.patient?.user?.lastName}'
+                          : 'Dermatologist: ${appointment.dermatologist.user.firstName} ${appointment.dermatologist.user.lastName}',
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -95,14 +102,22 @@ class _AppointmentListState extends State<AppointmentList> {
                         fontSize: 14,
                       ),
                     ),
-                    trailing: appointment.done
-                        ? Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
+                    trailing: _isUpdating
+                        ? CircularProgressIndicator()
+                        : appointment.done
+                        ? IconButton(
+                      icon: Icon(Icons.remove_circle),
+                      color: Colors.red,
+                      onPressed: () {
+                        showRemoveConfirmationDialog(appointment);
+                      },
                     )
-                        : Icon(
-                      Icons.schedule,
+                        : IconButton(
+                      icon: Icon(Icons.cancel),
                       color: Colors.orange,
+                      onPressed: () {
+                        showCancelConfirmationDialog(appointment);
+                      },
                     ),
                     onTap: () {
                       // Handle appointment tap
@@ -126,5 +141,98 @@ class _AppointmentListState extends State<AppointmentList> {
         }
       },
     );
+  }
+
+  Future<void> showRemoveConfirmationDialog(Appointment appointment) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Remove Appointment'),
+          content: Text('Are you sure you want to remove this appointment?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await updateAppointment(appointment, true);
+              },
+              child: Text('Remove'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> showCancelConfirmationDialog(Appointment appointment) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Cancel Appointment'),
+          content: Text('Are you sure you want to cancel this appointment?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('No'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await updateAppointment(appointment, false);
+              },
+              child: Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> updateAppointment(Appointment appointment, bool isRemove) async {
+    setState(() {
+      _isUpdating = true;
+    });
+
+    try {
+      if (isRemove) {
+        if (_isPatient) appointment.patientRemoved = DateTime.now();
+        else appointment.dermatologistRemoved = DateTime.now();
+      } else {
+        appointment.slot = null;
+        if (_isPatient) appointment.patientCancelled = DateTime.now();
+        else appointment.dermatologistCancelled = DateTime.now();
+      }
+
+      await widget.appointmentRepository.updateAppointment(appointment);
+
+      setState(() {
+        _isUpdating = false;
+        _appointmentsFuture =
+            widget.appointmentRepository.getAppointments(widget.completed);
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Appointment updated successfully')),
+      );
+    } catch (error) {
+      setState(() {
+        _isUpdating = false;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to update appointment')),
+      );
+    }
   }
 }

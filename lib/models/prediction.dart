@@ -28,7 +28,7 @@ class Prediction {
 
   Map<String, dynamic> toJson() {
     return {
-      'disease': disease.toJson(),
+      'disease_id': disease.id,
       'probability': probability,
       'approved': approved,
       'treatment': treatment,

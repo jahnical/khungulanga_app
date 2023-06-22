@@ -72,7 +72,25 @@ class DiagnosisPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  _mainPrediction(diagnosis.approved? diagnosis.predictions.firstWhere((element) => element.approved) : diagnosis.predictions[0], context)
+                  if (diagnosis.predictions.isNotEmpty)
+                    _mainPrediction(diagnosis.approved? diagnosis.predictions.firstWhere((element) => element.approved) : diagnosis.predictions[0], context)
+                  else
+                    const Center(
+                      widthFactor: .8,
+                      child: Padding(
+                        padding: EdgeInsets.all(24.0),
+                        child: Text(
+                            'Your skin condition could not be diagnosed, no lesion has been identified.\n\nYou can contact a dermatologist for further assistance.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.black54,
+                              fontFamily: 'OpenSans',
+                            ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
               //SizedBox(height: 8),
@@ -83,8 +101,8 @@ class DiagnosisPage extends StatelessWidget {
                 thickness: 2.0,
                 height: 16.0,
               ),
-              _infoForNotApprove(),
-              fromAppointment ? const SizedBox() : diagnosis.dermatologist == null || diagnosis.action == "Referral"? ElevatedButton.icon(
+              if (!diagnosis.approved) _infoForNotApprove(),
+              fromAppointment ? const SizedBox() : diagnosis.dermatologist == null || diagnosis.action != "Pending"? ElevatedButton.icon(
                 onPressed: () {
                   Navigator.of(context).push(
                     MaterialPageRoute(
@@ -95,7 +113,7 @@ class DiagnosisPage extends StatelessWidget {
                   );
                 },
                 icon: Icon(diagnosis.dermatologist == null? Icons.phone : Icons.book),
-                label: Text(diagnosis.dermatologist == null? 'Contact a Dermatologist' : 'Book An Appointment'),
+                label: Text(diagnosis.dermatologist == null ? 'Contact a Dermatologist' : 'Book An Appointment'),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.lightBlueAccent,
                   padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
@@ -211,7 +229,7 @@ class DiagnosisPage extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            subtitle: Text(prediction.treatment ?? "Not Treatment Provided"),
+            subtitle: Text(prediction.treatment ?? "No Treatment Provided"),
           ),
       ],
     );
@@ -220,7 +238,8 @@ class DiagnosisPage extends StatelessWidget {
   _infoForNotApprove() {
     return Column(
       children: [
-        Padding(
+        if (diagnosis.predictions.length > 1)
+          Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
@@ -300,6 +319,7 @@ class DiagnosisPage extends StatelessWidget {
             ],
           ),
         ),
+
         SizedBox(height: 16),
 
         Column(

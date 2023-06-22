@@ -132,15 +132,15 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                       TextButton(
                         onPressed: _onRegisterButtonPressed,
-                        child: const Text('Register As Patient'),
+                        child: const Text('Register'),
                       ),
                       const SizedBox(
                         height: 16.0,
                       ),
-                      TextButton(
+                      /*TextButton(
                         onPressed: _onDermRegisterButtonPressed,
                         child: const Text('Register As Dermatologist'),
-                      ),
+                      ),*/
                     ],
                   ),
                 ),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:khungulanga_app/models/slot.dart';
 
 import 'clinic.dart';
@@ -27,6 +29,7 @@ class Dermatologist {
   });
 
   factory Dermatologist.fromJson(Map<String, dynamic> json) {
+    log(json.toString());
     return Dermatologist(
       id: json['id'],
       qualification: json['qualification'],

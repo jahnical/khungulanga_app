@@ -84,11 +84,11 @@ class DiagnosisBloc extends Bloc<DiagnosisEvent, DiagnosisState> {
       yield DiagnosisLoading(_repository.diagnoses);
       event.diagnosis.approved = true;
       event.diagnosis.action = "Treatment";
-      event.prediction.approved = true;
-      event.prediction.treatment = event.treatment;
+      event.prediction?.approved = true;
+      event.prediction?.treatment = event.treatment;
       try {
         await _repository.updateDiagnosis(event.diagnosis);
-        await _repository.updatePrediction(event.prediction);
+        if (event.prediction != null) await _repository.updatePrediction(event.prediction!);
         yield DiagnosisUpdated(_repository.diagnoses);
         add(FetchDiagnoses());
       } catch (e) {

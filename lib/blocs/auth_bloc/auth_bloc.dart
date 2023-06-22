@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
@@ -66,7 +68,16 @@ class AuthBloc
 
       await userRepository.deleteToken(id: 0);
 
+      restartApp();
+
       yield AuthUnauthenticated();
     }
   }
+
+  void restartApp() {
+    // Invoke the platform-specific method to restart the app
+    SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+  }
+
+
 }

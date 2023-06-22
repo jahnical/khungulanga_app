@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khungulanga_app/blocs/auth_bloc/auth_bloc.dart';
 import 'package:khungulanga_app/blocs/home_navigation_bloc/home_navigation_bloc.dart';
 import 'package:khungulanga_app/widgets/appointment/appointments_page.dart';
+import 'package:khungulanga_app/widgets/profile/derm_profile.dart';
 
+import '../../repositories/user_repository.dart';
 import '../notification/notifications_page.dart';
 import '../results/results_page.dart';
 import '../slots/derm_slots.dart';
@@ -72,7 +74,9 @@ class _DermHomePageState extends State<DermHomePage> {
             title: Text('Profile'),
             leading: Icon(Icons.person),
             onTap: () {
-              // Navigate to the profile screen
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (context) => DermatologistProfilePage(dermatologist: RepositoryProvider.of<UserRepository>(context).dermatologist!),
+              ));
             },
           ),
           ExpansionTile(
@@ -94,6 +98,15 @@ class _DermHomePageState extends State<DermHomePage> {
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => AppointmentsPage(completed: true),
+                  ));
+                },
+              ),
+              ListTile(
+                title: Text('Cancelled Appointments'),
+                leading: Icon(Icons.cancel),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => AppointmentsPage(completed: false, cancelled: true),
                   ));
                 },
               ),

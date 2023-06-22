@@ -3,9 +3,11 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:khungulanga_app/repositories/notifications_repository.dart';
+import 'package:khungulanga_app/repositories/slot_repository.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:khungulanga_app/blocs/auth_bloc/auth_bloc.dart';
 import 'package:khungulanga_app/blocs/dermatologists_bloc/dermatologists_bloc.dart';
 import 'package:khungulanga_app/blocs/diagnosis_bloc/diagnosis_bloc.dart';
@@ -49,6 +51,8 @@ main() {
   Bloc.observer = SimpleBlocObserver();
   final userRepository = UserRepository();
 
+  initializeNotificationChannel();
+
   runApp(
       BlocProvider<AuthBloc>(
         create: (context) {
@@ -60,6 +64,20 @@ main() {
         child: App(userRepository: userRepository),
       )
   );
+}
+
+void initializeNotificationChannel() {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  // Handle foreground notifications
+  flutterLocalNotificationsPlugin.initialize(
+    const InitializationSettings(
+      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+    ),
+    onDidReceiveNotificationResponse: onNotificationResponse,
+    onDidReceiveBackgroundNotificationResponse: onNotificationResponse,
+  );
+
 }
 
 Future<void> initCamera() async {
@@ -111,6 +129,7 @@ class App extends StatelessWidget {
         RepositoryProvider(create: (context) => DiseaseRepository()),
         RepositoryProvider(create: (context) => AppointmentRepository()),
         RepositoryProvider(create: (context) => notificationRepository),
+        RepositoryProvider(create: (context) => SlotRepository()),
       ],
       child: MultiBlocProvider(
           providers: [
@@ -149,4 +168,7 @@ class App extends StatelessWidget {
       ),
     );
   }
+}
+void onNotificationResponse(NotificationResponse details) {
+  log(details.payload ?? "New notification");
 }

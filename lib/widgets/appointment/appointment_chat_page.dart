@@ -184,7 +184,7 @@ class _AppointmentChatPageState extends State<AppointmentChatPage> {
                       ),
                       const Expanded(child: SizedBox(),),
                       ElevatedButton(
-                        onPressed: _bloc.chat!.appointment.patientApproved != null? null :  () {
+                        onPressed: _bloc.chat!.appointment.patientRemoved != null? null :  () {
                           _bloc.add(ApproveAppointment());
                         },
                         child: const Text('Approve'),
@@ -192,7 +192,7 @@ class _AppointmentChatPageState extends State<AppointmentChatPage> {
                       const SizedBox(width: 16.0,),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
-                        onPressed: _bloc.chat!.appointment.patientRejected != null? null : () {
+                        onPressed: _bloc.chat!.appointment.patientCancelled != null? null : () {
                           _bloc.add(RejectAppointment());
                         },
                         child: const Text('Reject'),

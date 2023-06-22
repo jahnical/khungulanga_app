@@ -88,6 +88,7 @@ class UserRepository {
     await userDao.deleteUser(id);
     USER = null;
     this.patient = null;
+    this.dermatologist = null;
   }
 
   Future <bool> hasToken() async {

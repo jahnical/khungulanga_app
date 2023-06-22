@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -23,16 +25,35 @@ class BookSlotPage extends StatefulWidget {
 
 class _BookSlotPageState extends State<BookSlotPage> {
   late final List<Slot> slots;
-
+  bool isLoading = true;
   bool isBookingSlot = false;
+  String? errorMessage;
 
   @override
   void initState() {
-    setState(() {
-      slots = widget.dermatologist?.slots ?? [];
-      slots.sort((a, b) => getDayNumber(a.dayOfWeek).compareTo(getDayNumber(b.dayOfWeek)));
-    });
     super.initState();
+    fetchSlots();
+  }
+
+  Future<void> fetchSlots() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      slots = await RepositoryProvider.of<SlotRepository>(context).getSlotsOf(widget.dermatologist!.id);
+      slots.sort((a, b) => getDayNumber(a.dayOfWeek).compareTo(getDayNumber(b.dayOfWeek)));
+      log(slots.toString());
+    } catch (error) {
+      setState(() {
+        errorMessage = 'Failed to fetch slots. Please retry.';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -41,7 +62,25 @@ class _BookSlotPageState extends State<BookSlotPage> {
       appBar: AppBar(
         title: Text('${widget.dermatologist?.user.firstName} ${widget.dermatologist?.user.lastName} Slots'),
       ),
-      body: ListView.separated(
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : errorMessage != null
+          ? Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            errorMessage!,
+            style: TextStyle(fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: fetchSlots,
+            child: Text('Retry'),
+          ),
+        ],
+      )
+          : ListView.separated(
         itemCount: slots.length,
         separatorBuilder: (BuildContext context, int index) => SizedBox(height: 0),
         itemBuilder: (BuildContext context, int index) {
@@ -150,7 +189,7 @@ class _BookSlotPageState extends State<BookSlotPage> {
     );
   }
 
-  Future<Appointment?> bookSlot(Slot slot, Diagnosis? diagnosis, BuildContext context) async {
+Future<Appointment?> bookSlot(Slot slot, Diagnosis? diagnosis, BuildContext context) async {
     final repository = context.read<AppointmentRepository>();
     final patient = context.read<UserRepository>().patient;
     var appointment = Appointment(
@@ -182,26 +221,5 @@ class _BookSlotPageState extends State<BookSlotPage> {
       nextSlotDate = nextSlotDate.add(Duration(days: dayDiff));
     }
     return nextSlotDate;
-  }
-
-  int getDayNumber(String day) {
-    switch (day) {
-      case 'Monday':
-        return 1;
-      case 'Tuesday':
-        return 2;
-      case 'Wednesday':
-        return 3;
-      case 'Thursday':
-        return 4;
-      case 'Friday':
-        return 5;
-      case 'Saturday':
-        return 6;
-      case 'Sunday':
-        return 7;
-      default:
-        return 0;
-    }
   }
 }

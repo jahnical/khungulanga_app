@@ -31,7 +31,7 @@ class UpdateDiagnosis extends DiagnosisEvent {
 
 class SubmitTreatmentPressed extends DiagnosisEvent {
   final Diagnosis diagnosis;
-  final Prediction prediction;
+  final Prediction? prediction;
   final String treatment;
 
   SubmitTreatmentPressed({

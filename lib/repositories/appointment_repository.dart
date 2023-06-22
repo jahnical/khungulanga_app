@@ -19,10 +19,11 @@ class AppointmentRepository {
     return chats;
   }
 
-  Future<List<Appointment>> getAppointments(bool completed) async {
-    final response = await _dio.get('$APPOINTMENTS_URL/?done=$completed', options: getOptions());
+  Future<List<Appointment>> getAppointments(bool completed, {bool cancelled=false}) async {
+    final response = await _dio.get('$APPOINTMENTS_URL/?done=$completed&cancelled=$cancelled', options: getOptions());
     final appointmentsJson = response.data as List<dynamic>;
     final appointments = appointmentsJson.map((appointmentJson) => Appointment.fromJson(appointmentJson)).toList();
+
     return appointments;
   }
 
@@ -92,6 +93,18 @@ class AppointmentRepository {
       final appointmentJson = response.data as Map<String, dynamic>;
       final bookedAppointment = Appointment.fromJson(appointmentJson);
       return bookedAppointment;
+    }
+  }
+
+  Future<Appointment> getAppointment(int i) async {
+    final response = await _dio.get('$APPOINTMENTS_URL/$i/', options: getOptions());
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to get appointment');
+    } else {
+      final appointmentJson = response.data as Map<String, dynamic>;
+      final appointment = Appointment.fromJson(appointmentJson);
+      return appointment;
     }
   }
 }

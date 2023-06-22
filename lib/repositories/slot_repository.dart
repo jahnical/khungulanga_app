@@ -16,6 +16,13 @@ class SlotRepository {
     return slots;
   }
 
+  Future<List<Slot>> getSlotsOf(int dermId) async {
+    final response = await _dio.get('$SLOTS_URL/of/$dermId/', options: getOptions());
+    final slotsJson = response.data as List<dynamic>;
+    final slots = slotsJson.map((slotJson) => Slot.fromJson(slotJson)).toList();
+    return slots;
+  }
+
   Future<Slot> getSlot(int id) async {
     final response = await _dio.get('$SLOTS_URL/$id/', options: getOptions());
     final slotJson = response.data as Map<String, dynamic>;

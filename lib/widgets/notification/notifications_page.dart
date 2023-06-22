@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:khungulanga_app/models/notification.dart';
 import 'package:khungulanga_app/repositories/notifications_repository.dart';
+import 'package:khungulanga_app/widgets/appointment/appointments_page.dart';
 import 'package:khungulanga_app/widgets/diagnosis/derm_diagnosis_page.dart';
 
+import '../../repositories/appointment_repository.dart';
 import '../../repositories/diagnosis_repository.dart';
 import '../../repositories/user_repository.dart';
 import '../diagnosis/diagnosis_page.dart';
@@ -25,7 +27,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
   @override
   void initState() {
     super.initState();
-    _notificationRepository = NotificationRepository();
+    _notificationRepository = RepositoryProvider.of<NotificationRepository>(context);
     _loadNotifications();
   }
 
@@ -243,7 +245,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     super.dispose();
   }
 
-  void notificationTaped(NotificationModel notification, BuildContext context) {
+  Future<void> notificationTaped(NotificationModel notification, BuildContext context) async {
     markNotificationAsRead(notification);
     if (notification.relatedName == 'Diagnosis') {
       final repo = RepositoryProvider.of<DiagnosisRepository>(context);
@@ -256,6 +258,23 @@ class _NotificationsPageState extends State<NotificationsPage> {
       }
 
     } else if (notification.relatedName == 'Appointment') {
+      setState(() {
+        isLoading = true;
+      });
+      try {
+        final repo = RepositoryProvider.of<AppointmentRepository>(context);
+        final appointment = await repo.getAppointment(notification.relatedId!);
+        Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => AppointmentsPage(completed: appointment.done, cancelled: appointment.patientCancelled != null || appointment.dermatologistCancelled != null)
+            ));
+      } catch (error) {
+        log(error.toString());
+      } finally {
+        setState(() {
+          isLoading = false;
+        });
+      }
 
     }
   }

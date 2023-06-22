@@ -9,17 +9,17 @@ import 'patient.dart';
 
 class Appointment {
   final int? id;
-  final Dermatologist dermatologist;
-  final Patient? patient;
+  Dermatologist dermatologist;
+  Patient? patient;
   DateTime? bookDate = DateTime.now();
   DateTime? appoTime;
   bool done;
   Duration? duration;
   double? cost;
-  DateTime? patientApproved;
-  DateTime? dermatologistApproved;
-  DateTime? patientRejected;
-  DateTime? dermatologistRejected;
+  DateTime? patientRemoved;
+  DateTime? dermatologistRemoved;
+  DateTime? patientCancelled;
+  DateTime? dermatologistCancelled;
   String extraInfo;
   Diagnosis? diagnosis;
   Slot? slot;
@@ -33,10 +33,10 @@ class Appointment {
     this.done = false,
     this.duration = const Duration(hours: 1),
     this.cost = 0.0,
-    this.patientApproved,
-    this.dermatologistApproved,
-    this.patientRejected,
-    this.dermatologistRejected,
+    this.patientRemoved,
+    this.dermatologistRemoved,
+    this.patientCancelled,
+    this.dermatologistCancelled,
     this.diagnosis,
     this.extraInfo = "Extra Info",
     this.slot
@@ -52,10 +52,10 @@ class Appointment {
       done: json['done'] ?? false,
       duration: json['duration'] != null ? Duration(minutes: json['duration'] ?? 0) : null,
       cost: json['cost']?.toDouble() ?? 0.0,
-      patientApproved: json['patient_approved'] != null ? DateTime.parse(json['patient_approved']) : null,
-      dermatologistApproved: json['dermatologist_approved'] != null ? DateTime.parse(json['dermatologist_approved']) : null,
-      patientRejected: json['patient_rejected'] != null ? DateTime.parse(json['patient_rejected']) : null,
-      dermatologistRejected: json['dermatologist_rejected'] != null ? DateTime.parse(json['dermatologist_rejected']) : null,
+      patientRemoved: json['patient_removed'] != null ? DateTime.parse(json['patient_removed']) : null,
+      dermatologistRemoved: json['dermatologist_removed'] != null ? DateTime.parse(json['dermatologist_removed']) : null,
+      patientCancelled: json['patient_cancelled'] != null ? DateTime.parse(json['patient_cancelled']) : null,
+      dermatologistCancelled: json['dermatologist_cancelled'] != null ? DateTime.parse(json['dermatologist_cancelled']) : null,
       extraInfo: json['extra_info'] ?? "",
       diagnosis: json['diagnosis'] != null ? Diagnosis.fromJson(json['diagnosis']) : null,
       slot: json['slot'] != null ? Slot.fromJson(json['slot']) : null,
@@ -73,10 +73,10 @@ class Appointment {
       'duration': duration?.inMinutes,
       'cost': cost,
       'extra_info': extraInfo,
-      'patient_approved': patientApproved?.toIso8601String(),
-      'dermatologist_approved': dermatologistApproved?.toIso8601String(),
-      'patient_rejected': patientRejected?.toIso8601String(),
-      'dermatologist_rejected': dermatologistRejected?.toIso8601String(),
+      'patient_removed': patientRemoved?.toIso8601String(),
+      'dermatologist_removed': dermatologistRemoved?.toIso8601String(),
+      'patient_cancelled': patientCancelled?.toIso8601String(),
+      'dermatologist_cancelled': dermatologistCancelled?.toIso8601String(),
       'diagnosis_id': diagnosis?.id,
       'slot_id': slot?.id,
     };
@@ -108,10 +108,10 @@ class Appointment {
       done: done ?? this.done,
       duration: duration ?? this.duration,
       cost: cost ?? this.cost,
-      patientApproved: patientApproved ?? this.patientApproved,
-      dermatologistApproved: dermatologistApproved ?? this.dermatologistApproved,
-      patientRejected: patientRejected ?? this.patientRejected,
-      dermatologistRejected: dermatologistRejected ?? this.dermatologistRejected,
+      patientRemoved: patientApproved ?? this.patientRemoved,
+      dermatologistRemoved: dermatologistApproved ?? this.dermatologistRemoved,
+      patientCancelled: patientRejected ?? this.patientCancelled,
+      dermatologistCancelled: dermatologistRejected ?? this.dermatologistCancelled,
       extraInfo: extraInfo ?? this.extraInfo,
       diagnosis: diagnosis ?? this.diagnosis,
       slot: slot ?? this.slot,

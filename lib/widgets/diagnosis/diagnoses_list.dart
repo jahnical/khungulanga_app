@@ -65,7 +65,7 @@ class DiagnosesList extends StatelessWidget {
                         ),
                       ),
                       title: Text(
-                        isHistory? toTitleCase(diagnosis.predictions[0].disease.name) : 'Results From ${diagnosis.patient.user?.firstName} ${diagnosis.patient.user?.lastName}',
+                        isHistory? toTitleCase(diagnosis.predictions.isNotEmpty? diagnosis.predictions[0].disease.name : "No Disease") : 'Results From ${diagnosis.patient.user?.firstName} ${diagnosis.patient.user?.lastName}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: const TextStyle(
@@ -82,7 +82,7 @@ class DiagnosesList extends StatelessWidget {
                         ),
                       ),
                       trailing: Text(
-                        '${(diagnosis.predictions[0].probability * 100).toInt()}%',
+                        diagnosis.predictions.isNotEmpty? '${(diagnosis.predictions[0].probability * 100).toInt()}%' : 'N/A',
                         style: const TextStyle(
                           fontWeight: FontWeight.w400,
                           fontSize: 14,
