@@ -8,13 +8,22 @@ import 'package:khungulanga_app/repositories/user_repository.dart';
 import '../diagnosis/diagnosis_page.dart';
 import '../profile/derm_profile.dart';
 
-class AppointmentDetailPage extends StatelessWidget {
+class AppointmentDetailPage extends StatefulWidget {
   final Appointment appointment;
 
   AppointmentDetailPage({required this.appointment});
 
-  void _cancelAppointment(BuildContext context) {
-    showDialog(
+  @override
+  _AppointmentDetailPageState createState() => _AppointmentDetailPageState();
+}
+
+class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
+  bool _isLoading = false;
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  Future<void> _cancelAppointment(BuildContext context) async {
+    final confirmed = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -24,29 +33,58 @@ class AppointmentDetailPage extends StatelessWidget {
             TextButton(
               child: Text('Cancel'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(false);
               },
             ),
             TextButton(
               child: Text('Confirm'),
-              onPressed: () async {
-                // Perform cancellation logic here
-                final _isPatient = RepositoryProvider.of<UserRepository>(context).patient != null;
-                appointment.slot = null;
-                if (_isPatient) appointment.patientCancelled = DateTime.now();
-                else appointment.dermatologistCancelled = DateTime.now();
-                await RepositoryProvider.of<AppointmentRepository>(context).updateAppointment(appointment);
-                Navigator.of(context).pop();
+              onPressed: () {
+                Navigator.of(context).pop(true);
               },
             ),
           ],
         );
       },
     );
+
+    if (confirmed != null && confirmed) {
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+
+        final _isPatient = RepositoryProvider.of<UserRepository>(context).patient != null;
+        widget.appointment.slot = null;
+        if (_isPatient)
+          widget.appointment.patientCancelled = DateTime.now();
+        else
+          widget.appointment.dermatologistCancelled = DateTime.now();
+
+        await RepositoryProvider.of<AppointmentRepository>(context).updateAppointment(widget.appointment);
+
+        setState(() {
+          _isLoading = false;
+        });
+
+        _showSnackBar(context, 'Appointment cancelled successfully');
+
+        Navigator.of(context).pop();
+      } catch (error) {
+        setState(() {
+          _isLoading = false;
+        });
+
+        _showSnackBar(context, 'An error occurred while cancelling the appointment');
+      }
+    }
   }
 
-  void _markAsDone(BuildContext context) {
-    showDialog(
+  void _showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
+  }
+
+  Future<void> _markAsDone(BuildContext context) async {
+    final confirmed = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
@@ -56,42 +94,61 @@ class AppointmentDetailPage extends StatelessWidget {
             TextButton(
               child: Text('Cancel'),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(false);
               },
             ),
             TextButton(
               child: Text('Confirm'),
-              onPressed: () async {
-                appointment.done = true;
-                await RepositoryProvider.of<AppointmentRepository>(context).updateAppointment(appointment);
-                // Perform mark as done logic here
-                Navigator.of(context).pop();
+              onPressed: () {
+                Navigator.of(context).pop(true);
               },
             ),
           ],
         );
       },
     );
+
+    if (confirmed != null && confirmed) {
+      try {
+        setState(() {
+          _isLoading = true;
+        });
+
+        widget.appointment.done = true;
+        await RepositoryProvider.of<AppointmentRepository>(context).updateAppointment(widget.appointment);
+
+        setState(() {
+          _isLoading = false;
+        });
+
+        _showSnackBar(context, 'Appointment marked as done');
+
+        Navigator.of(context).pop();
+      } catch (error) {
+        setState(() {
+          _isLoading = false;
+        });
+
+        _showSnackBar(context, 'An error occurred while marking the appointment as done');
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
         title: Text('Appointment Details'),
         actions: [
           IconButton(
             icon: Icon(Icons.cancel),
-            onPressed: () {
-              _cancelAppointment(context);
-            },
+            onPressed: _isLoading ? null : () => _cancelAppointment(context),
           ),
           IconButton(
             icon: Icon(Icons.done),
-            onPressed: () {
-              _markAsDone(context);
-            },
+            onPressed: _isLoading ? null : () => _markAsDone(context),
           ),
         ],
       ),
@@ -104,50 +161,50 @@ class AppointmentDetailPage extends StatelessWidget {
               AppointmentDetailCard(
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (_) {
-                    return DermatologistProfilePage(dermatologist: appointment.dermatologist,);
+                    return DermatologistProfilePage(dermatologist: widget.appointment.dermatologist,);
                   }));
                 },
                 title: 'Dermatologist',
                 icon: Icons.person,
-                content: '${appointment.dermatologist.user.firstName} ${appointment.dermatologist.user.lastName}',
+                content: '${widget.appointment.dermatologist.user.firstName} ${widget.appointment.dermatologist.user.lastName}',
               ),
             if (RepositoryProvider.of<UserRepository>(context).patient == null)
               AppointmentDetailCard(
                 title: 'Patient',
                 icon: Icons.person,
-                content: '${appointment.patient?.user?.firstName} ${appointment.patient?.user?.lastName}',
+                content: '${widget.appointment.patient?.user?.firstName} ${widget.appointment.patient?.user?.lastName}',
               ),
             SizedBox(height: 8.0),
             AppointmentDetailCard(
               title: 'Appointment Date',
               icon: Icons.calendar_today,
-              content: appointment.appoTime != null
-                  ? DateFormat('MMM d, yyyy h:mm').format(appointment.appoTime!)
+              content: widget.appointment.appoTime != null
+                  ? DateFormat('MMM d, yyyy h:mm').format(widget.appointment.appoTime!)
                   : 'N/A',
             ),
             SizedBox(height: 8.0),
             AppointmentStatusCard(
-              appointment: appointment,
+              appointment: widget.appointment,
             ),
             SizedBox(height: 8.0),
             AppointmentDetailCard(
               title: 'Healthy Center',
               icon: Icons.location_pin,
-              content: '${appointment.dermatologist.clinic.name} Clinic',
+              content: '${widget.appointment.dermatologist.clinic.name} Clinic',
             ),
             SizedBox(height: 8.0),
             AppointmentDetailCard(
               title: 'Hourly Cost',
               icon: Icons.money,
-              content: '\$${appointment.dermatologist.hourlyRate}',
+              content: '\$${widget.appointment.dermatologist.hourlyRate}',
             ),
             SizedBox(height: 8.0),
             AppointmentDetailCard(
               onTap: () {
-                if (appointment.diagnosis != null) {
+                if (widget.appointment.diagnosis != null) {
                   Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => DiagnosisPage(
-                      diagnosis: appointment.diagnosis!,
+                      diagnosis: widget.appointment.diagnosis!,
                       fromAppointment: true,
                     ),
                   ));
@@ -155,7 +212,11 @@ class AppointmentDetailPage extends StatelessWidget {
               },
               title: 'Diagnosis',
               icon: Icons.local_hospital,
-              content: appointment.diagnosis == null? 'N/A' : appointment.diagnosis!.predictions.isNotEmpty? appointment.diagnosis!.predictions[0].disease.name : "No Disease",
+              content: widget.appointment.diagnosis == null
+                  ? 'N/A'
+                  : widget.appointment.diagnosis!.predictions.isNotEmpty
+                  ? widget.appointment.diagnosis!.predictions[0].disease.name
+                  : "No Disease",
             ),
           ],
         ),
@@ -182,7 +243,6 @@ class AppointmentDetailCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        //color: Colors.blue[50],
         elevation: 4.0,
         child: Padding(
           padding: EdgeInsets.all(16.0),
@@ -229,7 +289,6 @@ class AppointmentStatusCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      //color: Colors.blue[50],
       elevation: 4.0,
       child: Padding(
         padding: EdgeInsets.all(16.0),

@@ -91,17 +91,22 @@ class _DermatologistListState extends State<DermatologistList> {
       itemCount: dermatologists.length,
       itemBuilder: (BuildContext context, int index) {
         final dermatologist = dermatologists[index];
-        return Column(
-          children: [
-            SizedBox(height: 8.0),
-            ListTile(
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 4.0),
+          child: Card(
+            elevation: 2.0,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: ListTile(
+              contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               leading: Text(
                 '\$${dermatologist.hourlyRate}',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               title: Text(
                 '${dermatologist.user.firstName} ${dermatologist.user.lastName}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,
                 ),
@@ -133,9 +138,7 @@ class _DermatologistListState extends State<DermatologistList> {
               ),
               onTap: () => _viewDetails(context, dermatologist),
             ),
-            SizedBox(height: 8.0),
-            Divider(height: 1.0, thickness: 1.0),
-          ],
+          ),
         );
       },
     );

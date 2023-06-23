@@ -7,8 +7,8 @@ class Patient {
   final String? firstName;
   final String? lastName;
   final String ?email;
-  final DateTime dob;
-  final String gender;
+  DateTime dob;
+  String gender;
   bool? isStaff =false;
   bool? isActive = false;
   DateTime? lastLogin;

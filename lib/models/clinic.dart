@@ -2,11 +2,13 @@ class Clinic {
   final String name;
   final double latitude;
   final double longitude;
+  final int? id;
 
   Clinic({
     required this.name,
     required this.latitude,
     required this.longitude,
+    this.id,
   });
 
   factory Clinic.fromJson(Map<String, dynamic> json) {
@@ -14,6 +16,7 @@ class Clinic {
       name: json['name'],
       latitude: json['latitude'],
       longitude: json['longitude'],
+      id: json['id'],
     );
   }
 
@@ -22,6 +25,7 @@ class Clinic {
       'name': name,
       'latitude': latitude,
       'longitude': longitude,
+      'id': id,
     };
   }
 }

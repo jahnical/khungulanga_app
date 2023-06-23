@@ -17,3 +17,4 @@ const SLOTS_URL = "$API_BASE_URL/slots";
 const DEVICES_URL = "$API_BASE_URL/devices";
 const NOTIFICATIONS_URL = "$API_BASE_URL/notifications";
 const PREDICTION_URL = "$API_BASE_URL/predictions";
+const CLINICS_URL = "$API_BASE_URL/clinics";

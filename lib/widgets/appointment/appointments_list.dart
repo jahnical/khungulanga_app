@@ -104,7 +104,7 @@ class _AppointmentListState extends State<AppointmentList> {
                     ),
                     trailing: _isUpdating
                         ? CircularProgressIndicator()
-                        : appointment.done
+                        : appointment.done || widget.cancelled
                         ? IconButton(
                       icon: Icon(Icons.remove_circle),
                       color: Colors.red,
@@ -219,7 +219,7 @@ class _AppointmentListState extends State<AppointmentList> {
       setState(() {
         _isUpdating = false;
         _appointmentsFuture =
-            widget.appointmentRepository.getAppointments(widget.completed);
+            widget.appointmentRepository.getAppointments(widget.completed, cancelled: widget.cancelled);
       });
 
       ScaffoldMessenger.of(context).showSnackBar(

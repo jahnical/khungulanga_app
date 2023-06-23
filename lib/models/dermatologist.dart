@@ -43,6 +43,17 @@ class Dermatologist {
     );
   }
 
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'qualification': qualification,
+        'email': email,
+        'phone_number': phoneNumber,
+        'clinic_id': clinic.id,
+        'user_id': user.id,
+        'specialization': specialization,
+        'hourly_rate': hourlyRate,
+      };
+
   static List<Map<String, String>> specializations = [
     {
       "id": "COSMETIC",
@@ -73,4 +84,5 @@ class Dermatologist {
       "name": "Teledermatologist"
     },
   ];
+
 }

@@ -2,7 +2,10 @@ import 'dart:developer';
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:khungulanga_app/repositories/clinic_repository.dart';
+import 'package:khungulanga_app/repositories/dermatologist_repository.dart';
 import 'package:khungulanga_app/repositories/notifications_repository.dart';
+import 'package:khungulanga_app/repositories/patient_repository.dart';
 import 'package:khungulanga_app/repositories/slot_repository.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
@@ -130,6 +133,9 @@ class App extends StatelessWidget {
         RepositoryProvider(create: (context) => AppointmentRepository()),
         RepositoryProvider(create: (context) => notificationRepository),
         RepositoryProvider(create: (context) => SlotRepository()),
+        RepositoryProvider(create: (context) => DermatologistRepository()),
+        RepositoryProvider(create: (context) => ClinicRepository()),
+        RepositoryProvider(create: (context) => PatientRepository()),
       ],
       child: MultiBlocProvider(
           providers: [

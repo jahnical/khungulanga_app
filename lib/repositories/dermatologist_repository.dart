@@ -38,6 +38,16 @@ class DermatologistRepository {
         data: jsonEncode(dermatologist.toJson()));
   }*/
 
+  Future<void> updateDermatologist(Dermatologist dermatologist) async {
+    final response = await _dio.put('$DERMATOLOGISTS_URL/${dermatologist.user.username}/', data: dermatologist.toJson(), options: putOptions());
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to update dermatologist.');
+    } else {
+      print('Dermatologist updated successfully.');
+    }
+  }
+
   Future<void> deleteDermatologist(int id) async {
     await _dio.delete('$DERMATOLOGISTS_URL/$id');
   }

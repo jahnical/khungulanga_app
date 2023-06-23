@@ -258,11 +258,13 @@ class _NotificationsPageState extends State<NotificationsPage> {
       }
 
     } else if (notification.relatedName == 'Appointment') {
-      setState(() {
+      final repo = RepositoryProvider.of<AppointmentRepository>(context);
+
+      /*setState(() {
         isLoading = true;
-      });
+      });*/
       try {
-        final repo = RepositoryProvider.of<AppointmentRepository>(context);
+
         final appointment = await repo.getAppointment(notification.relatedId!);
         Navigator.of(context).push(
             MaterialPageRoute(
