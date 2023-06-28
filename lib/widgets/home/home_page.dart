@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khungulanga_app/blocs/auth_bloc/auth_bloc.dart';
 import 'package:khungulanga_app/blocs/home_navigation_bloc/home_navigation_bloc.dart';
+import 'package:khungulanga_app/models/notification.dart';
+import 'package:khungulanga_app/repositories/notifications_repository.dart';
 import 'package:khungulanga_app/repositories/user_repository.dart';
 import 'package:khungulanga_app/widgets/appointment/appointment_chats.dart';
 import 'package:khungulanga_app/widgets/appointment/appointments_page.dart';
@@ -10,6 +12,7 @@ import 'package:khungulanga_app/widgets/diseases/diseases_page.dart';
 import 'package:khungulanga_app/widgets/history/history_page.dart';
 import 'package:khungulanga_app/widgets/notification/notifications_page.dart';
 import '../profile/patient_profile.dart';
+import '../refreshable_widget.dart';
 import '../scan/scan_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -22,7 +25,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final List<String> _titles = ['History', 'Scan', 'Dermatologists'];
 
-  final List<Widget> _pages = [const HistoryPage(), ScanPage(), DermatologistList(userLocation: [0.0, 0.0],),];
+  final List<Widget> _pages = [HistoryPage(), ScanPage(), DermatologistList(userLocation: [0.0, 0.0],),];
+
+  late final NotificationRepository? notificationRepository;
+
+  @override
+  void initState() {
+    notificationRepository = RepositoryProvider.of<NotificationRepository?>(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +44,25 @@ class _HomePageState extends State<HomePage> {
               title: Text(_titles[_getCurrentIndex()]),
               actions: [
                 IconButton(
-                  icon: Icon(Icons.notifications),
+                  icon: StreamBuilder<List<NotificationModel>>(
+                    stream: notificationRepository?.notificationsStream,
+                    builder: (context, snapshot) {
+                      return Icon(notificationRepository?.hasUnread() == true? Icons.notifications_active : Icons.notifications);
+                    }
+                  ),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => NotificationsPage(),
                     ));
                   },
                 ),
+                if (_pages[_getCurrentIndex()] is RefreshableWidget)
+                  IconButton(
+                    icon: Icon(Icons.refresh),
+                    onPressed: () {
+                      (_pages[_getCurrentIndex()] as RefreshableWidget).refresh();
+                    },
+                  ),
               ],
             ),
             drawer: _buildDrawer(),

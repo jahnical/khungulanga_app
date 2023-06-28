@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ictp7.khungulanga_app">
    <application
-        android:label="khungulanga_app"
+        android:label="Khungulanga"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

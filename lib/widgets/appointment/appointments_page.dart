@@ -1,12 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
-import 'package:khungulanga_app/models/appointment.dart';
 import 'package:khungulanga_app/repositories/appointment_repository.dart';
-import 'package:khungulanga_app/repositories/user_repository.dart';
-
-import '../../blocs/home_navigation_bloc/home_navigation_bloc.dart';
-import 'appointment_detail_page.dart';
 import 'appointments_list.dart';
 
 class AppointmentsPage extends StatefulWidget {
@@ -23,19 +16,16 @@ class AppointmentsPage extends StatefulWidget {
 }
 
 class _AppointmentsPageState extends State<AppointmentsPage> {
-  Future<List<Appointment>> _appointmentsFuture = Future.value([]);
+  late AppointmentList list;
 
   @override
   void initState() {
     super.initState();
-    _loadAppointments();
+    list = AppointmentList(completed: widget.completed, cancelled: widget.cancelled);
   }
 
   void _loadAppointments() {
-    setState(() {
-      _appointmentsFuture =
-          widget.appointmentRepository.getAppointments(widget.completed, cancelled: widget.cancelled);
-    });
+    list.refresh();
   }
 
   @override
@@ -43,8 +33,15 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.completed ? "Completed" : widget.cancelled? "Cancelled" : "Scheduled"} Appointments'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: _loadAppointments,
+          ),
+        ]
       ),
-      body: AppointmentList(completed: widget.completed, cancelled: widget.cancelled),
+      body: RefreshIndicator(onRefresh: () async { return _loadAppointments(); },
+      child: list),
     );
   }
 }

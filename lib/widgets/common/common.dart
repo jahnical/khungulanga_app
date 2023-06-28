@@ -1,3 +1,5 @@
+import '../../models/slot.dart';
+
 export './loading_indicator.dart';
 
 String formatStartTime(DateTime startTime) {
@@ -25,4 +27,16 @@ int getDayNumber(String day) {
     default:
       return 0;
   }
+}
+
+DateTime calculateNextSlotDate(Slot slot) {
+  var now = DateTime.now();
+  var nextSlotDate = DateTime.now().copyWith(hour: slot.startTime.hour, minute: slot.startTime.minute);
+  final dayDiff = getDayNumber(slot.dayOfWeek) - now.weekday;
+  if (dayDiff < 0) {
+    nextSlotDate = nextSlotDate.add(Duration(days: 7 + dayDiff));
+  } else {
+    nextSlotDate = nextSlotDate.add(Duration(days: dayDiff));
+  }
+  return nextSlotDate;
 }

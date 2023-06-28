@@ -45,7 +45,7 @@ class DiagnosisBloc extends Bloc<DiagnosisEvent, DiagnosisState> {
     } else if (event is Diagnose) {
       try {
         yield Diagnosing(_repository.diagnoses);
-        final diagnosis = await DiagnosisRepository().diagnose(event.data);
+        final diagnosis = await DiagnosisRepository().diagnose(event.data, event.cancelToken);
         yield DiagnosisSuccess(_repository.diagnoses, diagnosis);
       } on AppException catch (e) {
         log("Error ${e.code}", error: e);

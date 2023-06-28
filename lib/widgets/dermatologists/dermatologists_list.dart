@@ -5,12 +5,13 @@ import 'package:khungulanga_app/models/dermatologist.dart';
 import 'package:khungulanga_app/models/diagnosis.dart';
 import 'package:khungulanga_app/widgets/appointment/appointment_chat_page.dart';
 import 'package:khungulanga_app/widgets/profile/derm_profile.dart';
+import 'package:khungulanga_app/widgets/refreshable_widget.dart';
 import 'package:khungulanga_app/widgets/slots/book_slot.dart';
 import 'package:khungulanga_app/widgets/slots/derm_slots.dart';
 
 import '../../repositories/diagnosis_repository.dart';
 
-class DermatologistList extends StatefulWidget {
+class DermatologistList extends RefreshableWidget {
   final List<double> userLocation;
   final Diagnosis? diagnosis;
 
@@ -23,8 +24,34 @@ class DermatologistList extends StatefulWidget {
   _DermatologistListState createState() => _DermatologistListState();
 }
 
-class _DermatologistListState extends State<DermatologistList> {
+class _DermatologistListState extends RefreshableWidgetState<DermatologistList> {
   bool _isUpdating = false;
+  FilterType filterType = FilterType.All;
+  List<Dermatologist> filteredDermatologists = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredDermatologists = [];
+    filterType = widget.diagnosis != null? FilterType.Free : FilterType.All;
+
+    if (BlocProvider.of<DermatologistsBloc>(context).state is DermatologistsLoadedState) {
+      _applyFilter(filterType, (BlocProvider.of<DermatologistsBloc>(context).state as DermatologistsLoadedState).dermatologists);
+    }
+  }
+
+  void _applyFilter(FilterType type, List<Dermatologist> dermatologists) {
+    setState(() {
+      filterType = type;
+      if (type == FilterType.All) {
+        filteredDermatologists = dermatologists;
+      } else {
+        filteredDermatologists = dermatologists
+            .where((dermatologist) => type == FilterType.Free ? dermatologist.hourlyRate <= 0 : dermatologist.hourlyRate > 0)
+            .toList();
+      }
+    });
+  }
 
   Widget _buildLoadingIndicator() {
     return Center(
@@ -36,13 +63,14 @@ class _DermatologistListState extends State<DermatologistList> {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(errorMessage),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           ElevatedButton(
             onPressed: () =>
                 context.read<DermatologistsBloc>().add(LoadDermatologistsEvent()),
-            child: Text('Retry'),
+            child: const Text('Retry'),
           ),
         ],
       ),
@@ -70,24 +98,66 @@ class _DermatologistListState extends State<DermatologistList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DermatologistsBloc, DermatologistsState>(
-      builder: (context, state) {
-        if (state is DermatologistsLoadingState) {
-          return _buildLoadingIndicator();
-        } else if (state is DermatologistsLoadedState) {
-          return _buildDermatologistsList(state.dermatologists, context);
-        } else if (state is DermatologistsErrorState) {
-          return _buildError(context, state.errorMessage);
-        } else {
-          return Container();
-        }
-      },
-    );
+    return BlocListener<DermatologistsBloc, DermatologistsState>(
+        listener: (context, state) {
+          if (state is DermatologistsLoadedState) _applyFilter(filterType, state.dermatologists);
+        },
+        child: RefreshIndicator(
+          onRefresh: () async {
+            refresh();
+          },
+          child: BlocBuilder<DermatologistsBloc, DermatologistsState>(
+            builder: (context, state) {
+              if (state is DermatologistsLoadingState) {
+                return _buildLoadingIndicator();
+              } else if (state is DermatologistsLoadedState) {
+                return Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        FilterChip(
+                          label: Text('All'),
+                          selected: filterType == FilterType.All,
+                          onSelected: (selected) => _applyFilter(FilterType.All, state.dermatologists),
+                          selectedColor: Colors.lightBlueAccent,
+                        ),
+                        SizedBox(width: 16),
+                        FilterChip(
+                          label: Text('Free'),
+                          selected: filterType == FilterType.Free,
+                          onSelected: (selected) => _applyFilter(FilterType.Free, state.dermatologists),
+                          selectedColor: Colors.lightBlueAccent,
+                        ),
+                        SizedBox(width: 16),
+                        FilterChip(
+                          label: Text('Paid'),
+                          selected: filterType == FilterType.Paid,
+                          onSelected: (selected) => _applyFilter(FilterType.Paid, state.dermatologists),
+                          selectedColor: Colors.lightBlueAccent,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    _buildDermatologistsList(filteredDermatologists, context),
+                  ],
+                );
+              } else if (state is DermatologistsErrorState) {
+                return _buildError(context, state.errorMessage);
+              } else {
+                return Container();
+              }
+            },
+          ),
+    ),
+);
   }
 
   Widget _buildDermatologistsList(
       List<Dermatologist> dermatologists, BuildContext context) {
     return ListView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: dermatologists.length,
       itemBuilder: (BuildContext context, int index) {
         final dermatologist = dermatologists[index];
@@ -101,8 +171,8 @@ class _DermatologistListState extends State<DermatologistList> {
             child: ListTile(
               contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               leading: Text(
-                '\$${dermatologist.hourlyRate}',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                'MWK ${dermatologist.hourlyRate}',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.amber),
               ),
               title: Text(
                 '${dermatologist.user.firstName} ${dermatologist.user.lastName}',
@@ -129,8 +199,7 @@ class _DermatologistListState extends State<DermatologistList> {
                       : Icons.book,
                   color: Theme.of(context).primaryColor,
                 ),
-                onPressed: () =>
-                widget.diagnosis != null &&
+                onPressed: () => widget.diagnosis != null &&
                     widget.diagnosis?.dermatologist == null &&
                     dermatologist.hourlyRate < 1
                     ? _sendResults(context, dermatologist)
@@ -158,7 +227,9 @@ class _DermatologistListState extends State<DermatologistList> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Please provide any additional information concerning your problem:'),
+                  Text(
+                    'Please provide any additional information concerning your problem:\n(You can as well book an appointment)',
+                  ),
                   SizedBox(height: 16.0),
                   TextField(
                     onChanged: (value) {
@@ -167,6 +238,7 @@ class _DermatologistListState extends State<DermatologistList> {
                     decoration: InputDecoration(
                       hintText: 'Additional Information',
                     ),
+                    maxLines: null,
                   ),
                 ],
               ),
@@ -175,7 +247,11 @@ class _DermatologistListState extends State<DermatologistList> {
                   onPressed: () => Navigator.of(context).pop(),
                   child: Text('Cancel'),
                 ),
-                TextButton(
+                IconButton(
+                  onPressed: () => _bookAppointment(context, dermatologist),
+                  icon: Icon(Icons.book, color: Theme.of(context).primaryColor),
+                ),
+                IconButton(
                   onPressed: () async {
                     setState(() {
                       _isUpdating = true;
@@ -184,9 +260,9 @@ class _DermatologistListState extends State<DermatologistList> {
                     await _updateDiagnosis(context, dermatologist, additionalInfo);
                     Navigator.of(context).pop();
                   },
-                  child: _isUpdating
+                  icon: _isUpdating
                       ? CircularProgressIndicator()
-                      : Text('Send'),
+                      : Icon(Icons.send, color: Theme.of(context).primaryColor),
                 ),
               ],
             );
@@ -210,6 +286,7 @@ class _DermatologistListState extends State<DermatologistList> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Results sent successfully'),
+          backgroundColor: Colors.green,
         ),
       );
       Navigator.pop(context);
@@ -219,6 +296,7 @@ class _DermatologistListState extends State<DermatologistList> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to send results'),
+          backgroundColor: Colors.red,
         ),
       );
     } finally {
@@ -227,4 +305,15 @@ class _DermatologistListState extends State<DermatologistList> {
       });
     }
   }
+
+  @override
+  refresh() {
+    context.read<DermatologistsBloc>().add(LoadDermatologistsEvent());
+  }
+}
+
+enum FilterType {
+  All,
+  Free,
+  Paid,
 }

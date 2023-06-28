@@ -9,12 +9,24 @@ import 'package:khungulanga_app/widgets/dermatologists/dermatologists_page.dart'
 import 'package:khungulanga_app/widgets/diseases/disease_page.dart';
 import '../../blocs/diagnosis_bloc/diagnosis_bloc.dart';
 
-class DiagnosisPage extends StatelessWidget {
+class DiagnosisPage extends StatefulWidget {
   final Diagnosis diagnosis;
   final bool fromAppointment;
 
   const DiagnosisPage({Key? key, required this.diagnosis, this.fromAppointment = false})
       : super(key: key);
+
+  @override
+  _DiagnosisPageState createState() => _DiagnosisPageState(this.diagnosis, this.fromAppointment);
+}
+
+class _DiagnosisPageState extends State<DiagnosisPage> {
+  bool _isDeleting = false;
+  final Diagnosis diagnosis;
+  final bool fromAppointment;
+
+  _DiagnosisPageState(this.diagnosis, this.fromAppointment);
+
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +143,9 @@ class DiagnosisPage extends StatelessWidget {
   }
 
   void _confirmDelete(Diagnosis diagnosis, BuildContext context, DiagnosisBloc bloc) async {
+    setState(() {
+      _isDeleting = false;
+    });
     final confirmed = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -139,21 +154,26 @@ class DiagnosisPage extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('CANCEL'),
+            child: const Text('Cancel'),
           ),
-          ElevatedButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: ElevatedButton.styleFrom(
+          _isDeleting? const CircularProgressIndicator() : TextButton(
+            onPressed: () {
+              setState(() {
+                _isDeleting = true;
+              });
+              bloc.add(DeleteDiagnosis(diagnosis));
+            },
+            style: TextButton.styleFrom(
               primary: Theme.of(context).errorColor,
             ),
-            child: const Text('DELETE'),
+            child: const Text('Delete'),
           ),
         ],
       ),
     );
 
     if (confirmed != null && confirmed) {
-      bloc.add(DeleteDiagnosis(diagnosis));
+
     }
   }
 
@@ -179,6 +199,7 @@ class DiagnosisPage extends StatelessWidget {
           ),
         ),
         SizedBox(height: 8),
+        if (!prediction.approved)
         Text(
           '${(prediction.probability * 100).toInt()}% Probability',
           textAlign: TextAlign.center,
@@ -224,12 +245,12 @@ class DiagnosisPage extends StatelessWidget {
               color: Colors.blue,
             ),
             title: Text(
-              "Treatment",
+              "Doctor Notes",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            subtitle: Text(prediction.treatment ?? "No Treatment Provided"),
+            subtitle: Text(prediction.treatment ?? "No Notes Provided"),
           ),
       ],
     );

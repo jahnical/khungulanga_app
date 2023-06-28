@@ -80,10 +80,31 @@ class DiseaseDetailPage extends StatelessWidget {
           ),
           SizedBox(height: 24.0),
           Text(
-            'Treatments:',
+            'Common Treatments:',
             style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(height: 16.0),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: Container(
+              padding: const EdgeInsets.all(16.0),
+              decoration: BoxDecoration(
+                color: Colors.redAccent.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.redAccent),
+              ),
+              child: const Text(
+                'Note: Use the doctor notes if available. The treatments listed here are for informational purposes only. It is advised to consult a qualified dermatologist for confirmation and personalized treatment recommendations.',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.redAccent,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
           SizedBox(height: 16.0),

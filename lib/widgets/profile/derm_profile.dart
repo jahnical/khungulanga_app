@@ -9,6 +9,7 @@ import 'package:khungulanga_app/repositories/dermatologist_repository.dart';
 
 import '../../../models/clinic.dart';
 import '../../models/diagnosis.dart';
+import '../../repositories/diagnosis_repository.dart';
 import '../../repositories/user_repository.dart';
 import '../slots/book_slot.dart';
 
@@ -33,6 +34,7 @@ class _DermatologistProfilePageState extends State<DermatologistProfilePage> {
   bool _fieldsUpdated = false;
   bool _isLoading = false;
   List<Clinic> clinics = [];
+  bool _isUpdating = false;
 
   @override
   void initState() {
@@ -286,14 +288,19 @@ class _DermatologistProfilePageState extends State<DermatologistProfilePage> {
                 if (isPatient(context))
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) {
-                        return BookSlotPage(
-                          dermatologist: widget.dermatologist,
-                          diagnosis: widget.diagnosis,
-                        );
-                      }));
+                      if (widget.diagnosis != null &&
+                          widget.diagnosis?.dermatologist == null &&
+                          widget.dermatologist.hourlyRate < 1) {
+                        _sendResults(context, widget.dermatologist);
+                      } else {
+                        _bookAppointment(context, widget.dermatologist);
+                      }
                     },
-                    child: Text('Book Appointment'),
+                    child: Text(widget.diagnosis != null &&
+                        widget.diagnosis?.dermatologist == null &&
+                        widget.dermatologist.hourlyRate < 1
+                        ? 'Send Results'
+                        : 'Book Appointment'),
                   ),
               ],
             ),
@@ -319,4 +326,107 @@ class _DermatologistProfilePageState extends State<DermatologistProfilePage> {
       });
     });
   }
+
+  _sendResults(BuildContext context, Dermatologist dermatologist) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String additionalInfo = '';
+
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return AlertDialog(
+              title: Text('Confirm Sending Results'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Please provide any additional information concerning your problem:\n(You can as well book an appointment)',
+                  ),
+                  SizedBox(height: 16.0),
+                  TextField(
+                    onChanged: (value) {
+                      additionalInfo = value;
+                    },
+                    decoration: InputDecoration(
+                      hintText: 'Additional Information',
+                    ),
+                    maxLines: null,
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text('Cancel'),
+                ),
+                IconButton(
+                  onPressed: () => _bookAppointment(context, dermatologist),
+                  icon: Icon(Icons.book, color: Theme.of(context).primaryColor),
+                ),
+                IconButton(
+                  onPressed: () async {
+                    setState(() {
+                      _isUpdating = true;
+                    });
+
+                    await _updateDiagnosis(context, dermatologist, additionalInfo);
+                    Navigator.of(context).pop();
+                  },
+                  icon: _isUpdating
+                      ? CircularProgressIndicator()
+                      : Icon(Icons.send, color: Theme.of(context).primaryColor),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _updateDiagnosis(
+      BuildContext context, Dermatologist dermatologist, String additionalInfo) async {
+    setState(() {
+      _isUpdating = true;
+    });
+
+    final repo = RepositoryProvider.of<DiagnosisRepository>(context);
+    try {
+      widget.diagnosis!.dermatologist = dermatologist;
+      widget.diagnosis!.extraDermInfo = additionalInfo;
+      await repo.updateDiagnosis(widget.diagnosis!);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Results sent successfully'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      Navigator.pop(context);
+    } catch (e) {
+      widget.diagnosis!.dermatologist = null;
+      widget.diagnosis!.extraDermInfo = null;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to send results'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() {
+        _isUpdating = false;
+      });
+    }
+  }
+
+  _bookAppointment(BuildContext context, Dermatologist dermatologist) {
+    Navigator.push(context, MaterialPageRoute(builder: (_) {
+      return BookSlotPage(
+        dermatologist: dermatologist,
+        diagnosis: widget.diagnosis,
+      );
+    }));
+  }
+
 }

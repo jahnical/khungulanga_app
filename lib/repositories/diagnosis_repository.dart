@@ -26,7 +26,7 @@ class DiagnosisRepository {
     }
   }
 
-  Future<Diagnosis> diagnose(FormData data) async {
+  Future<Diagnosis> diagnose(FormData data, CancelToken cancelToken) async {
     final dio = Dio();
 
     log(DIAGNOSIS_URL);
@@ -36,6 +36,7 @@ class DiagnosisRepository {
         "$DIAGNOSIS_URL/",
         options: postOptions(),
         data: data,
+        cancelToken: cancelToken
       );
       if (response.statusCode == 200) {
         return Diagnosis.fromJson(response.data);

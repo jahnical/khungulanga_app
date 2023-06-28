@@ -43,7 +43,7 @@ class AuthBloc
         } else if (userRepository.dermatologist != null) {
           yield AuthAuthenticatedDermatologist(user);
         }
-        NotificationRepository().initialize();
+        NotificationRepository().initialize(event.context);
       } else {
         yield AuthUnauthenticated();
       }

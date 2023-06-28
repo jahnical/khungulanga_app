@@ -10,7 +10,6 @@ import 'package:khungulanga_app/repositories/slot_repository.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:khungulanga_app/blocs/auth_bloc/auth_bloc.dart';
 import 'package:khungulanga_app/blocs/dermatologists_bloc/dermatologists_bloc.dart';
 import 'package:khungulanga_app/blocs/diagnosis_bloc/diagnosis_bloc.dart';
@@ -54,34 +53,20 @@ main() {
   Bloc.observer = SimpleBlocObserver();
   final userRepository = UserRepository();
 
-  initializeNotificationChannel();
-
   runApp(
       BlocProvider<AuthBloc>(
         create: (context) {
           return AuthBloc(
               userRepository: userRepository
           )
-            ..add(AppStarted());
+            ..add(AppStarted(context));
         },
         child: App(userRepository: userRepository),
       )
   );
 }
 
-void initializeNotificationChannel() {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  // Handle foreground notifications
-  flutterLocalNotificationsPlugin.initialize(
-    const InitializationSettings(
-      android: AndroidInitializationSettings('@mipmap/ic_launcher'),
-    ),
-    onDidReceiveNotificationResponse: onNotificationResponse,
-    onDidReceiveBackgroundNotificationResponse: onNotificationResponse,
-  );
-
-}
 
 Future<void> initCamera() async {
   final cameras = await availableCameras();
@@ -95,10 +80,10 @@ class App extends StatelessWidget {
 
   App({Key? key, required this.userRepository}) : super(key: key) {
     // Initialize Firebase
-    initializeFirebase();
+    initialize();
   }
 
-  void initializeFirebase() async {
+  void initialize() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
@@ -174,7 +159,4 @@ class App extends StatelessWidget {
       ),
     );
   }
-}
-void onNotificationResponse(NotificationResponse details) {
-  log(details.payload ?? "New notification");
 }

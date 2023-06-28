@@ -7,8 +7,9 @@ class FetchDiagnoses extends DiagnosisEvent {}
 
 class Diagnose extends DiagnosisEvent {
   final FormData data;
+  final CancelToken cancelToken;
 
-  Diagnose(this.data);
+  Diagnose(this.data, {required this.cancelToken});
 }
 
 class DeleteDiagnosis extends DiagnosisEvent {

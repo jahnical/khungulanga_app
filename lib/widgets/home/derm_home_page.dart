@@ -6,8 +6,11 @@ import 'package:khungulanga_app/blocs/home_navigation_bloc/home_navigation_bloc.
 import 'package:khungulanga_app/widgets/appointment/appointments_page.dart';
 import 'package:khungulanga_app/widgets/profile/derm_profile.dart';
 
+import '../../models/notification.dart';
+import '../../repositories/notifications_repository.dart';
 import '../../repositories/user_repository.dart';
 import '../notification/notifications_page.dart';
+import '../refreshable_widget.dart';
 import '../results/results_page.dart';
 import '../slots/derm_slots.dart';
 
@@ -20,12 +23,19 @@ class DermHomePage extends StatefulWidget {
 
 class _DermHomePageState extends State<DermHomePage> {
   final List<String> _titles = ['Results', 'Appointments', 'Slots'];
+  late final NotificationRepository? notificationRepository;
 
   final List<Widget> _pages = [
     ResultsPage(),
     AppointmentList(completed: false),
     DermatologistSlotsPage(),
   ];
+
+  @override
+  void initState() {
+    notificationRepository = RepositoryProvider.of<NotificationRepository?>(context);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +46,25 @@ class _DermHomePageState extends State<DermHomePage> {
               title: Text(_titles[_getCurrentIndex()]),
               actions: [
                 IconButton(
-                  icon: Icon(Icons.notifications),
+                  icon: StreamBuilder<List<NotificationModel>>(
+                      stream: notificationRepository?.notificationsStream,
+                      builder: (context, snapshot) {
+                        return Icon(notificationRepository?.hasUnread() == true? Icons.notifications_active : Icons.notifications);
+                      }
+                  ),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => NotificationsPage(),
                     ));
                   },
                 ),
+                if (_pages[_getCurrentIndex()] is RefreshableWidget)
+                  IconButton(
+                    icon: Icon(Icons.refresh),
+                    onPressed: () {
+                      (_pages[_getCurrentIndex()] as RefreshableWidget).refresh();
+                    },
+                  ),
               ],
             ),
             drawer: _buildDrawer(),

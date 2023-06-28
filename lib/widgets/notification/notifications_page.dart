@@ -87,6 +87,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
               icon: Icon(Icons.clear_all),
               onPressed: markAllNotificationsAsRead,
             ),
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: _loadNotifications,
+          ),
         ],
       ),
       body: isLoading
@@ -111,105 +115,108 @@ class _NotificationsPageState extends State<NotificationsPage> {
           ? Center(
         child: Text('No notifications.'),
       )
-          : ListView.builder(
+          : RefreshIndicator(
+            onRefresh: _loadNotifications,
+            child: ListView.builder(
         itemCount: groupedNotifications.length,
         itemBuilder: (context, index) {
-          final group = groupedNotifications[index];
-          final groupDate = group['date'];
-          final groupNotifications = group['notifications'];
-          final isLastGroup =
-              index == groupedNotifications.length - 1;
+            final group = groupedNotifications[index];
+            final groupDate = group['date'];
+            final groupNotifications = group['notifications'];
+            final isLastGroup =
+                index == groupedNotifications.length - 1;
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  DateFormat('EEEE, MMM d')
-                      .format(groupDate),
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                    color: Colors.grey,
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    DateFormat('EEEE, MMM d')
+                        .format(groupDate),
+                    textAlign: TextAlign.left,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                itemCount: groupNotifications.length,
-                itemBuilder: (context, index) {
-                  final notification =
-                  groupNotifications[index];
-                  final isLastNotification =
-                      index == groupNotifications.length - 1;
-                  final formattedTime = DateFormat.jm()
-                      .format(notification.timestamp);
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: ClampingScrollPhysics(),
+                  itemCount: groupNotifications.length,
+                  itemBuilder: (context, index) {
+                    final notification =
+                    groupNotifications[index];
+                    final isLastNotification =
+                        index == groupNotifications.length - 1;
+                    final formattedTime = DateFormat.jm()
+                        .format(notification.timestamp);
 
-                  return Column(
-                    children: [
-                      Card(
-                        elevation: 2,
-                        margin: EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
-                        ),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.all(8),
-                          onTap: () {
-                            notificationTaped(notification, context);
-                          },
-                          title: Text(
-                            notification.title,
-                            style: TextStyle(
-                              fontWeight: notification.isRead
-                                  ? FontWeight.normal
-                                  : FontWeight.bold,
+                    return Column(
+                      children: [
+                        Card(
+                          elevation: 2,
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
+                          child: ListTile(
+                            contentPadding: EdgeInsets.all(8),
+                            onTap: () {
+                              notificationTaped(notification, context);
+                            },
+                            title: Text(
+                              notification.title,
+                              style: TextStyle(
+                                fontWeight: notification.isRead
+                                    ? FontWeight.normal
+                                    : FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                notification.message,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                formattedTime,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 12,
+                            subtitle: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  notification.message,
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                            ],
+                                Text(
+                                  formattedTime,
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            trailing: !notification.isRead
+                                ? Icon(
+                              Icons.circle,
+                              color: Colors.blueAccent,
+                              size: 16,
+                            )
+                                : null,
                           ),
-                          trailing: !notification.isRead
-                              ? Icon(
-                            Icons.circle,
-                            color: Colors.blueAccent,
-                            size: 16,
-                          )
-                              : null,
                         ),
-                      ),
-                      if (!isLastNotification)
-                        Divider(
-                          height: 2,
-                          indent: 72,
-                        ),
-                    ],
-                  );
-                },
-              ),
-              if (!isLastGroup) Divider(height: 24),
-            ],
-          );
+                        if (!isLastNotification)
+                          Divider(
+                            height: 2,
+                            indent: 72,
+                          ),
+                      ],
+                    );
+                  },
+                ),
+                if (!isLastGroup) Divider(height: 24),
+              ],
+            );
         },
       ),
+          ),
     );
   }
 

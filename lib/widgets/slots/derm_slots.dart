@@ -2,18 +2,20 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:khungulanga_app/models/slot.dart';
 import 'package:khungulanga_app/repositories/slot_repository.dart';
 import 'package:khungulanga_app/widgets/slots/slot_detail_page.dart';
 import '../../repositories/user_repository.dart';
 import '../common/common.dart';
+import '../refreshable_widget.dart';
 
-class DermatologistSlotsPage extends StatefulWidget {
+class DermatologistSlotsPage extends RefreshableWidget {
   @override
   _DermatologistSlotsPageState createState() => _DermatologistSlotsPageState();
 }
 
-class _DermatologistSlotsPageState extends State<DermatologistSlotsPage> {
+class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistSlotsPage> {
   List<Slot> slots = [];
   bool isLoading = true;
   String errorMessage = '';
@@ -49,7 +51,9 @@ class _DermatologistSlotsPageState extends State<DermatologistSlotsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: buildBody(),
+      body: RefreshIndicator(onRefresh: () { return fetchSlots(); },
+        child: buildBody()
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(
@@ -108,17 +112,17 @@ class _DermatologistSlotsPageState extends State<DermatologistSlotsPage> {
                       ),
                     ),
                     subtitle: Text(
-                      slot.scheduled ? 'Booked' : 'Available',
+                      '${slot.scheduled ? 'Booked' : 'Available'} on ${DateFormat('MMM d, yyyy h:mm').format(calculateNextSlotDate(slot))}',
                       style: TextStyle(
                         color: slot.scheduled ? Colors.red : Colors.green,
                       ),
                     ),
-                    trailing: IconButton(
+                    trailing: !slot.scheduled ? IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {
                         showConfirmationDialog(slot);
                       },
-                    ),
+                    ) : null,
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -247,5 +251,10 @@ class _DermatologistSlotsPageState extends State<DermatologistSlotsPage> {
 
   String formatTime(DateTime time) {
     return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')} ${time.hour < 12 ? 'AM' : 'PM'}';
+  }
+
+  @override
+  refresh() {
+    fetchSlots();
   }
 }
