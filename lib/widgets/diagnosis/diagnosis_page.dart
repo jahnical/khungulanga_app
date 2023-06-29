@@ -34,12 +34,15 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
       listener: (context, state) {
         log(state.toString());
         if (state is DiagnosisDeletingError) {
+          Navigator.of(context).pop();
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
               content: Text('An error occurred while deleting the diagnosis.'),
+              backgroundColor: Colors.red,
             ),
           );
         } else if (state is DiagnosisDeleted) {
+          Navigator.of(context).pop();
           Navigator.of(context).pop();
         } else if (state is ConfirmingDiagnosisDelete) {
           _confirmDelete(state.diagnosis, context, context.read<DiagnosisBloc>());
@@ -87,12 +90,13 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
                   if (diagnosis.predictions.isNotEmpty)
                     _mainPrediction(diagnosis.approved? diagnosis.predictions.firstWhere((element) => element.approved) : diagnosis.predictions[0], context)
                   else
-                    const Center(
+                    Center(
                       widthFactor: .8,
                       child: Padding(
                         padding: EdgeInsets.all(24.0),
                         child: Text(
-                            'Your skin condition could not be diagnosed, no lesion has been identified.\n\nYou can contact a dermatologist for further assistance.',
+                          !diagnosis.approved? 'Your skin condition could not be diagnosed, no lesion has been identified.\n\nYou can contact a dermatologist for further assistance.'
+                          : '',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 15,
@@ -148,27 +152,31 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
     });
     final confirmed = await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Delete Diagnosis'),
-        content: const Text('Are you sure you want to delete this diagnosis?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancel'),
-          ),
-          _isDeleting? const CircularProgressIndicator() : TextButton(
-            onPressed: () {
-              setState(() {
-                _isDeleting = true;
-              });
-              bloc.add(DeleteDiagnosis(diagnosis));
-            },
-            style: TextButton.styleFrom(
-              primary: Theme.of(context).errorColor,
-            ),
-            child: const Text('Delete'),
-          ),
-        ],
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) {
+          return AlertDialog(
+            title: const Text('Delete Diagnosis'),
+            content: const Text('Are you sure you want to delete this diagnosis?'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancel'),
+              ),
+              _isDeleting? const CircularProgressIndicator() : TextButton(
+                onPressed: () {
+                  setState(() {
+                    _isDeleting = true;
+                  });
+                  bloc.add(DeleteDiagnosis(diagnosis));
+                },
+                style: TextButton.styleFrom(
+                  primary: Theme.of(context).errorColor,
+                ),
+                child: const Text('Delete'),
+              ),
+            ],
+          );
+        }
       ),
     );
 
@@ -222,7 +230,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
             style: TextStyle(fontSize: 16),
           ),
         ),
-        Row(
+        /*Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             ViewMoreButton(onPressed: () {
@@ -236,21 +244,40 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
             }),
             SizedBox(width: 16),
           ],
-        ),
+        ),*/
         SizedBox(height: 16.0),
         if (diagnosis.approved)
-          ListTile(
-            leading: Icon(
-              Icons.medical_services,
-              color: Colors.blue,
-            ),
-            title: Text(
-              "Doctor Notes",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
+          Column(
+            children: [
+              if (prediction.treatmentId != null)
+              ListTile(
+                leading: Icon(
+                  Icons.medical_services,
+                  color: Colors.blue,
+                ),
+                title: Text(
+                  "Treatment",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(prediction.disease.treatments.firstWhere((element) => element.id == prediction.treatmentId).description ?? "No Notes Provided"),
               ),
-            ),
-            subtitle: Text(prediction.treatment ?? "No Notes Provided"),
+              SizedBox(height: 16.0),
+              ListTile(
+                leading: Icon(
+                  Icons.medical_services,
+                  color: Colors.blue,
+                ),
+                title: Text(
+                  "Doctor Notes",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                subtitle: Text(prediction.treatment ?? "No Notes Provided"),
+              ),
+            ],
           ),
       ],
     );

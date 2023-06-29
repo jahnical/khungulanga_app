@@ -24,13 +24,13 @@ void onNotificationResponse(NotificationResponse details) {
 
 class NotificationRepository {
   final FirebaseMessaging _firebaseMessaging;
-  List<NotificationModel> _notifications = [];
+  static List<NotificationModel> _notifications = [];
   final Dio _dio = APIClient.dio;
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-  Stream<List<NotificationModel>>? get notificationsStream =>
+  static Stream<List<NotificationModel>>? get notificationsStream =>
       _notificationsStreamController.stream;
-  final _notificationsStreamController =
+  static final _notificationsStreamController =
   StreamController<List<NotificationModel>>.broadcast();
 
   NotificationRepository() : _firebaseMessaging = FirebaseMessaging.instance {

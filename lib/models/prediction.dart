@@ -7,6 +7,7 @@ class Prediction {
   final double probability;
   bool approved;
   String? treatment;
+  int? treatmentId;
 
   Prediction({
     required this.disease,
@@ -14,6 +15,7 @@ class Prediction {
     required this.approved,
     this.treatment,
     this.id,
+    this.treatmentId,
   });
 
   factory Prediction.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class Prediction {
       approved: json['approved'],
       treatment: json['treatment'],
       id: json['id'],
+      treatmentId: json['treatment_id'],
     );
   }
 
@@ -33,6 +36,7 @@ class Prediction {
       'approved': approved,
       'treatment': treatment,
       'id': id,
+      'treatment_id': treatmentId,
     };
   }
 }

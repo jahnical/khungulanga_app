@@ -133,7 +133,7 @@ class _BookSlotPageState extends State<BookSlotPage>
                   ),
                   trailing: slot.scheduled
                       ? Icon(Icons.block, color: Colors.red, size: 24)
-                      : Icon(Icons.check, color: Colors.green, size: 24),
+                      : Icon(Icons.book, color: Colors.green, size: 24),
                   onTap: () {
                     if (!slot.scheduled) {
                       showDialog(
