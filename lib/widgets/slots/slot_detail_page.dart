@@ -13,7 +13,7 @@ class SlotDetailPage extends StatefulWidget {
   @override
   _SlotDetailPageState createState() => _SlotDetailPageState();
 }
-
+// slot details
 class _SlotDetailPageState extends State<SlotDetailPage> {
   final _formKey = GlobalKey<FormState>();
   late TimeOfDay _startTime;

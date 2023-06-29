@@ -12,7 +12,7 @@ import '../refreshable_widget.dart';
 
 class DermatologistSlotsPage extends RefreshableWidget {
   @override
-  _DermatologistSlotsPageState createState() => _DermatologistSlotsPageState();
+  _DermatologistSlotsPageState createState() => _DermatologistSlotsPageState() ;
 }
 
 class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistSlotsPage> {
@@ -70,7 +70,7 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
 
   Widget buildBody() {
     if (isLoading) {
-      return Center(child: CircularProgressIndicator());
+      return Center(child:CircularProgressIndicator() );
     } else if (errorMessage.isNotEmpty) {
       return buildErrorState();
     } else {
@@ -117,7 +117,7 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
                         color: slot.scheduled ? Colors.red : Colors.green,
                       ),
                     ),
-                    trailing: !slot.scheduled ? IconButton(
+                    trailing: !slot.scheduled ? IconButton (
                       icon: Icon(Icons.delete),
                       onPressed: () {
                         showConfirmationDialog(slot);
@@ -205,7 +205,7 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
       slots.remove(slot);
     } catch (e) {
       setState(() {
-        errorMessage = 'Failed to delete the slot. Please try again.';
+        errorMessage =  'Failed to delete the slot. Please try again.';
       });
     }
 
@@ -219,7 +219,7 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
 
     for (final slot in slots) {
       final dayOfWeek = slot.dayOfWeek;
-      if (!slotsByDay.containsKey(dayOfWeek)) {
+      if (!slotsByDay.containsKey(dayOfWeek) ) {
         slotsByDay[dayOfWeek] = [];
       }
       slotsByDay[dayOfWeek]!.add(slot);

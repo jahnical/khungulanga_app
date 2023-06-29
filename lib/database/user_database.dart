@@ -5,6 +5,7 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
+//database
 const userTable = 'userTable';
 
 class DatabaseProvider {
@@ -19,7 +20,7 @@ class DatabaseProvider {
     _database = await createDatabase();
     return _database!;
   }
-
+// upgrade user database
   createDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "User.db");
@@ -40,7 +41,7 @@ class DatabaseProvider {
   ){
     if (newVersion > oldVersion){}
   }
-
+// updating user database
   void initDB(Database database, int version) async {
     await database.execute(
       "CREATE TABLE $userTable ("
