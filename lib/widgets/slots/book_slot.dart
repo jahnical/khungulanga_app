@@ -23,7 +23,8 @@ class BookSlotPage extends StatefulWidget {
   _BookSlotPageState createState() => _BookSlotPageState();
 }
 
-class _BookSlotPageState extends State<BookSlotPage> {
+class _BookSlotPageState extends State<BookSlotPage> 
+{
   List<Slot> slots = [];
   bool isLoading = true;
   bool isBookingSlot = false;
@@ -58,7 +59,8 @@ class _BookSlotPageState extends State<BookSlotPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context)
+   {
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.dermatologist?.user.firstName} ${widget.dermatologist?.user.lastName} Slots'),
