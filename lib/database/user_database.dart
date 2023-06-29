@@ -20,7 +20,7 @@ class DatabaseProvider {
     _database = await createDatabase();
     return _database!;
   }
-
+// upgrade user database
   createDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "User.db");
