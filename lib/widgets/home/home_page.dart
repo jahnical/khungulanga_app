@@ -15,6 +15,7 @@ import '../profile/patient_profile.dart';
 import '../refreshable_widget.dart';
 import '../scan/scan_page.dart';
 
+// home page
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
