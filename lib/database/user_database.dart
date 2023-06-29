@@ -41,7 +41,7 @@ class DatabaseProvider {
   ){
     if (newVersion > oldVersion){}
   }
-
+// updating user database
   void initDB(Database database, int version) async {
     await database.execute(
       "CREATE TABLE $userTable ("
