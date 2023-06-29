@@ -18,7 +18,7 @@ class BookSlotPage extends StatefulWidget {
   final Diagnosis? diagnosis;
 
   BookSlotPage({this.dermatologist, this.diagnosis});
-
+// booking slots
   @override
   _BookSlotPageState createState() => _BookSlotPageState();
 }
