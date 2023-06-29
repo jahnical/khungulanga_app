@@ -3,6 +3,7 @@ import 'diagnosis.dart';
 import 'appointment.dart';
 import 'user.dart';
 
+// messages
 class ChatMessage {
   final int? id;
   final User sender;
