@@ -124,14 +124,14 @@ class _DermatologistListState extends RefreshableWidgetState<DermatologistList> 
                         ),
                         SizedBox(width: 16),
                         FilterChip(
-                          label: Text('Free'),
+                          label: Text('Public'),
                           selected: filterType == FilterType.Free,
                           onSelected: (selected) => _applyFilter(FilterType.Free, state.dermatologists),
                           selectedColor: Colors.lightBlueAccent,
                         ),
                         SizedBox(width: 16),
                         FilterChip(
-                          label: Text('Paid'),
+                          label: Text('Private'),
                           selected: filterType == FilterType.Paid,
                           onSelected: (selected) => _applyFilter(FilterType.Paid, state.dermatologists),
                           selectedColor: Colors.lightBlueAccent,

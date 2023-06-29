@@ -23,7 +23,7 @@ class _ResultsPageState extends RefreshableWidgetState<ResultsPage> {
     _diagnosisBloc.add(FetchDiagnoses()); // Initial load of diagnoses
 
     final notRepo = RepositoryProvider.of<NotificationRepository>(context);
-    notRepo.notificationsStream?.listen((event) {
+    NotificationRepository.notificationsStream?.listen((event) {
       if (notRepo.hasUnreadDiagnosisFeedback()) _diagnosisBloc.add(FetchDiagnoses());
     });
   }

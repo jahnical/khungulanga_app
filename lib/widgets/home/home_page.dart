@@ -15,6 +15,7 @@ import '../profile/patient_profile.dart';
 import '../refreshable_widget.dart';
 import '../scan/scan_page.dart';
 
+// home page
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
               actions: [
                 IconButton(
                   icon: StreamBuilder<List<NotificationModel>>(
-                    stream: notificationRepository?.notificationsStream,
+                    stream: NotificationRepository.notificationsStream,
                     builder: (context, snapshot) {
                       return Icon(notificationRepository?.hasUnread() == true? Icons.notifications_active : Icons.notifications);
                     }

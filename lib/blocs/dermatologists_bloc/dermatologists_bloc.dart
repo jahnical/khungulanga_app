@@ -26,7 +26,7 @@ class DermatologistsBloc extends Bloc<DermatologistsEvent, DermatologistsState> 
         dermatologists.sort((a, b) => a.user.firstName.compareTo(b.user.firstName));
         yield DermatologistsLoadedState(dermatologists: dermatologists);
       } catch (e) {
-        yield DermatologistsErrorState(errorMessage: 'Failed to load dermatologists $e');
+        yield DermatologistsErrorState(errorMessage: 'Failed to load dermatologists');
       }
     }
   }
