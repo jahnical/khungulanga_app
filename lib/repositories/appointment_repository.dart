@@ -11,7 +11,7 @@ import '../models/appointment_chat.dart';
 
 class AppointmentRepository {
   final Dio _dio = APIClient.dio;
-  // This could be replaced with an API call or database query
+  // This could be replaced with an API call or database querry
   Future<List<AppointmentChat>> getAppointmentChats() async {
     final response = await _dio.get('$APPOINTMENT_CHAT_URL/', options: getOptions());
     final chatsJson = response.data as List<dynamic>;
@@ -33,7 +33,7 @@ class AppointmentRepository {
     final chat = AppointmentChat.fromJson(chatJson);
     return chat;
   }
-
+// appointment
   Future<AppointmentChat> saveAppointmentChat(AppointmentChat chat) async {
     final response = await _dio.post('$APPOINTMENT_CHAT_URL/', options: postOptions(), data: chat.toJsonMap());
 
@@ -46,7 +46,7 @@ class AppointmentRepository {
       return createdChat;
     }
   }
-
+//when patient wants to communicate with dermatologist
   Future<ChatMessage> sendMessage(FormData data) async {
     final response = await _dio.post('$CHAT_MESSAGES_URL/', options: postOptions(), data: data);
 
