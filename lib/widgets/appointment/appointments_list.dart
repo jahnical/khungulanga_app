@@ -31,7 +31,7 @@ class _AppointmentListState extends RefreshableWidgetState<AppointmentList> {
     _loadAppointments();
 
     final notRepo = RepositoryProvider.of<NotificationRepository>(context);
-    notRepo.notificationsStream?.listen((event) {
+    NotificationRepository.notificationsStream?.listen((event) {
       if (notRepo.hasUnread()) _loadAppointments();
     });
   }

@@ -141,16 +141,6 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
         title: Text('Appointment Details'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.cancel),
-            onPressed: _isLoading ? null : () => _cancelAppointment(context),
-          ),
-          IconButton(
-            icon: Icon(Icons.done),
-            onPressed: _isLoading ? null : () => _markAsDone(context),
-          ),
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -218,6 +208,31 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
                   ? widget.appointment.diagnosis!.predictions[0].disease.name
                   : "No Disease",
             ),
+
+            const SizedBox(height: 16),
+            if (RepositoryProvider.of<UserRepository>(context).patient == null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : () => _markAsDone(context),
+                  child: const Text('Mark as Done'),
+                  style: ElevatedButton.styleFrom(
+                      minimumSize: Size(double.infinity, 54)
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: ElevatedButton(
+                  onPressed: _isLoading ? null : () => _cancelAppointment(context),
+                  style: ElevatedButton.styleFrom(
+                      primary: Colors.redAccent,
+                      minimumSize: Size(double.infinity, 54)
+                  ),
+                  child: const Text('Cancel Appointment'),
+                ),
+              ),
+            const SizedBox(height: 16),
           ],
         ),
       ),

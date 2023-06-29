@@ -47,7 +47,7 @@ class _DermHomePageState extends State<DermHomePage> {
               actions: [
                 IconButton(
                   icon: StreamBuilder<List<NotificationModel>>(
-                      stream: notificationRepository?.notificationsStream,
+                      stream: NotificationRepository.notificationsStream,
                       builder: (context, snapshot) {
                         return Icon(notificationRepository?.hasUnread() == true? Icons.notifications_active : Icons.notifications);
                       }

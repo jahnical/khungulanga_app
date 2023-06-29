@@ -65,7 +65,7 @@ class _DiagnosesListState extends State<DiagnosesList> {
             ),
             SizedBox(width: 16),
             StreamBuilder<List<NotificationModel>>(
-              stream: RepositoryProvider.of<NotificationRepository>(context).notificationsStream,
+              stream: NotificationRepository.notificationsStream,
               builder: (context, snapshot) {
                 return FilterChip(
                   avatar: !widget.isHistory && RepositoryProvider.of<NotificationRepository>(context).hasUnreadDiagnosisFeedback()
@@ -81,7 +81,7 @@ class _DiagnosesListState extends State<DiagnosesList> {
             ),
             SizedBox(width: 16),
             StreamBuilder<List<NotificationModel>>(
-              stream: RepositoryProvider.of<NotificationRepository>(context).notificationsStream,
+              stream: NotificationRepository.notificationsStream,
               builder: (context, snapshot) {
                 return FilterChip(
                   avatar: widget.isHistory && RepositoryProvider.of<NotificationRepository>(context).hasUnreadDiagnosisFeedback()

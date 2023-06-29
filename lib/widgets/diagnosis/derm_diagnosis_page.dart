@@ -5,6 +5,7 @@ import 'package:khungulanga_app/blocs/diagnosis_bloc/diagnosis_bloc.dart';
 
 import '../../api_connection/endpoints.dart';
 import '../../models/prediction.dart';
+import 'confirmation_page.dart';
 
 class DermDiagnosisPage extends StatefulWidget {
   final Diagnosis diagnosis;
@@ -146,7 +147,28 @@ class _DermDiagnosisPageState extends State<DermDiagnosisPage> {
                               .predictions[selectedPrediction]
                               : null;
 
-                          showDialog(
+                          if (prediction != null) {
+                            navigateToConfirmationPage(prediction);
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: const Text('Confirm Results'),
+                                content: const Text('Are you sure you want to confirm that the patient is okay? This cannot be undone.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(),
+                                    child: const Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () => Navigator.of(context).pop(),
+                                    child: const Text('Yes confirm'),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                          /*showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
                               title: const Text('Submit Notes'),
@@ -219,7 +241,7 @@ class _DermDiagnosisPageState extends State<DermDiagnosisPage> {
                                 ),
                               ],
                             ),
-                          );
+                          );*/
                         } else {
                           showDialog(
                             context: context,
@@ -285,6 +307,15 @@ class _DermDiagnosisPageState extends State<DermDiagnosisPage> {
             );
           },
         ),
+      ),
+    );
+  }
+
+  void navigateToConfirmationPage(Prediction prediction) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ConfirmationPage(prediction: prediction, diagnosis: widget.diagnosis),
       ),
     );
   }
