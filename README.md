@@ -1,16 +1,20 @@
 # khungulanga_app
 
-Khungulanga patient application
+Khungulanga user application
 
-## Getting Started
+## Tools
+1. Flutter
+2. Firebase Cloud Messaging
 
-This project is a starting point for a Flutter application.
+### Architecture
+BLoC Pattern
 
-A few resources to get you started if this is your first Flutter project:
+## Developer
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+ICT Project Group 7
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Members
+ 1. Tadala Muwalo
+ 2. Habila Hamuza
+ 3. Wenston Malizani
+ 4. Mathews Jere
