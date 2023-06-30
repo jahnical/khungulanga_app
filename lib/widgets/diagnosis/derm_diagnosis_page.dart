@@ -161,7 +161,16 @@ class _DermDiagnosisPageState extends State<DermDiagnosisPage> {
                                     child: const Text('Cancel'),
                                   ),
                                   TextButton(
-                                    onPressed: () => Navigator.of(context).pop(),
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                        context.read<DiagnosisBloc>().add(
+                                          SubmitTreatmentPressed(
+                                            diagnosis: widget.diagnosis,
+                                            treatment: "",
+                                            prediction: prediction,
+                                          ),
+                                        );
+                                    },
                                     child: const Text('Yes confirm'),
                                   ),
                                 ],

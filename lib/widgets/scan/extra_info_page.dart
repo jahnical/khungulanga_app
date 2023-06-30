@@ -242,38 +242,40 @@ class _ExtraInfoPageState extends State<ExtraInfoPage> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Body Part Info'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Select the body part that is affected by the skin condition. If the skin condition affects multiple body parts, select the body part that is most affected.',
-              ),
-              const SizedBox(height: 16.0),
-              Text(
-                'For example, if the skin condition affects the face and the upper body, select "Face".',
-              ),
-              const SizedBox(height: 24.0),
-              Text(
-                'The selected body part will be used to narrow down the diagnosis as follows:',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16.0),
-              Text(
-                'Face: Acne Vulgaris, Basal Cell Carcinoma, Rosacea, Squamous Cell Carcinoma, Urticaria',
-              ),
-              const SizedBox(height: 16.0),
-              Text(
-                'Upper Body (+ Cranium): Acne Vulgaris, Basal Cell Carcinoma, Folliculitis, Lichen Planus, Psoriasis, Rosacea, Scabies',
-              ),
-              const SizedBox(height: 16.0),
-              Text(
-                'Arms or Hands: Basal Cell Carcinoma, Allergic Contact Dermatitis, Lichen Planus, Psoriasis, Scabies, Urticaria'
-              ),
-              const SizedBox(height: 16.0),
-              Text(
-                '<b>Legs or Feet:</b> Basal Cell Carcinoma, Folliculitis, Melanoma, Psoriasis, Scabies'
-              )
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Select the body part that is affected by the skin condition. If the skin condition affects multiple body parts, select the body part that is most affected.',
+                ),
+                const SizedBox(height: 16.0),
+                Text(
+                  'For example, if the skin condition affects the face and the upper body, select "Face".',
+                ),
+                const SizedBox(height: 24.0),
+                Text(
+                  'The selected body part will be used to narrow down the diagnosis as follows:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16.0),
+                Text(
+                  'Face: Acne Vulgaris, Basal Cell Carcinoma, Rosacea, Squamous Cell Carcinoma, Urticaria',
+                ),
+                const SizedBox(height: 16.0),
+                Text(
+                  'Upper Body (+ Cranium): Acne Vulgaris, Basal Cell Carcinoma, Folliculitis, Lichen Planus, Psoriasis, Rosacea, Scabies',
+                ),
+                const SizedBox(height: 16.0),
+                Text(
+                  'Arms or Hands: Basal Cell Carcinoma, Allergic Contact Dermatitis, Lichen Planus, Psoriasis, Scabies, Urticaria'
+                ),
+                const SizedBox(height: 16.0),
+                Text(
+                  'Legs or Feet: Basal Cell Carcinoma, Folliculitis, Melanoma, Psoriasis, Scabies'
+                )
+              ],
+            ),
           ),
           actions: [
             TextButton(
