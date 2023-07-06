@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, user-scalable=no">
+  <meta name="description" content="API docs for the Appointment class from the appointment library, for the Dart programming language.">
+  <title>Appointment class - appointment library - Dart API</title>
+
+
+  
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet">
+  
+  <link rel="stylesheet" href="../static-assets/github.css?v1">
+  <link rel="stylesheet" href="../static-assets/styles.css?v1">
+  <link rel="icon" href="../static-assets/favicon.png?v1">
+
+  
+</head>
+
+
+<body data-base-href="../" data-using-base-href="false" class="light-theme">
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <span id="sidenav-left-toggle" class="material-symbols-outlined" role="button" tabindex="0">menu</span>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="../index.html">khungulanga_app</a></li>
+    <li><a href="../models_appointment/models_appointment-library.html">appointment</a></li>
+    <li class="self-crumb">Appointment class</li>
+  </ol>
+  <div class="self-name">Appointment</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+  <div class="toggle" id="theme-button">
+    <label for="theme">
+      <input type="checkbox" id="theme" value="light-theme">
+      <span id="dark-theme-button" class="material-symbols-outlined">
+        brightness_4
+      </span>
+      <span id="light-theme-button" class="material-symbols-outlined">
+        brightness_5
+      </span>
+    </label>
+  </div>
+</header>
+<main>
+
+  <div id="dartdoc-main-content" class="main-content">
+      <div>
+<h1><span class="kind-class">Appointment</span> class 
+ 
+</h1></div>
+
+    
+<section class="desc markdown">
+  <p>Model class for managing appointments.</p>
+</section>
+
+
+
+    
+  <section class="summary offset-anchor" id="constructors">
+    <h2>Constructors</h2>
+
+    <dl class="constructor-summary-list">
+        <dt id="Appointment" class="callable">
+          <span class="name"><a href="../models_appointment/Appointment/Appointment.html">Appointment</a></span><span class="signature">(<span class="parameter" id="-param-id">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span><span class="parameter" id="-param-dermatologist"><span>required</span> <span class="type-annotation"><a href="../models_dermatologist/Dermatologist-class.html">Dermatologist</a></span> <span class="parameter-name">dermatologist</span>, </span><span class="parameter" id="-param-patient"><span class="type-annotation"><a href="../models_patient/Patient-class.html">Patient</a>?</span> <span class="parameter-name">patient</span>, </span><span class="parameter" id="-param-bookDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">bookDate</span>, </span><span class="parameter" id="-param-appoTime"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">appoTime</span>, </span><span class="parameter" id="-param-done"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> <span class="parameter-name">done</span> = <span class="default-value">false</span>, </span><span class="parameter" id="-param-duration"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Duration-class.html">Duration</a>?</span> <span class="parameter-name">duration</span> = <span class="default-value">const Duration(hours: 1)</span>, </span><span class="parameter" id="-param-cost"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>?</span> <span class="parameter-name">cost</span> = <span class="default-value">0.0</span>, </span><span class="parameter" id="-param-patientRemoved"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">patientRemoved</span>, </span><span class="parameter" id="-param-dermatologistRemoved"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">dermatologistRemoved</span>, </span><span class="parameter" id="-param-patientCancelled"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">patientCancelled</span>, </span><span class="parameter" id="-param-dermatologistCancelled"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">dermatologistCancelled</span>, </span><span class="parameter" id="-param-diagnosis"><span class="type-annotation"><a href="../models_diagnosis/Diagnosis-class.html">Diagnosis</a>?</span> <span class="parameter-name">diagnosis</span>, </span><span class="parameter" id="-param-extraInfo"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> <span class="parameter-name">extraInfo</span> = <span class="default-value">&quot;Extra Info&quot;</span>, </span><span class="parameter" id="-param-slot"><span class="type-annotation"><a href="../models_slot/Slot-class.html">Slot</a>?</span> <span class="parameter-name">slot</span>}</span>)</span>
+        </dt>
+        <dd>
+          Constructs a new instance of the Appointment class.
+<a href="../models_appointment/Appointment/id.html">id</a> is the ID of the appointment.
+<a href="../models_appointment/Appointment/dermatologist.html">dermatologist</a> is the dermatologist of the appointment.
+<a href="../models_appointment/Appointment/patient.html">patient</a> is the patient of the appointment.
+<a href="../models_appointment/Appointment/bookDate.html">bookDate</a> is the date the appointment was booked.
+<a href="../models_appointment/Appointment/appoTime.html">appoTime</a> is the date the appointment is scheduled for.
+<a href="../models_appointment/Appointment/done.html">done</a> is whether the appointment is done or not.
+<a href="../models_appointment/Appointment/duration.html">duration</a> is the duration of the appointment.
+<a href="../models_appointment/Appointment/cost.html">cost</a> is the cost of the appointment.
+<a href="../models_appointment/Appointment/patientRemoved.html">patientRemoved</a> is the date the patient was removed from the appointment.
+<a href="../models_appointment/Appointment/dermatologistRemoved.html">dermatologistRemoved</a> is the date the dermatologist was removed from the appointment.
+<a href="../models_appointment/Appointment/patientCancelled.html">patientCancelled</a> is the date the patient cancelled the appointment.
+<a href="../models_appointment/Appointment/dermatologistCancelled.html">dermatologistCancelled</a> is the date the dermatologist cancelled the appointment.
+<a href="../models_appointment/Appointment/extraInfo.html">extraInfo</a> is the extra information of the appointment.
+<a href="../models_appointment/Appointment/diagnosis.html">diagnosis</a> is the diagnosis of the appointment.
+<a href="../models_appointment/Appointment/slot.html">slot</a> is the slot of the appointment.
+Returns a new instance of the Appointment class.
+        </dd>
+        <dt id="Appointment.fromJson" class="callable">
+          <span class="name"><a href="../models_appointment/Appointment/Appointment.fromJson.html">Appointment.fromJson</a></span><span class="signature">(<span class="parameter" id="fromJson-param-json"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span> <span class="parameter-name">json</span></span>)</span>
+        </dt>
+        <dd>
+          Creates an Appointment from json.
+<code>json</code> is the JSON map to convert.
+Returns a Appointment.
+            <div class="constructor-modifier features">factory</div>
+        </dd>
+    </dl>
+  </section>
+
+    <section class="summary offset-anchor" id="instance-properties">
+      <h2>Properties</h2>
+
+      <dl class="properties">
+        <dt id="appoTime" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/appoTime.html">appoTime</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="bookDate" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/bookDate.html">bookDate</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="cost" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/cost.html">cost</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="dermatologist" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/dermatologist.html">dermatologist</a></span>
+  <span class="signature">&#8596; <a href="../models_dermatologist/Dermatologist-class.html">Dermatologist</a></span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="dermatologistCancelled" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/dermatologistCancelled.html">dermatologistCancelled</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="dermatologistRemoved" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/dermatologistRemoved.html">dermatologistRemoved</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="diagnosis" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/diagnosis.html">diagnosis</a></span>
+  <span class="signature">&#8596; <a href="../models_diagnosis/Diagnosis-class.html">Diagnosis</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="done" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/done.html">done</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="duration" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/duration.html">duration</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/Duration-class.html">Duration</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="extraInfo" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/extraInfo.html">extraInfo</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="hashCode" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a></span> 
+
+</dt>
+<dd class="inherited">
+  The hash code for this object.
+  <div class="features"><span class="feature">read-only</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="id" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/id.html">id</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">final</span></div>
+
+</dd>
+
+        <dt id="patient" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/patient.html">patient</a></span>
+  <span class="signature">&#8596; <a href="../models_patient/Patient-class.html">Patient</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="patientCancelled" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/patientCancelled.html">patientCancelled</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="patientRemoved" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/patientRemoved.html">patientRemoved</a></span>
+  <span class="signature">&#8596; <a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+        <dt id="runtimeType" class="property inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></span>
+  <span class="signature">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Type-class.html">Type</a></span> 
+
+</dt>
+<dd class="inherited">
+  A representation of the runtime type of the object.
+  <div class="features"><span class="feature">read-only</span><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="slot" class="property">
+  <span class="name"><a href="../models_appointment/Appointment/slot.html">slot</a></span>
+  <span class="signature">&#8596; <a href="../models_slot/Slot-class.html">Slot</a>?</span> 
+
+</dt>
+<dd>
+  
+  <div class="features"><span class="feature">read / write</span></div>
+
+</dd>
+
+      </dl>
+    </section>
+
+    
+  <section
+      class="summary offset-anchor"
+      id="instance-methods">
+    <h2>Methods</h2>
+    <dl class="callables">
+        <dt id="copyWith" class="callable">
+  <span class="name"><a href="../models_appointment/Appointment/copyWith.html">copyWith</a></span><span class="signature">(<wbr><span class="parameter" id="copyWith-param-id">{<span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/int-class.html">int</a>?</span> <span class="parameter-name">id</span>, </span><span class="parameter" id="copyWith-param-dermatologist"><span class="type-annotation"><a href="../models_dermatologist/Dermatologist-class.html">Dermatologist</a>?</span> <span class="parameter-name">dermatologist</span>, </span><span class="parameter" id="copyWith-param-patient"><span class="type-annotation"><a href="../models_patient/Patient-class.html">Patient</a>?</span> <span class="parameter-name">patient</span>, </span><span class="parameter" id="copyWith-param-bookDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">bookDate</span>, </span><span class="parameter" id="copyWith-param-appoDate"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">appoDate</span>, </span><span class="parameter" id="copyWith-param-done"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a>?</span> <span class="parameter-name">done</span>, </span><span class="parameter" id="copyWith-param-duration"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Duration-class.html">Duration</a>?</span> <span class="parameter-name">duration</span>, </span><span class="parameter" id="copyWith-param-cost"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/double-class.html">double</a>?</span> <span class="parameter-name">cost</span>, </span><span class="parameter" id="copyWith-param-patientApproved"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">patientApproved</span>, </span><span class="parameter" id="copyWith-param-dermatologistApproved"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">dermatologistApproved</span>, </span><span class="parameter" id="copyWith-param-patientRejected"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">patientRejected</span>, </span><span class="parameter" id="copyWith-param-dermatologistRejected"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/DateTime-class.html">DateTime</a>?</span> <span class="parameter-name">dermatologistRejected</span>, </span><span class="parameter" id="copyWith-param-extraInfo"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a>?</span> <span class="parameter-name">extraInfo</span>, </span><span class="parameter" id="copyWith-param-diagnosis"><span class="type-annotation"><a href="../models_diagnosis/Diagnosis-class.html">Diagnosis</a>?</span> <span class="parameter-name">diagnosis</span>, </span><span class="parameter" id="copyWith-param-slot"><span class="type-annotation"><a href="../models_slot/Slot-class.html">Slot</a>?</span> <span class="parameter-name">slot</span>}</span>)
+    <span class="returntype parameter">&#8594; <a href="../models_appointment/Appointment-class.html">Appointment</a></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Returns the Appointment with copied values.
+  
+
+</dd>
+
+        <dt id="noSuchMethod" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></span><span class="signature">(<wbr><span class="parameter" id="noSuchMethod-param-invocation"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Invocation-class.html">Invocation</a></span> <span class="parameter-name">invocation</span></span>)
+    <span class="returntype parameter">&#8594; dynamic</span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  Invoked when a non-existent method or property is accessed.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+        <dt id="toJson" class="callable">
+  <span class="name"><a href="../models_appointment/Appointment/toJson.html">toJson</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/Map-class.html">Map</a><span class="signature">&lt;<wbr><span class="type-parameter"><a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>, <span class="type-parameter">dynamic</span>&gt;</span></span>
+  </span>
+  
+
+</dt>
+<dd>
+  Converts an Appointment to json.
+Returns a JSON map.
+  
+
+</dd>
+
+        <dt id="toString" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></span><span class="signature">(<wbr>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/String-class.html">String</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  A string representation of this object.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+  <section
+      class="summary offset-anchor inherited"
+      id="operators">
+    <h2>Operators</h2>
+    <dl class="callables">
+        <dt id="operator ==" class="callable inherited">
+  <span class="name"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></span><span class="signature">(<wbr><span class="parameter" id="==-param-other"><span class="type-annotation"><a href="https://api.flutter.dev/flutter/dart-core/Object-class.html">Object</a></span> <span class="parameter-name">other</span></span>)
+    <span class="returntype parameter">&#8594; <a href="https://api.flutter.dev/flutter/dart-core/bool-class.html">bool</a></span>
+  </span>
+  
+
+</dt>
+<dd class="inherited">
+  The equality operator.
+  <div class="features"><span class="feature">inherited</span></div>
+
+</dd>
+
+    </dl>
+  </section>
+    
+    
+    
+
+
+  </div> <!-- /.main-content -->
+
+  <div id="dartdoc-sidebar-left" class="sidebar sidebar-offcanvas-left">
+    <header id="header-search-sidebar" class="hidden-l">
+  <form class="search-sidebar" role="search">
+    <input type="text" id="search-sidebar" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<ol class="breadcrumbs gt-separated dark hidden-l" id="sidebar-nav">
+  <li><a href="../index.html">khungulanga_app</a></li>
+  <li><a href="../models_appointment/models_appointment-library.html">appointment</a></li>
+  <li class="self-crumb">Appointment class</li>
+</ol>
+
+
+    <h5>appointment library</h5>
+    <ol>
+      <li class="section-title"><a href="../models_appointment/models_appointment-library.html#classes">Classes</a></li>
+        <li><a href="../models_appointment/Appointment-class.html">Appointment</a></li>
+
+
+
+
+
+
+
+
+</ol>
+
+  </div>
+
+  <div id="dartdoc-sidebar-right" class="sidebar sidebar-offcanvas-right">
+    <ol>
+
+        <li class="section-title"><a href="../models_appointment/Appointment-class.html#constructors">Constructors</a></li>
+          <li><a href="../models_appointment/Appointment/Appointment.html">Appointment</a></li>
+          <li><a href="../models_appointment/Appointment/Appointment.fromJson.html">fromJson</a></li>
+
+
+        <li class="section-title">
+          <a href="../models_appointment/Appointment-class.html#instance-properties">Properties</a>
+        </li>
+          <li><a href="../models_appointment/Appointment/appoTime.html">appoTime</a></li>
+          <li><a href="../models_appointment/Appointment/bookDate.html">bookDate</a></li>
+          <li><a href="../models_appointment/Appointment/cost.html">cost</a></li>
+          <li><a href="../models_appointment/Appointment/dermatologist.html">dermatologist</a></li>
+          <li><a href="../models_appointment/Appointment/dermatologistCancelled.html">dermatologistCancelled</a></li>
+          <li><a href="../models_appointment/Appointment/dermatologistRemoved.html">dermatologistRemoved</a></li>
+          <li><a href="../models_appointment/Appointment/diagnosis.html">diagnosis</a></li>
+          <li><a href="../models_appointment/Appointment/done.html">done</a></li>
+          <li><a href="../models_appointment/Appointment/duration.html">duration</a></li>
+          <li><a href="../models_appointment/Appointment/extraInfo.html">extraInfo</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/hashCode.html">hashCode</a></li>
+          <li><a href="../models_appointment/Appointment/id.html">id</a></li>
+          <li><a href="../models_appointment/Appointment/patient.html">patient</a></li>
+          <li><a href="../models_appointment/Appointment/patientCancelled.html">patientCancelled</a></li>
+          <li><a href="../models_appointment/Appointment/patientRemoved.html">patientRemoved</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/runtimeType.html">runtimeType</a></li>
+          <li><a href="../models_appointment/Appointment/slot.html">slot</a></li>
+
+        <li class="section-title"><a href="../models_appointment/Appointment-class.html#instance-methods">Methods</a></li>
+          <li><a href="../models_appointment/Appointment/copyWith.html">copyWith</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/noSuchMethod.html">noSuchMethod</a></li>
+          <li><a href="../models_appointment/Appointment/toJson.html">toJson</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/toString.html">toString</a></li>
+
+        <li class="section-title inherited"><a href="../models_appointment/Appointment-class.html#operators">Operators</a></li>
+          <li class="inherited"><a href="https://api.flutter.dev/flutter/dart-core/Object/operator_equals.html">operator ==</a></li>
+
+
+
+
+</ol>
+
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    khungulanga_app
+      1.0.0+1
+  </span>
+
+  
+</footer>
+
+
+
+<script src="../static-assets/highlight.pack.js?v1"></script>
+<script src="../static-assets/docs.dart.js"></script>
+
+
+
+</body>
+
+</html>
+
