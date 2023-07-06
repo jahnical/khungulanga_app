@@ -13,11 +13,13 @@ import '../../repositories/diagnosis_repository.dart';
 import '../../repositories/user_repository.dart';
 import '../diagnosis/diagnosis_page.dart';
 
+/// A page for viewing notifications.
 class NotificationsPage extends StatefulWidget {
   @override
   _NotificationsPageState createState() => _NotificationsPageState();
 }
 
+/// The state for the NotificationsPage.
 class _NotificationsPageState extends State<NotificationsPage> {
   late NotificationRepository _notificationRepository;
   List<NotificationModel> notifications = [];
@@ -31,6 +33,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     _loadNotifications();
   }
 
+  /// Loads the notifications.
   Future<void> _loadNotifications() async {
     setState(() {
       isLoading = true;
@@ -51,6 +54,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     }
   }
 
+  /// Marks all notifications as read.
   void markAllNotificationsAsRead() {
     setState(() {
       notifications.forEach((notification) {
@@ -60,6 +64,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     });
   }
 
+  /// Marks a notifications as read.
   void markNotificationAsRead(NotificationModel notification) {
     setState(() {
       notification.isRead = true;
@@ -67,6 +72,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     });
   }
 
+  /// Clears all notifications.
   void clearAllNotifications() {
     setState(() {
       notifications.clear();
@@ -220,6 +226,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     );
   }
 
+  /// Groups notifications by date.
   List<Map<String, dynamic>> groupNotificationsByDate(
       List<NotificationModel> notifications) {
     final groupedMap = <String, List<NotificationModel>>{};
@@ -252,6 +259,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     super.dispose();
   }
 
+  /// Handles notification tap.
   Future<void> notificationTaped(NotificationModel notification, BuildContext context) async {
     markNotificationAsRead(notification);
     if (notification.relatedName == 'Diagnosis') {

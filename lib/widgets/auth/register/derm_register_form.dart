@@ -8,6 +8,8 @@ import 'package:khungulanga_app/repositories/clinic_repository.dart';
 
 import '../../../models/clinic.dart';
 
+/// Deprecated form.
+/// A form that allows dermatologists to register.
 class RegisterDermForm extends StatefulWidget {
   const RegisterDermForm({Key? key}) : super(key: key);
 

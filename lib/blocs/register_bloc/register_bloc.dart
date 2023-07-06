@@ -11,11 +11,15 @@ import '../auth_bloc/auth_bloc.dart';
 part 'register_event.dart';
 part 'register_state.dart';
 
+/// A BLoC responsible for handling the registration process.
+///
+/// The [RegisterBloc] receives [RegisterEvent]s and emits [RegisterState]s in response to those events.
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final UserRepository userRepository;
   final AuthBloc authenticationBloc;
   final BuildContext context;
 
+  /// Constructs a [RegisterBloc] with the necessary dependencies and sets the initial state to [RegisterInitial].
   RegisterBloc({
     required this.userRepository,
     required this.authenticationBloc,
@@ -24,12 +28,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   @override
   Stream<RegisterState> mapEventToState(
-    RegisterEvent event,
-  ) async* {
+      RegisterEvent event,
+      ) async* {
     if (event is RegisterButtonPressed) {
       yield RegisterLoading();
 
       try {
+        // Call the user repository to register the user
         await userRepository.register(
           username: event.username,
           email: event.email,
@@ -40,15 +45,20 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           gender: event.gender,
         );
 
+        // Authenticate the registered user
         final user = await userRepository.authenticate(
           username: event.username,
           password: event.password,
         );
 
+        // Emit the success state and trigger the authentication bloc's LoggedIn event
         authenticationBloc.add(LoggedIn(user: user));
         yield RegisterInitial();
+
+        // Close the registration screen
         Navigator.pop(context);
       } catch (error) {
+        // Emit the failure state if an error occurs during registration
         yield RegisterFailure(error: error.toString());
       }
     }
@@ -56,6 +66,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       yield RegisterLoading();
 
       try {
+        // Call the user repository to register the dermatologist
         await userRepository.dermRegister(
           username: event.username,
           email: event.email,
@@ -66,18 +77,23 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           qualification: event.qualification,
           clinic: event.clinic,
           specialization: event.specialization,
-          hourlyRate: event.hourlyRate
+          hourlyRate: event.hourlyRate,
         );
 
+        // Authenticate the registered dermatologist
         final user = await userRepository.authenticate(
           username: event.username,
           password: event.password,
         );
 
+        // Emit the success state and trigger the authentication bloc's LoggedIn event
         authenticationBloc.add(LoggedIn(user: user));
         yield RegisterInitial();
+
+        // Close the registration screen
         Navigator.pop(context);
       } catch (error) {
+        // Emit the failure state if an error occurs during registration
         yield RegisterFailure(error: error.toString());
       }
     }

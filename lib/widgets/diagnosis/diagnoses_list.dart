@@ -34,6 +34,7 @@ class _DiagnosesListState extends State<DiagnosesList> {
     //if (!widget.isHistory) filterType = FilterType.NotResponded;
   }
 
+  /// Apply the selected filter type to the diagnoses list.
   void _applyFilter(FilterType type) {
     setState(() {
       filterType = type;
@@ -41,7 +42,7 @@ class _DiagnosesListState extends State<DiagnosesList> {
         filteredDiagnoses = widget.diagnoses;
       } else {
         filteredDiagnoses = widget.diagnoses
-            .where((diagnosis) => (type == FilterType.Responded)? diagnosis.action != "Pending" :  diagnosis.action == "Pending")
+            .where((diagnosis) => (type == FilterType.Responded) ? diagnosis.action != "Pending" : diagnosis.action == "Pending")
             .toList();
       }
     });
@@ -69,15 +70,16 @@ class _DiagnosesListState extends State<DiagnosesList> {
               builder: (context, snapshot) {
                 return FilterChip(
                   avatar: !widget.isHistory && RepositoryProvider.of<NotificationRepository>(context).hasUnreadDiagnosisFeedback()
-                      ? Icon(Icons.circle, color: Colors.purpleAccent, size: 16,) : null,
-                  label: Text(widget.isHistory? 'Without Response' : "Pending"),
+                      ? Icon(Icons.circle, color: Colors.purpleAccent, size: 16,)
+                      : null,
+                  label: Text(widget.isHistory ? 'Without Response' : "Pending"),
                   selected: filterType == FilterType.NotResponded,
                   onSelected: (value) {
                     _applyFilter(FilterType.NotResponded);
                   },
                   selectedColor: Colors.lightBlueAccent,
                 );
-              }
+              },
             ),
             SizedBox(width: 16),
             StreamBuilder<List<NotificationModel>>(
@@ -85,15 +87,17 @@ class _DiagnosesListState extends State<DiagnosesList> {
               builder: (context, snapshot) {
                 return FilterChip(
                   avatar: widget.isHistory && RepositoryProvider.of<NotificationRepository>(context).hasUnreadDiagnosisFeedback()
-                    ? Icon(Icons.circle, color: Colors.purpleAccent, size: 16,) : null,
-                  label: Text(widget.isHistory? 'With Response' : 'Responded'),
+                      ? Icon(Icons.circle, color: Colors.purpleAccent, size: 16,)
+                      : null,
+                  label: Text(widget.isHistory ?
+                      'With Response' : 'Responded'),
                   selected: filterType == FilterType.Responded,
                   onSelected: (value) {
                     _applyFilter(FilterType.Responded);
                   },
                   selectedColor: Colors.lightBlueAccent,
                 );
-              }
+              },
             ),
           ],
         ),
@@ -187,7 +191,7 @@ class _DiagnosesListState extends State<DiagnosesList> {
                             color: Colors.grey,
                           ),
                         ),
-                        trailing: !diagnosis.approved? Text(
+                        trailing: !diagnosis.approved ? Text(
                           diagnosis.predictions.isNotEmpty
                               ? '${(diagnosis.predictions[0].probability * 100).toInt()}%'
                               : 'N/A',
@@ -195,7 +199,7 @@ class _DiagnosesListState extends State<DiagnosesList> {
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
                           ),
-                        ): null,
+                        ) : null,
                       ),
                       const Divider(
                         height: 8,
@@ -213,6 +217,7 @@ class _DiagnosesListState extends State<DiagnosesList> {
   }
 }
 
+/// Represents the filter type for diagnoses list.
 enum FilterType {
   All,
   Responded,

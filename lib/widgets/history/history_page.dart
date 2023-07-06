@@ -5,6 +5,7 @@ import 'package:khungulanga_app/repositories/notifications_repository.dart';
 import 'package:khungulanga_app/widgets/diagnosis/diagnoses_list.dart';
 import 'package:khungulanga_app/widgets/refreshable_widget.dart';
 
+/// A page that displays the history of diagnoses.
 class HistoryPage extends RefreshableWidget {
   HistoryPage({Key? key}) : super(key: key);
 
@@ -12,6 +13,7 @@ class HistoryPage extends RefreshableWidget {
   _HistoryPageState createState() => _HistoryPageState();
 }
 
+/// The state class for the HistoryPage widget.
 class _HistoryPageState extends RefreshableWidgetState<HistoryPage> {
   late DiagnosisBloc _diagnosisBloc;
 
@@ -27,6 +29,7 @@ class _HistoryPageState extends RefreshableWidgetState<HistoryPage> {
     });
   }
 
+  /// Refreshes the list of diagnoses.
   Future<void> _refreshDiagnoses() async {
     _diagnosisBloc.add(FetchDiagnoses()); // Trigger reload of diagnoses
   }

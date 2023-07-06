@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:khungulanga_app/blocs/register_bloc/register_bloc.dart';
 
+/// A widget that displays a register form.
 class RegisterForm extends StatefulWidget {
   const RegisterForm({super.key});
 
@@ -10,6 +11,7 @@ class RegisterForm extends StatefulWidget {
   State<RegisterForm> createState() => _RegisterFormState();
 }
 
+/// A state of register form.
 class _RegisterFormState extends State<RegisterForm> {
   final _formKey = GlobalKey<FormState>();
   final _passwordController = TextEditingController();
@@ -20,10 +22,12 @@ class _RegisterFormState extends State<RegisterForm> {
   final _lastNameController = TextEditingController();
   String? _selectedGender = "M";
 
+  /// Handles login button pressed.
   _onLoginButtonPressed() {
     Navigator.pop(context);
   }
 
+  /// Handles register button pressed.
   _onRegisterButtonPressed() {
     if (_formKey.currentState?.validate() == true) {
       BlocProvider.of<RegisterBloc>(context).add(RegisterButtonPressed(

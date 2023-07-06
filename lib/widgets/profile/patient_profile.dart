@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khungulanga_app/models/patient.dart';
 import 'package:khungulanga_app/repositories/patient_repository.dart';
 
+/// A page that displays and allows editing of the patient's profile.
 class PatientProfilePage extends StatefulWidget {
   final Patient patient;
 
@@ -31,6 +32,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
     _emailController.text = widget.patient.user?.email ?? '';
   }
 
+  /// Toggles the edit mode of the profile.
   void _toggleEdit() {
     setState(() {
       _isEditing = !_isEditing;
@@ -38,6 +40,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
     });
   }
 
+  /// Checks if any fields have been updated and updates the state accordingly.
   void _checkFieldsUpdated() {
     if (!_fieldsUpdated) {
       if (_firstNameController.text != widget.patient.user?.firstName ||
@@ -52,6 +55,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
     }
   }
 
+  /// Saves the changes made to the profile.
   Future<void> _saveChanges() async {
     if (_fieldsUpdated) {
       // Show confirmation dialog
@@ -118,9 +122,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
           // Show success message
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Profile updated successfully'),
-            backgroundColor
-
-                : Colors.green,
+            backgroundColor: Colors.green,
           ));
         } catch (error) {
           // Show error message
@@ -139,6 +141,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
     _toggleEdit();
   }
 
+  /// Shows a date picker dialog to select the date of birth.
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -154,6 +157,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
     }
   }
 
+  /// Selects the gender value.
   void _selectGender(String gender) {
     if (_selectedGender != gender) {
       setState(() {
@@ -239,7 +243,7 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please enter your date of birth';
+                          return 'Please enter your date ofbirth';
                         }
                         return null;
                       },
@@ -259,8 +263,6 @@ class _PatientProfilePageState extends State<PatientProfilePage> {
                     ),
                     Expanded(
                       child: RadioListTile(
-
-
                         title: Text('Female'),
                         value: 'Female',
                         groupValue: _selectedGender,

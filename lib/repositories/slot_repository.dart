@@ -6,9 +6,13 @@ import '../api_connection/api_client.dart';
 import '../api_connection/con_options.dart';
 import '../api_connection/endpoints.dart';
 
+/// Repository for managing slot-related data and operations.
 class SlotRepository {
   final Dio _dio = APIClient.dio;
 
+  /// Retrieves a list of all slots.
+  ///
+  /// Returns a list of [Slot] objects representing the slots.
   Future<List<Slot>> getSlots() async {
     final response = await _dio.get('$SLOTS_URL/', options: getOptions());
     final slotsJson = response.data as List<dynamic>;
@@ -16,6 +20,10 @@ class SlotRepository {
     return slots;
   }
 
+  /// Retrieves a list of slots for a specific dermatologist.
+  ///
+  /// [dermId] represents the ID of the dermatologist.
+  /// Returns a list of [Slot] objects representing the slots.
   Future<List<Slot>> getSlotsOf(int dermId) async {
     final response = await _dio.get('$SLOTS_URL/of/$dermId/', options: getOptions());
     final slotsJson = response.data as List<dynamic>;
@@ -23,6 +31,10 @@ class SlotRepository {
     return slots;
   }
 
+  /// Retrieves a slot by its ID.
+  ///
+  /// [id] represents the ID of the slot.
+  /// Returns a [Slot] object representing the slot.
   Future<Slot> getSlot(int id) async {
     final response = await _dio.get('$SLOTS_URL/$id/', options: getOptions());
     final slotJson = response.data as Map<String, dynamic>;
@@ -30,6 +42,10 @@ class SlotRepository {
     return slot;
   }
 
+  /// Saves a new slot.
+  ///
+  /// [slot] represents the slot to be saved.
+  /// Returns the created [Slot] object.
   Future<Slot> saveSlot(Slot slot) async {
     final response = await _dio.post('$SLOTS_URL/', options: postOptions(), data: slot.toJson());
 
@@ -43,6 +59,10 @@ class SlotRepository {
     }
   }
 
+  /// Updates an existing slot.
+  ///
+  /// [slot] represents the updated slot.
+  /// Returns the updated [Slot] object.
   Future<Slot> updateSlot(Slot slot) async {
     final response = await _dio.put('$SLOTS_URL/${slot.id}/', options: putOptions(), data: slot.toJson());
 
@@ -55,6 +75,9 @@ class SlotRepository {
     }
   }
 
+  /// Deletes a slot by its ID.
+  ///
+  /// [id] represents the ID of the slot to be deleted.
   Future<void> deleteSlot(int id) async {
     final response = await _dio.delete('$SLOTS_URL/$id/', options: deleteOptions());
 

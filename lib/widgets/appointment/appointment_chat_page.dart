@@ -18,8 +18,8 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../diagnosis/diagnosis_page.dart';
 
-
-
+/// Deprecated page.
+/// A page that displays a chat with a dermatologist.
 class AppointmentChatPage extends StatefulWidget {
   final Dermatologist dermatologist;
   Diagnosis? diagnosis;

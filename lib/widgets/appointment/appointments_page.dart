@@ -8,6 +8,10 @@ class AppointmentsPage extends StatefulWidget {
   final bool completed;
   final bool cancelled;
 
+  /// Constructs an instance of [AppointmentsPage].
+  ///
+  /// [completed] specifies whether to display completed appointments.
+  /// [cancelled] specifies whether to display cancelled appointments (default is false).
   AppointmentsPage({Key? key, required this.completed, this.cancelled = false})
       : super(key: key);
 
@@ -21,9 +25,11 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   @override
   void initState() {
     super.initState();
+    // Initialize the appointment list with the completed and cancelled flags.
     list = AppointmentList(completed: widget.completed, cancelled: widget.cancelled);
   }
 
+  /// Loads the appointments by refreshing the list.
   void _loadAppointments() {
     list.refresh();
   }
@@ -32,16 +38,20 @@ class _AppointmentsPageState extends State<AppointmentsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.completed ? "Completed" : widget.cancelled? "Cancelled" : "Scheduled"} Appointments'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.refresh),
-            onPressed: _loadAppointments,
-          ),
-        ]
+        // Set the title based on the completed and cancelled flags.
+          title: Text('${widget.completed ? "Completed" : widget.cancelled? "Cancelled" : "Scheduled"} Appointments'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.refresh),
+              onPressed: _loadAppointments,
+            ),
+          ]
       ),
-      body: RefreshIndicator(onRefresh: () async { return _loadAppointments(); },
-      child: list),
+      body: RefreshIndicator(
+        // Configure the RefreshIndicator with the _loadAppointments function as the refresh callback.
+        onRefresh: () async { return _loadAppointments(); },
+        child: list, // Display the appointment list.
+      ),
     );
   }
 }

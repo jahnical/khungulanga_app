@@ -10,9 +10,10 @@ import '../../repositories/user_repository.dart';
 import '../common/common.dart';
 import '../refreshable_widget.dart';
 
+/// A page that displays the slots of a dermatologist.
 class DermatologistSlotsPage extends RefreshableWidget {
   @override
-  _DermatologistSlotsPageState createState() => _DermatologistSlotsPageState() ;
+  _DermatologistSlotsPageState createState() => _DermatologistSlotsPageState();
 }
 
 class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistSlotsPage> {
@@ -26,6 +27,7 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
     fetchSlots();
   }
 
+  /// Fetches the slots from the repository.
   Future<void> fetchSlots() async {
     setState(() {
       isLoading = true;
@@ -35,7 +37,7 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
     try {
       // Fetch slots from the repository or any other data source
       slots = await RepositoryProvider.of<SlotRepository>(context).getSlotsOf(RepositoryProvider.of<UserRepository>(context).dermatologist!.id);
-      slots.sort((a, b) => getDayNumber(a.dayOfWeek).compareTo(getDayNumber(b.dayOfWeek)));// Replace with actual repository method
+      slots.sort((a, b) => getDayNumber(a.dayOfWeek).compareTo(getDayNumber(b.dayOfWeek))); // Replace with actual repository method
     } catch (e) {
       setState(() {
         errorMessage = 'Failed to fetch slots. Please try again.';
@@ -51,8 +53,11 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: RefreshIndicator(onRefresh: () { return fetchSlots(); },
-        child: buildBody()
+      body: RefreshIndicator(
+        onRefresh: () {
+          return fetchSlots();
+        },
+        child: buildBody(),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -68,9 +73,10 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
     );
   }
 
+  /// Builds the body of the page.
   Widget buildBody() {
     if (isLoading) {
-      return Center(child:CircularProgressIndicator() );
+      return Center(child: CircularProgressIndicator());
     } else if (errorMessage.isNotEmpty) {
       return buildErrorState();
     } else {
@@ -117,12 +123,14 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
                         color: slot.scheduled ? Colors.red : Colors.green,
                       ),
                     ),
-                    trailing: !slot.scheduled ? IconButton (
+                    trailing: !slot.scheduled
+                        ? IconButton(
                       icon: Icon(Icons.delete),
                       onPressed: () {
                         showConfirmationDialog(slot);
                       },
-                    ) : null,
+                    )
+                        : null,
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -140,6 +148,7 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
     }
   }
 
+  /// Builds the error state widget.
   Widget buildErrorState() {
     return Center(
       child: Column(
@@ -162,6 +171,7 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
     );
   }
 
+  /// Shows a confirmation dialog before deleting a slot.
   Future<void> showConfirmationDialog(Slot slot) async {
     return showDialog<void>(
       context: context,
@@ -193,6 +203,7 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
     );
   }
 
+  /// Deletes a slot.
   Future<void> deleteSlot(Slot slot) async {
     setState(() {
       isLoading = true;
@@ -205,7 +216,7 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
       slots.remove(slot);
     } catch (e) {
       setState(() {
-        errorMessage =  'Failed to delete the slot. Please try again.';
+        errorMessage = 'Failed to delete the slot. Please try again.';
       });
     }
 
@@ -214,12 +225,13 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
     });
   }
 
+  /// Groups the slots by day of the week.
   Map<String, List<Slot>> groupSlotsByDay(List<Slot> slots) {
     final slotsByDay = <String, List<Slot>>{};
 
     for (final slot in slots) {
       final dayOfWeek = slot.dayOfWeek;
-      if (!slotsByDay.containsKey(dayOfWeek) ) {
+      if (!slotsByDay.containsKey(dayOfWeek)) {
         slotsByDay[dayOfWeek] = [];
       }
       slotsByDay[dayOfWeek]!.add(slot);
@@ -228,6 +240,7 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
     return slotsByDay;
   }
 
+  /// Returns the name of the day of the week based on the weekday number.
   String getDayOfWeek(int weekday) {
     switch (weekday) {
       case 1:
@@ -249,12 +262,14 @@ class _DermatologistSlotsPageState extends RefreshableWidgetState<DermatologistS
     }
   }
 
+
+  /// Formats the given [time] as a string in the format 'HH:mm AM/PM'.
   String formatTime(DateTime time) {
     return '${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')} ${time.hour < 12 ? 'AM' : 'PM'}';
   }
 
   @override
-  refresh() {
+  void refresh() {
     fetchSlots();
   }
 }

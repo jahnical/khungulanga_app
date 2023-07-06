@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'disease.dart';
 
+/// Model class for managing predictions.
 class Prediction {
   final int? id;
   final Disease disease;
@@ -9,6 +10,13 @@ class Prediction {
   String? treatment;
   int? treatmentId;
 
+  /// Constructs a new instance of the Prediction class.
+  /// [disease] is the disease predicted.
+  /// [probability] is the probability of the prediction.
+  /// [approved] is whether the prediction is approved or not.
+  /// [treatment] is the treatment for the prediction.
+  /// [id] is the ID of the prediction.
+  /// [treatmentId] is the ID of the treatment.
   Prediction({
     required this.disease,
     required this.probability,
@@ -18,6 +26,9 @@ class Prediction {
     this.treatmentId,
   });
 
+  /// Constructs a Prediction object from a JSON map.
+  /// [json] is the JSON map representing the Prediction.
+  /// Returns a Prediction object.
   factory Prediction.fromJson(Map<String, dynamic> json) {
     return Prediction(
       disease: Disease.fromJson(json['disease']),
@@ -29,6 +40,8 @@ class Prediction {
     );
   }
 
+  /// Converts the Prediction object to a JSON map.
+  /// Returns a JSON map representing the Prediction.
   Map<String, dynamic> toJson() {
     return {
       'disease_id': disease.id,

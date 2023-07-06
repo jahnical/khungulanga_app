@@ -13,18 +13,20 @@ import '../../repositories/slot_repository.dart';
 import '../../repositories/user_repository.dart';
 import '../common/common.dart';
 
+/// A page for booking slots with a dermatologist.
 class BookSlotPage extends StatefulWidget {
   final Dermatologist? dermatologist;
   final Diagnosis? diagnosis;
 
+  /// Constructs a BookSlotPage.
   BookSlotPage({this.dermatologist, this.diagnosis});
-// booking slots
+
   @override
   _BookSlotPageState createState() => _BookSlotPageState();
 }
 
-class _BookSlotPageState extends State<BookSlotPage> 
-{
+/// The state for the BookSlotPage.
+class _BookSlotPageState extends State<BookSlotPage> {
   List<Slot> slots = [];
   bool isLoading = true;
   bool isBookingSlot = false;
@@ -36,6 +38,7 @@ class _BookSlotPageState extends State<BookSlotPage>
     fetchSlots();
   }
 
+  /// Fetches the available slots.
   Future<void> fetchSlots() async {
     setState(() {
       isLoading = true;
@@ -59,8 +62,7 @@ class _BookSlotPageState extends State<BookSlotPage>
   }
 
   @override
-  Widget build(BuildContext context)
-   {
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('${widget.dermatologist?.user.firstName} ${widget.dermatologist?.user.lastName} Slots'),
@@ -70,31 +72,31 @@ class _BookSlotPageState extends State<BookSlotPage>
       ),
       body: RefreshIndicator(
         onRefresh: fetchSlots,
-        child:  isLoading
-          ? Center(child: CircularProgressIndicator())
-          : errorMessage != null
-          ? Center(
-            child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-            Text(
-              errorMessage!,
-              style: TextStyle(fontSize: 16),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: fetchSlots,
-              child: Text('Retry'),
-            ),
-        ],
-      ),
-          )
-          : ListView.separated(
-        itemCount: slots.length,
-        separatorBuilder: (BuildContext context, int index) => SizedBox(height: 0),
-        itemBuilder: (BuildContext context, int index) {
+        child: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : errorMessage != null
+            ? Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                errorMessage!,
+                style: TextStyle(fontSize: 16),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: fetchSlots,
+                child: Text('Retry'),
+              ),
+            ],
+          ),
+        )
+            : ListView.separated(
+          itemCount: slots.length,
+          separatorBuilder: (BuildContext context, int index) => SizedBox(height: 0),
+          itemBuilder: (BuildContext context, int index) {
             Slot slot = slots[index];
             return Column(
               children: [
@@ -195,13 +197,14 @@ class _BookSlotPageState extends State<BookSlotPage>
                 ),
               ],
             );
-        },
-      ),
+          },
+        ),
       ),
     );
   }
 
-Future<Appointment?> bookSlot(Slot slot, Diagnosis? diagnosis, BuildContext context) async {
+  /// Books a slot with the given information.
+  Future<Appointment?> bookSlot(Slot slot, Diagnosis? diagnosis, BuildContext context) async {
     final repository = context.read<AppointmentRepository>();
     final patient = context.read<UserRepository>().patient;
     var appointment = Appointment(

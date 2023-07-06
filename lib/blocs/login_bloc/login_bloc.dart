@@ -9,10 +9,12 @@ import '../auth_bloc/auth_bloc.dart';
 part 'login_event.dart';
 part 'login_state.dart';
 
+/// Handles the authentication and state management for the login screen.
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository userRepository;
   final AuthBloc authenticationBloc;
 
+  /// Constructs a [LoginBloc] instance with the required dependencies.
   LoginBloc({
     required this.userRepository,
     required this.authenticationBloc,
@@ -23,8 +25,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   @override
   Stream<LoginState> mapEventToState(
-    LoginEvent event,
-  ) async* {
+      LoginEvent event,
+      ) async* {
     if (event is LoginButtonPressed) {
       yield LoginLoading();
 

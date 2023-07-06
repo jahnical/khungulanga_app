@@ -7,6 +7,7 @@ import '../../api_connection/endpoints.dart';
 import '../../models/prediction.dart';
 import 'confirmation_page.dart';
 
+/// A page that displays the diagnosis result and allows the user to confirm or reject it.
 class DermDiagnosisPage extends StatefulWidget {
   final Diagnosis diagnosis;
 
@@ -16,6 +17,7 @@ class DermDiagnosisPage extends StatefulWidget {
   _DermDiagnosisPageState createState() => _DermDiagnosisPageState();
 }
 
+/// The state of the [DermDiagnosisPage].
 class _DermDiagnosisPageState extends State<DermDiagnosisPage> {
   int selectedPrediction = -1;
   TextEditingController treatmentController = TextEditingController();
@@ -320,6 +322,7 @@ class _DermDiagnosisPageState extends State<DermDiagnosisPage> {
     );
   }
 
+  /// Navigates to the confirmation page.
   void navigateToConfirmationPage(Prediction prediction) {
     Navigator.push(
       context,
@@ -330,6 +333,7 @@ class _DermDiagnosisPageState extends State<DermDiagnosisPage> {
   }
 }
 
+/// A widget that displays a prediction.
 class PredictionItem extends StatelessWidget {
   final Prediction prediction;
   final bool isSelected;

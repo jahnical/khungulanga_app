@@ -1,5 +1,6 @@
 import 'package:khungulanga_app/models/user.dart';
 
+/// Model class for managing patients.
 class Patient {
   final int id;
   final String? username;
@@ -15,6 +16,20 @@ class Patient {
   DateTime? dateJoined;
   User? user;
 
+  /// Constructs a new instance of the Patient class.
+  /// [id] is the ID of the patient.
+  /// [username] is the username of the patient.
+  /// [password] is the password of the patient.
+  /// [firstName] is the first name of the patient.
+  /// [lastName] is the last name of the patient.
+  /// [email] is the email of the patient.
+  /// [dob] is the date of birth of the patient.
+  /// [gender] is the gender of the patient.
+  /// [isStaff] is whether the patient is staff or not.
+  /// [isActive] is whether the patient is active or not.
+  /// [lastLogin] is the last login of the patient.
+  /// [dateJoined] is the date joined of the patient.
+  /// [user] is the user of the patient.
   Patient({
     required this.id,
     this.username,
@@ -31,6 +46,9 @@ class Patient {
     this.user
   });
 
+  /// Constructs a Patient object from a JSON map.
+  /// [json] is the JSON map representing the Patient.
+  /// Returns a Patient object.
   factory Patient.fromJson(Map<String, dynamic> json) {
     return Patient(
       id: json['id'],
@@ -40,6 +58,8 @@ class Patient {
     );
   }
 
+  /// Converts the Patient object to a JSON map.
+  /// Returns a JSON map representing the Patient.
   Map<String, dynamic> toJson() => {
         'id': id,
         'username': username,

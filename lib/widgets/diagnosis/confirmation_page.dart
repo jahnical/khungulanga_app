@@ -7,6 +7,7 @@ import '../../models/diagnosis.dart';
 import '../../models/prediction.dart';
 import '../../util/common.dart';
 
+/// A page that displays detailed information about a specific diagnosis. It also allows the user to confirm the diagnosis.
 class ConfirmationPage extends StatefulWidget {
   final Prediction prediction;
   final Diagnosis diagnosis;
@@ -17,6 +18,7 @@ class ConfirmationPage extends StatefulWidget {
   _ConfirmationPageState createState() => _ConfirmationPageState();
 }
 
+/// The state of the [ConfirmationPage].
 class _ConfirmationPageState extends State<ConfirmationPage> {
   TextEditingController treatmentController = TextEditingController();
   bool isTreatmentFilled = false;
@@ -42,6 +44,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
         : null;
   }
 
+  /// Handles the refer treatment button.
   void handleReferTreatment() {
     // Refer treatment
     Navigator.pop(context);
@@ -53,6 +56,7 @@ class _ConfirmationPageState extends State<ConfirmationPage> {
     );
   }
 
+  /// Handles the submit treatment button.
   void handleSubmitTreatment() {
     //Navigator.pop(context);
     if (isTreatmentFilled || selectedTreatment != null) {

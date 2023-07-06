@@ -11,6 +11,9 @@ import '../profile/derm_profile.dart';
 class AppointmentDetailPage extends StatefulWidget {
   final Appointment appointment;
 
+  /// Constructs an instance of [AppointmentDetailPage].
+  ///
+  /// [appointment] specifies the appointment to display details for.
   AppointmentDetailPage({required this.appointment});
 
   @override
@@ -22,6 +25,7 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  /// Cancels the appointment.
   Future<void> _cancelAppointment(BuildContext context) async {
     final confirmed = await showDialog(
       context: context,
@@ -79,10 +83,12 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
     }
   }
 
+  /// Displays a snackbar with the given [message].
   void _showSnackBar(BuildContext context, String message) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(message)));
   }
 
+  /// Marks the appointment as done.
   Future<void> _markAsDone(BuildContext context) async {
     final confirmed = await showDialog(
       context: context,
@@ -221,17 +227,17 @@ class _AppointmentDetailPageState extends State<AppointmentDetailPage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : () => _cancelAppointment(context),
-                  style: ElevatedButton.styleFrom(
-                      primary: Colors.redAccent,
-                      minimumSize: Size(double.infinity, 54)
-                  ),
-                  child: const Text('Cancel Appointment'),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: _isLoading ? null : () => _cancelAppointment(context),
+                style: ElevatedButton.styleFrom(
+                    primary: Colors.redAccent,
+                    minimumSize: Size(double.infinity, 54)
                 ),
+                child: const Text('CancelAppointment'),
               ),
+            ),
             const SizedBox(height: 16),
           ],
         ),
@@ -246,6 +252,12 @@ class AppointmentDetailCard extends StatelessWidget {
   final String content;
   final Null Function()? onTap;
 
+  /// Constructs an instance of [AppointmentDetailCard].
+  ///
+  /// [title] specifies the title of the card.
+  /// [icon] specifies the icon to display on the card.
+  /// [content] specifies the content to display on the card.
+  /// [onTap] specifies the callback function to be invoked when the card is tapped.
   AppointmentDetailCard({
     required this.title,
     this.icon,
@@ -299,6 +311,9 @@ class AppointmentDetailCard extends StatelessWidget {
 class AppointmentStatusCard extends StatelessWidget {
   final Appointment appointment;
 
+  /// Constructs an instance of [AppointmentStatusCard].
+  ///
+  /// [appointment] specifies the appointment.
   AppointmentStatusCard({required this.appointment});
 
   @override

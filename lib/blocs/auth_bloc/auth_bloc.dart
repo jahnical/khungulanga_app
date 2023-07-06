@@ -14,8 +14,8 @@ import '../../repositories/notifications_repository.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-class AuthBloc
-    extends Bloc<AuthEvent, AuthState> {
+/// The authentication bloc responsible for handling authentication events and managing the authentication state.
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserRepository userRepository;
 
   AuthBloc({required this.userRepository}) : super(AuthUninitialized());
@@ -24,16 +24,14 @@ class AuthBloc
   AuthState get initialState => AuthUninitialized();
 
   @override
-  Stream<AuthState> mapEventToState(
-    AuthEvent event,
-  ) async* {
+  Stream<AuthState> mapEventToState(AuthEvent event) async* {
     if (event is AppStarted) {
-
-      //For web testing
+      // For web testing
       if (kIsWeb) {
         yield AuthAuthenticatedPatient(null);
         return;
       }
+
       final user = await userRepository.getUserFromDB();
       final bool hasToken = await userRepository.hasToken();
 
@@ -52,9 +50,7 @@ class AuthBloc
     if (event is LoggedIn) {
       yield AuthLoading();
 
-      await userRepository.persistToken(
-        user: event.user
-      );
+      await userRepository.persistToken(user: event.user);
       final user = await userRepository.getUserFromDB();
       if (userRepository.patient != null) {
         yield AuthAuthenticatedPatient(user);
@@ -74,10 +70,8 @@ class AuthBloc
     }
   }
 
+  /// Restarts the app by invoking the platform-specific method.
   void restartApp() {
-    // Invoke the platform-specific method to restart the app
     SystemChannels.platform.invokeMethod('SystemNavigator.pop');
   }
-
-
 }

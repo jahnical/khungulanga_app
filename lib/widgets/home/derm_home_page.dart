@@ -14,6 +14,7 @@ import '../refreshable_widget.dart';
 import '../results/results_page.dart';
 import '../slots/derm_slots.dart';
 
+/// The home page widget for dermatologists.
 class DermHomePage extends StatefulWidget {
   const DermHomePage({Key? key}) : super(key: key);
 
@@ -21,6 +22,7 @@ class DermHomePage extends StatefulWidget {
   _DermHomePageState createState() => _DermHomePageState();
 }
 
+/// The state class for the DermHomePage widget.
 class _DermHomePageState extends State<DermHomePage> {
   final List<String> _titles = ['Results', 'Appointments', 'Slots'];
   late final NotificationRepository? notificationRepository;
@@ -33,7 +35,8 @@ class _DermHomePageState extends State<DermHomePage> {
 
   @override
   void initState() {
-    notificationRepository = RepositoryProvider.of<NotificationRepository?>(context);
+    notificationRepository =
+        RepositoryProvider.of<NotificationRepository?>(context);
     super.initState();
   }
 
@@ -49,9 +52,10 @@ class _DermHomePageState extends State<DermHomePage> {
                   icon: StreamBuilder<List<NotificationModel>>(
                       stream: NotificationRepository.notificationsStream,
                       builder: (context, snapshot) {
-                        return Icon(notificationRepository?.hasUnread() == true? Icons.notifications_active : Icons.notifications);
-                      }
-                  ),
+                        return Icon(notificationRepository?.hasUnread() == true
+                            ? Icons.notifications_active
+                            : Icons.notifications);
+                      }),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => NotificationsPage(),
@@ -74,6 +78,7 @@ class _DermHomePageState extends State<DermHomePage> {
         });
   }
 
+  /// Builds the drawer widget for the side navigation.
   _buildDrawer() {
     return Drawer(
       child: ListView(
@@ -84,12 +89,14 @@ class _DermHomePageState extends State<DermHomePage> {
               color: Theme.of(context).primaryColor,
             ),
             child: const Center(
-              child: Text('Khungulanga',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  )),
+              child: Text(
+                'Khungulanga',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
           ListTile(
@@ -97,7 +104,10 @@ class _DermHomePageState extends State<DermHomePage> {
             leading: Icon(Icons.person),
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => DermatologistProfilePage(dermatologist: RepositoryProvider.of<UserRepository>(context).dermatologist!),
+                builder: (context) => DermatologistProfilePage(
+                    dermatologist:
+                    RepositoryProvider.of<UserRepository>(context)
+                        .dermatologist!),
               ));
             },
           ),
@@ -128,7 +138,8 @@ class _DermHomePageState extends State<DermHomePage> {
                 leading: Icon(Icons.cancel),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => AppointmentsPage(completed: false, cancelled: true),
+                    builder: (context) => AppointmentsPage(
+                        completed: false, cancelled: true),
                   ));
                 },
               ),
@@ -206,6 +217,8 @@ class _DermHomePageState extends State<DermHomePage> {
     NavigateToAppointments(),
     NavigateToSlots(),
   ];
+
+  /// Builds the bottom navigation bar.
   _buildBottomNavigation() {
     return BottomNavigationBar(
       currentIndex: _getCurrentIndex(),
@@ -229,8 +242,12 @@ class _DermHomePageState extends State<DermHomePage> {
     );
   }
 
+  /// Returns the current index of the bottom navigation bar.
   int _getCurrentIndex() {
-    return context.read<HomeNavigationBloc>().state is HomeNavigationAppointments ? 1 :
-      context.read<HomeNavigationBloc>().state is HomeNavigationSlots ? 2 : 0;
+    return context.read<HomeNavigationBloc>().state is HomeNavigationAppointments
+        ? 1
+        : context.read<HomeNavigationBloc>().state is HomeNavigationSlots
+        ? 2
+        : 0;
   }
 }

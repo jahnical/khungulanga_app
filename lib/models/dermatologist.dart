@@ -5,6 +5,7 @@ import 'package:khungulanga_app/models/slot.dart';
 import 'clinic.dart';
 import 'user.dart';
 
+/// Model class for managing dermatologists.
 class Dermatologist {
   int id;
   String qualification;
@@ -16,6 +17,16 @@ class Dermatologist {
   double hourlyRate;
   List<Slot> slots;
 
+  /// Constructs a new instance of the Dermatologist class.
+  /// [id] is the ID of the dermatologist.
+  /// [qualification] is the qualification of the dermatologist.
+  /// [email] is the email of the dermatologist.
+  /// [phoneNumber] is the phone number of the dermatologist.
+  /// [clinic] is the clinic of the dermatologist.
+  /// [user] is the user of the dermatologist.
+  /// [specialization] is the specialization of the dermatologist.
+  /// [hourlyRate] is the hourly rate of the dermatologist.
+  /// [slots] is the list of slots of the dermatologist.
   Dermatologist({
     required this.id,
     required this.qualification,
@@ -28,6 +39,9 @@ class Dermatologist {
     required this.slots
   });
 
+  /// Constructs a Dermatologist object from a JSON map.
+  /// [json] is the JSON map representing the Dermatologist.
+  /// Returns a Dermatologist object.
   factory Dermatologist.fromJson(Map<String, dynamic> json) {
     log(json.toString());
     return Dermatologist(
@@ -43,6 +57,8 @@ class Dermatologist {
     );
   }
 
+  /// Converts the Dermatologist object to a JSON map.
+  /// Returns a JSON map representing the Dermatologist.
   Map<String, dynamic> toJson() => {
         'id': id,
         'qualification': qualification,

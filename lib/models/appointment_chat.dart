@@ -7,6 +7,8 @@ import 'dermatologist.dart';
 import 'diagnosis.dart';
 import 'patient.dart';
 
+/// Deprecated
+/// Model class for managing appointment chats.
 class AppointmentChat {
   final int? id;
   final Patient patient;
@@ -15,6 +17,13 @@ class AppointmentChat {
   Appointment appointment;
   List<ChatMessage> messages = [];
 
+  /// Constructs a new instance of the AppointmentChat class.
+  /// [id] is the ID of the appointment chat.
+  /// [patient] is the patient of the appointment chat.
+  /// [diagnosis] is the diagnosis of the appointment chat.
+  /// [dermatologist] is the dermatologist of the appointment chat.
+  /// [appointment] is the appointment of the appointment chat.
+  /// [messages] is the list of messages of the appointment chat.
   AppointmentChat({
     this.id,
     required this.patient,
@@ -24,6 +33,9 @@ class AppointmentChat {
     required this.messages
   });
 
+  /// Converts the AppointmentChat object to a JSON map.
+  /// Returns a JSON map representing the AppointmentChat.
+  /// [json] is the JSON map representing the AppointmentChat.
   factory AppointmentChat.fromJson(Map<String, dynamic> json) {
     return AppointmentChat(
       id: json['id'],
@@ -35,6 +47,8 @@ class AppointmentChat {
     );
   }
 
+  /// Converts the AppointmentChat object to a JSON map.
+  /// Returns a JSON map representing the AppointmentChat.
   Map<String, dynamic> toJsonMap() {
     return {
       'id': id,

@@ -1,6 +1,8 @@
 part of 'appointment_chat_bloc.dart';
 
 @immutable
+/// The base class for all appointment chat states.
+/// Deprecated
 abstract class AppointmentChatState {}
 
 class AppointmentChatInitial extends AppointmentChatState {}

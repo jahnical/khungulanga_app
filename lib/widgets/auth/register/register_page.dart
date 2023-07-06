@@ -5,6 +5,7 @@ import 'package:khungulanga_app/blocs/register_bloc/register_bloc.dart';
 import 'package:khungulanga_app/repositories/user_repository.dart';
 import 'package:khungulanga_app/widgets/auth/register/register_form.dart';
 
+/// A page that displays a register form.
 class RegisterPage extends StatelessWidget {
   final UserRepository userRepository;
 

@@ -8,11 +8,13 @@ import 'package:sqflite/sqflite.dart';
 //database
 const userTable = 'userTable';
 
+/// A class for managing the user database.
 class DatabaseProvider {
   static final DatabaseProvider dbProvider = DatabaseProvider();
 
   Database? _database;
 
+  /// Returns the user database.
   Future <Database> get database async {
     if (_database != null){
       return _database!;
@@ -20,7 +22,8 @@ class DatabaseProvider {
     _database = await createDatabase();
     return _database!;
   }
-// upgrade user database
+
+  /// Creates the user database.
   createDatabase() async {
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, "User.db");
@@ -34,6 +37,7 @@ class DatabaseProvider {
     return database;
   }
 
+  /// Upgrades the user database.
   void onUpgrade(
     Database database,
     int oldVersion,
@@ -41,7 +45,8 @@ class DatabaseProvider {
   ){
     if (newVersion > oldVersion){}
   }
-// updating user database
+
+  /// Initializes the user database.
   void initDB(Database database, int version) async {
     await database.execute(
       "CREATE TABLE $userTable ("

@@ -1,3 +1,4 @@
+/// A function that converts a string to title case.
 String toTitleCase(String text) {
   return text.toLowerCase().split(' ').map((word) {
     if (word.isEmpty) {
@@ -7,6 +8,7 @@ String toTitleCase(String text) {
   }).join(' ');
 }
 
+/// A custom exception.
 class AppException implements Exception {
   final String message;
   final String? code;

@@ -26,7 +26,7 @@ import 'package:khungulanga_app/widgets/splash/splash_page.dart';
 import 'api_connection/api_client.dart';
 import 'widgets/scan/scan_page.dart';
 
-
+/// A custom [BlocObserver] that logs bloc events, transitions, and errors.
 class SimpleBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object? event) {
@@ -46,7 +46,7 @@ class SimpleBlocObserver extends BlocObserver {
   }
 }
 
-main() {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   initCamera();
   APIClient.setupCacheInterceptor();
@@ -54,26 +54,24 @@ main() {
   final userRepository = UserRepository();
 
   runApp(
-      BlocProvider<AuthBloc>(
-        create: (context) {
-          return AuthBloc(
-              userRepository: userRepository
-          )
-            ..add(AppStarted(context));
-        },
-        child: App(userRepository: userRepository),
-      )
+    BlocProvider<AuthBloc>(
+      create: (context) {
+        return AuthBloc(userRepository: userRepository)
+          ..add(AppStarted(context));
+      },
+      child: App(userRepository: userRepository),
+    ),
   );
 }
 
-
-
+/// Initializes the camera for scanning.
 Future<void> initCamera() async {
   final cameras = await availableCameras();
   final firstCamera = cameras.first;
   camera = firstCamera;
 }
 
+/// The root widget of the application.
 class App extends StatelessWidget {
   final UserRepository userRepository;
   late NotificationRepository notificationRepository;
@@ -83,6 +81,7 @@ class App extends StatelessWidget {
     initialize();
   }
 
+  /// Initializes Firebase and sets up the notification repository.
   void initialize() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
@@ -92,7 +91,8 @@ class App extends StatelessWidget {
     setupInteractedMessage();
   }
 
-  Future<void> setupInteractedMessage() async {
+  /// Sets up the handling of interactive notification messages.
+  Future<void> setupInteractedMessage()async {
     RemoteMessage? initialMessage = await FirebaseMessaging.instance.getInitialMessage();
 
     if (initialMessage != null) {
@@ -102,6 +102,7 @@ class App extends StatelessWidget {
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
   }
 
+  /// Handles the received message.
   void _handleMessage(RemoteMessage message) {
     log('Handling a background message ${message.messageId}');
     log(message.data.toString());
@@ -123,39 +124,42 @@ class App extends StatelessWidget {
         RepositoryProvider(create: (context) => PatientRepository()),
       ],
       child: MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (BuildContext context) => DermatologistsBloc(userLocation: [0.0, 0.0])
-              ..add(LoadDermatologistsEvent())),
-            BlocProvider(create: (context) => HomeNavigationBloc()),
-            BlocProvider(create: (context) => DiagnosisBloc(repository: context.read<DiagnosisRepository>())
-              ..add(FetchDiagnoses())),
-
-          ],
-          child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              primarySwatch: Colors.blue,
-              brightness: Brightness.light,
-            ),
-            home: BlocBuilder<AuthBloc, AuthState>(
-              builder: (context, state) {
-                log(state.toString());
-                if (state is AuthUninitialized) {
-                  return const SplashPage();
-                }
-                if (state is AuthUnauthenticated) {
-                  return LoginPage(userRepository: userRepository,);
-                }
-                if (state is AuthLoading) {
-                  return const LoadingIndicator();
-                }
-                if (state is AuthAuthenticatedDermatologist) {
-                  return const DermHomePage();
-                }
-                return const HomePage();
-              },
-            ),
-          )
+        providers: [
+          BlocProvider(
+            create: (BuildContext context) => DermatologistsBloc(userLocation: [0.0, 0.0])
+              ..add(LoadDermatologistsEvent()),
+          ),
+          BlocProvider(create: (context) => HomeNavigationBloc()),
+          BlocProvider(
+            create: (context) => DiagnosisBloc(repository: context.read<DiagnosisRepository>())
+              ..add(FetchDiagnoses()),
+          ),
+        ],
+        child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            brightness: Brightness.light,
+          ),
+          home: BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
+              log(state.toString());
+              if (state is AuthUninitialized) {
+                return const SplashPage();
+              }
+              if (state is AuthUnauthenticated) {
+                return LoginPage(userRepository: userRepository,);
+              }
+              if (state is AuthLoading) {
+                return const LoadingIndicator();
+              }
+              if (state is AuthAuthenticatedDermatologist) {
+                return const DermHomePage();
+              }
+              return const HomePage();
+            },
+          ),
+        ),
       ),
     );
   }

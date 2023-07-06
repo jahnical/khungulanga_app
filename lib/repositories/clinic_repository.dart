@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:developer';
 
@@ -14,39 +13,29 @@ class ClinicRepository {
   final url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location={USER_LATITUDE},{USER_LONGITUDE}&radius=5000&type=clinic&key=YOUR_API_KEY';
   List<Clinic> _clinics = [];
 
+  /// Constructs a new [ClinicRepository] instance.
+  ///
+  /// Initializes the repository by fetching clinics.
   ClinicRepository() {
     fetchClinics();
   }
+
+  /// Fetches the list of clinics.
+  ///
+  /// If the clinics list is not empty, returns the cached list.
+  /// Otherwise, retrieves the clinics from the API.
   Future<List<Clinic>> fetchClinics() async {
     if (_clinics.isNotEmpty) {
       return _clinics;
     }
     _clinics = await getClinics();
     return _clinics;
-    /*return [
-      Clinic(name: "Songani", latitude: 23.778695, longitude: 12.543235, id: 1),
-      Clinic(name: "Songani1", latitude: 23.778695, longitude: 12.543235, id: 2),
-      Clinic(name: "Songani2", latitude: 23.778695, longitude: 12.543235, id: 3),
-    ];
-    final response = await _dio.get(url);
-
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.data);
-
-      List<Clinic> clinics = [];
-      for (var result in data['results']) {
-        clinics.add(Clinic(
-          name: result['name'],
-          latitude: result['geometry']['location']['lat'],
-          longitude: result['geometry']['location']['lng'],
-        ));
-      }
-      return clinics;
-    } else {
-      throw Exception('Failed to fetch clinics');
-    }*/
   }
 
+  /// Retrieves the list of clinics from the API.
+  ///
+  /// Returns a list of [Clinic] objects representing the clinics.
+  /// Throws an exception if the API request fails.
   Future<List<Clinic>> getClinics() async {
     final response = await _dio.get('$CLINICS_URL/', options: getOptions());
 
@@ -61,5 +50,4 @@ class ClinicRepository {
       throw Exception('Failed to fetch clinics');
     }
   }
-
 }

@@ -9,15 +9,18 @@ import 'package:khungulanga_app/repositories/diagnosis_repository.dart';
 import 'package:khungulanga_app/util/common.dart';
 import 'package:khungulanga_app/widgets/diagnosis/diagnosis_page.dart';
 
+/// A page for providing extra information related to a diagnosis.
 class ExtraInfoPage extends StatefulWidget {
   final String imagePath;
 
+  /// Constructs an ExtraInfoPage with the provided [imagePath].
   const ExtraInfoPage({required this.imagePath, Key? key}) : super(key: key);
 
   @override
   _ExtraInfoPageState createState() => _ExtraInfoPageState();
 }
 
+/// The state for the ExtraInfoPage.
 class _ExtraInfoPageState extends State<ExtraInfoPage> {
   final _formKey = GlobalKey<FormState>();
   String? _selectedBodyPart = "Face";
@@ -36,6 +39,7 @@ class _ExtraInfoPageState extends State<ExtraInfoPage> {
     super.dispose();
   }
 
+  /// Handles the form submission and triggers the diagnosis process.
   void _onSubmitForm(BuildContext context, DiagnosisBloc bloc, {bool ignoreSkin = false}) async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
@@ -51,6 +55,7 @@ class _ExtraInfoPageState extends State<ExtraInfoPage> {
     }
   }
 
+  /// Shows a dialog with a loading indicator while diagnosing.
   void _showLoadingDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -80,6 +85,7 @@ class _ExtraInfoPageState extends State<ExtraInfoPage> {
     );
   }
 
+  /// Shows an alert dialog with the provided [title], [content], and [actions].
   void _showAlertDialog(String title, String content, List<TextButton> actions) {
     showDialog(
       context: context,
@@ -236,6 +242,7 @@ class _ExtraInfoPageState extends State<ExtraInfoPage> {
     );
   }
 
+  /// Shows a dialog with information about body parts.
   void _bodyPartInfo() {
     showDialog(
       context: context,
@@ -268,11 +275,11 @@ class _ExtraInfoPageState extends State<ExtraInfoPage> {
                 ),
                 const SizedBox(height: 16.0),
                 Text(
-                  'Arms or Hands: Basal Cell Carcinoma, Allergic Contact Dermatitis, Lichen Planus, Psoriasis, Scabies, Urticaria'
+                    'Arms or Hands: Basal Cell Carcinoma, Allergic Contact Dermatitis, Lichen Planus, Psoriasis, Scabies, Urticaria'
                 ),
                 const SizedBox(height: 16.0),
                 Text(
-                  'Legs or Feet: Basal Cell Carcinoma, Folliculitis, Melanoma, Psoriasis, Scabies'
+                    'Legs or Feet: Basal Cell Carcinoma, Folliculitis, Melanoma, Psoriasis, Scabies'
                 )
               ],
             ),

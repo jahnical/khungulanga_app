@@ -4,6 +4,7 @@ import 'package:khungulanga_app/models/patient.dart';
 import 'dermatologist.dart';
 import 'prediction.dart';
 
+/// Model class for managing diagnoses.
 class Diagnosis {
   final String imageUrl;
   final String bodyPart;
@@ -17,6 +18,18 @@ class Diagnosis {
   Dermatologist? dermatologist;
   String? extraDermInfo;
 
+  /// Constructs a new instance of the Diagnosis class.
+  /// [id] is the ID of the diagnosis.
+  /// [imageUrl] is the image URL of the diagnosis.
+  /// [bodyPart] is the body part of the diagnosis.
+  /// [itchy] is whether the diagnosis is itchy or not.
+  /// [date] is the date of the diagnosis.
+  /// [predictions] is the predictions of the diagnosis.
+  /// [patient] is the patient of the diagnosis.
+  /// [approved] is whether the diagnosis is approved or not.
+  /// [action] is the action of the diagnosis.
+  /// [dermatologist] is the dermatologist of the diagnosis.
+  /// [extraDermInfo] is the extra dermatologist information of the diagnosis.
   Diagnosis(this.id, {
     required this.imageUrl,
     required this.bodyPart,
@@ -30,6 +43,8 @@ class Diagnosis {
     this.extraDermInfo,
   });
 
+  /// Converts the Diagnosis object to a JSON map.
+  /// Returns a JSON map representing the Diagnosis.
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -46,6 +61,9 @@ class Diagnosis {
     };
   }
 
+  /// Constructs a Diagnosis object from a JSON map.
+  /// [json] is the JSON map representing the Diagnosis.
+  /// Returns a Diagnosis object.
   factory Diagnosis.fromJson(Map<String, dynamic> json) {
     return Diagnosis(
       json['id'],

@@ -6,8 +6,9 @@ import 'package:khungulanga_app/repositories/disease_repository.dart';
 import 'package:khungulanga_app/util/common.dart';
 import 'package:khungulanga_app/widgets/diseases/disease_page.dart';
 
+/// A page that displays the supported diseases.
 class DiseasesPage extends StatelessWidget {
-  const DiseasesPage({super.key});
+  const DiseasesPage({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,7 @@ class DiseasesPage extends StatelessWidget {
     );
   }
 
+  /// Builds the list of diseases.
   Widget _buildDiseasesList(List<Disease> diseases) {
     return ListView.builder(
       itemCount: diseases.length,
@@ -65,6 +67,7 @@ class DiseasesPage extends StatelessWidget {
     );
   }
 
+  /// Builds the error indicator widget.
   Widget _buildErrorIndicator(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,

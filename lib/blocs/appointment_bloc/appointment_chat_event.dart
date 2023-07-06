@@ -1,5 +1,6 @@
 part of 'appointment_chat_bloc.dart';
 
+/// Deprecated
 @immutable
 abstract class AppointmentChatEvent {}
 

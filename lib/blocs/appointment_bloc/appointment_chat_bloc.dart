@@ -18,6 +18,7 @@ import '../../models/patient.dart';
 part 'appointment_chat_event.dart';
 part 'appointment_chat_state.dart';
 
+/// Deprecated
 class AppointmentChatBloc extends Bloc<AppointmentChatEvent, AppointmentChatState> {
   final AppointmentRepository _appointmentChatRepository;
   final UserRepository _userRepository;

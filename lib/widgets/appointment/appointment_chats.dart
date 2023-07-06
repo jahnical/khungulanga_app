@@ -3,7 +3,8 @@ import 'package:khungulanga_app/models/appointment_chat.dart';
 import 'package:khungulanga_app/repositories/appointment_repository.dart';
 import 'appointment_chat_page.dart';
 
-
+/// Deprecated page.
+/// A page that displays a list of appointment chats.
 class AppointmentChats extends StatelessWidget {
   final AppointmentRepository appointmentChatRepository =
   AppointmentRepository();

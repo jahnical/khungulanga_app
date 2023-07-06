@@ -7,6 +7,8 @@ import 'package:khungulanga_app/widgets/auth/register/register_form.dart';
 
 import 'derm_register_form.dart';
 
+/// Deprecated page.
+/// A page that displays a register form for dermatologists.
 class RegisterDermPage extends StatelessWidget {
   final UserRepository userRepository;
 

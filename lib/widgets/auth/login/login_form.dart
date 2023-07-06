@@ -6,6 +6,7 @@ import 'package:khungulanga_app/repositories/user_repository.dart';
 import '../register/derm_register_page.dart';
 import '../register/register_page.dart';
 
+/// A login form.
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
 
@@ -13,11 +14,13 @@ class LoginForm extends StatefulWidget {
   State<LoginForm> createState() => _LoginFormState();
 }
 
+/// A login form state.
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
+  /// Handles Register button pressed.
   _onRegisterButtonPressed() {
     Navigator.push(
       context,
@@ -32,6 +35,7 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
+  /// Handles Login button pressed.
   _onLoginButtonPressed() {
     if (_formKey.currentState!.validate()) {
       BlocProvider.of<LoginBloc>(context).add(

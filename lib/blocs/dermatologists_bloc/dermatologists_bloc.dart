@@ -11,10 +11,11 @@ import '../../repositories/dermatologist_repository.dart';
 part 'dermatologists_event.dart';
 part 'dermatologists_state.dart';
 
-// Define the BLoC class
+/// Handles the state management for the dermatologists screen.
 class DermatologistsBloc extends Bloc<DermatologistsEvent, DermatologistsState> {
   final List<double> userLocation;
 
+  /// Constructs a [DermatologistsBloc] instance with the required dependencies.
   DermatologistsBloc({required this.userLocation}) : super(DermatologistsLoadingState());
 
   @override

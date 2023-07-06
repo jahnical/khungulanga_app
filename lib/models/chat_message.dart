@@ -3,7 +3,8 @@ import 'diagnosis.dart';
 import 'appointment.dart';
 import 'user.dart';
 
-// messages
+/// Deprecated
+/// Model class for managing chat messages.
 class ChatMessage {
   final int? id;
   final User sender;
@@ -14,6 +15,15 @@ class ChatMessage {
   final DateTime time;
   final bool seen;
 
+  /// Constructs a new instance of the ChatMessage class.
+  /// [id] is the ID of the chat message.
+  /// [sender] is the sender of the chat message.
+  /// [text] is the text of the chat message.
+  /// [chatId] is the ID of the chat.
+  /// [diagnosis] is the diagnosis of the chat message.
+  /// [appointment] is the appointment of the chat message.
+  /// [time] is the time of the chat message.
+  /// [seen] is whether the chat message is seen or not.
   ChatMessage({
     this.id,
     required this.sender,
@@ -25,6 +35,9 @@ class ChatMessage {
     required this.seen,
   });
 
+  /// Converts the ChatMessage object to a JSON map.
+  /// Returns a JSON map representing the ChatMessage.
+  /// [json] is the JSON map representing the ChatMessage.
   factory ChatMessage.fromJson(Map<String, dynamic> json) {
     return ChatMessage(
       id: json['id'],
@@ -38,6 +51,8 @@ class ChatMessage {
     );
   }
 
+  /// Converts the ChatMessage object to a JSON map.
+  /// Returns a JSON map representing the ChatMessage.
   Map<String, dynamic> toJsonMap() {
     return {
       'id': id,

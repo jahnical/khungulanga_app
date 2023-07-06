@@ -13,6 +13,7 @@ import '../../repositories/diagnosis_repository.dart';
 import '../../repositories/user_repository.dart';
 import '../slots/book_slot.dart';
 
+/// A page for viewing and editing the profile of a dermatologist.
 class DermatologistProfilePage extends StatefulWidget {
   final Dermatologist dermatologist;
   final Diagnosis? diagnosis;
@@ -24,6 +25,7 @@ class DermatologistProfilePage extends StatefulWidget {
       _DermatologistProfilePageState();
 }
 
+/// State class for the DermatologistProfilePage widget.
 class _DermatologistProfilePageState extends State<DermatologistProfilePage> {
   final _formKey = GlobalKey<FormState>();
   final _phoneNumberController = TextEditingController();
@@ -47,12 +49,14 @@ class _DermatologistProfilePageState extends State<DermatologistProfilePage> {
     _loadClinics();
   }
 
+  /// Toggles the editing state of the profile.
   void _toggleEditing() {
     setState(() {
       _isEditing = !_isEditing;
     });
   }
 
+  /// Checks if any fields have been updated.
   void _checkFieldsUpdated() {
     if (_phoneNumberController.text != widget.dermatologist.phoneNumber ||
         _emailController.text != widget.dermatologist.email ||
@@ -69,6 +73,7 @@ class _DermatologistProfilePageState extends State<DermatologistProfilePage> {
     }
   }
 
+  /// Saves the changes made to the profile.
   void _saveChanges() async {
     bool confirmed = await showDialog(
       context: context,
@@ -310,10 +315,12 @@ class _DermatologistProfilePageState extends State<DermatologistProfilePage> {
     );
   }
 
+  /// Checks if the current user is a patient.
   bool isPatient(BuildContext context) {
     return RepositoryProvider.of<UserRepository>(context).patient != null;
   }
 
+  /// Loads the list of clinics from the repository.
   void _loadClinics() {
     final repo = RepositoryProvider.of<ClinicRepository>(context);
     repo.fetchClinics().then((clinics) {
@@ -327,6 +334,7 @@ class _DermatologistProfilePageState extends State<DermatologistProfilePage> {
     });
   }
 
+  /// Sends the results to the dermatologist.
   _sendResults(BuildContext context, Dermatologist dermatologist) {
     showDialog(
       context: context,
@@ -386,6 +394,7 @@ class _DermatologistProfilePageState extends State<DermatologistProfilePage> {
     );
   }
 
+  /// Update the diagnosis with the dermatologist and additional info.
   Future<void> _updateDiagnosis(
       BuildContext context, Dermatologist dermatologist, String additionalInfo) async {
     setState(() {
@@ -420,6 +429,7 @@ class _DermatologistProfilePageState extends State<DermatologistProfilePage> {
     }
   }
 
+  /// Navigates to the book slot page.
   _bookAppointment(BuildContext context, Dermatologist dermatologist) {
     Navigator.push(context, MaterialPageRoute(builder: (_) {
       return BookSlotPage(

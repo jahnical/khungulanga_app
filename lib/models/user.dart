@@ -1,5 +1,4 @@
-
-
+/// User model class
 class User {
   String username;
   String email;
@@ -8,6 +7,7 @@ class User {
   String lastName;
   int id;
 
+  /// Constructs a new instance of the User class.
   User({
     required this.username,
     required this.email,
@@ -17,6 +17,10 @@ class User {
     required this.id,
   });
 
+  /// Constructs a User object from a JSON map.
+  ///
+  /// [json] is the JSON map representing the User.
+  /// Returns a User object.
   factory User.fromJson(Map<String, dynamic> json) {
     return User(
       id: json['id'],
@@ -28,6 +32,9 @@ class User {
     );
   }
 
+  /// Converts the User object to a JSON map.
+  ///
+  /// Returns a JSON map representing the User.
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['username'] = username;

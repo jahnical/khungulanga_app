@@ -12,6 +12,7 @@ import '../../repositories/diagnosis_repository.dart';
 part 'diagnosis_event.dart';
 part 'diagnosis_state.dart';
 
+/// The bloc responsible for managing the diagnosis feature's state and events.
 class DiagnosisBloc extends Bloc<DiagnosisEvent, DiagnosisState> {
   final DiagnosisRepository _repository;
 

@@ -8,10 +8,11 @@ import '../../repositories/disease_repository.dart';
 part 'disease_event.dart';
 part 'disease_state.dart';
 
-// Bloc
+/// Handles the state management for the disease screen.
 class DiseaseBloc extends Bloc<DiseaseEvent, DiseaseState> {
   final DiseaseRepository diseaseRepository;
 
+  /// Constructs a [DiseaseBloc] instance with the required dependencies.
   DiseaseBloc(this.diseaseRepository) : super(DiseasesLoadingState());
 
   @override

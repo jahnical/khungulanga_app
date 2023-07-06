@@ -11,6 +11,7 @@ import 'package:khungulanga_app/widgets/slots/derm_slots.dart';
 
 import '../../repositories/diagnosis_repository.dart';
 
+/// A widget that displays a list of dermatologists.
 class DermatologistList extends RefreshableWidget {
   final List<double> userLocation;
   final Diagnosis? diagnosis;
@@ -24,6 +25,7 @@ class DermatologistList extends RefreshableWidget {
   _DermatologistListState createState() => _DermatologistListState();
 }
 
+/// The state of the dermatologist list widget.
 class _DermatologistListState extends RefreshableWidgetState<DermatologistList> {
   bool _isUpdating = false;
   FilterType filterType = FilterType.All;
@@ -40,6 +42,7 @@ class _DermatologistListState extends RefreshableWidgetState<DermatologistList> 
     }
   }
 
+  /// Handles the filter button.
   void _applyFilter(FilterType type, List<Dermatologist> dermatologists) {
     setState(() {
       filterType = type;
@@ -53,12 +56,14 @@ class _DermatologistListState extends RefreshableWidgetState<DermatologistList> 
     });
   }
 
+  /// Handles the refresh button. This method is called when the user pulls down the list.
   Widget _buildLoadingIndicator() {
     return Center(
       child: CircularProgressIndicator(),
     );
   }
 
+  /// Builds the error widget. This widget is displayed when an error occurs.
   Widget _buildError(BuildContext context, String errorMessage) {
     return Center(
       child: Column(
@@ -77,6 +82,7 @@ class _DermatologistListState extends RefreshableWidgetState<DermatologistList> 
     );
   }
 
+  /// Navigates to appointment booking screen.
   void _bookAppointment(BuildContext context, Dermatologist dermatologist) {
     // Code to navigate to appointment chat screen
     Navigator.push(context, MaterialPageRoute(builder: (_) {
@@ -87,6 +93,7 @@ class _DermatologistListState extends RefreshableWidgetState<DermatologistList> 
     }));
   }
 
+  /// Navigates to dermatologist profile screen.
   void _viewDetails(BuildContext context, Dermatologist dermatologist) {
     Navigator.push(context, MaterialPageRoute(builder: (_) {
       return DermatologistProfilePage(
@@ -153,6 +160,7 @@ class _DermatologistListState extends RefreshableWidgetState<DermatologistList> 
 );
   }
 
+  /// Builds the dermatologists list.
   Widget _buildDermatologistsList(
       List<Dermatologist> dermatologists, BuildContext context) {
     return ListView.builder(
@@ -213,6 +221,7 @@ class _DermatologistListState extends RefreshableWidgetState<DermatologistList> 
     );
   }
 
+  /// Handles sending of results to dermatologist.
   _sendResults(BuildContext context, Dermatologist dermatologist) {
     showDialog(
       context: context,
@@ -272,6 +281,7 @@ class _DermatologistListState extends RefreshableWidgetState<DermatologistList> 
     );
   }
 
+  /// Updates the diagnosis with the dermatologist and additional info.
   Future<void> _updateDiagnosis(
       BuildContext context, Dermatologist dermatologist, String additionalInfo) async {
     setState(() {

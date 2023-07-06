@@ -7,6 +7,7 @@ import 'dermatologist.dart';
 import 'diagnosis.dart';
 import 'patient.dart';
 
+/// Model class for managing appointments.
 class Appointment {
   final int? id;
   Dermatologist dermatologist;
@@ -24,6 +25,23 @@ class Appointment {
   Diagnosis? diagnosis;
   Slot? slot;
 
+  /// Constructs a new instance of the Appointment class.
+  /// [id] is the ID of the appointment.
+  /// [dermatologist] is the dermatologist of the appointment.
+  /// [patient] is the patient of the appointment.
+  /// [bookDate] is the date the appointment was booked.
+  /// [appoTime] is the date the appointment is scheduled for.
+  /// [done] is whether the appointment is done or not.
+  /// [duration] is the duration of the appointment.
+  /// [cost] is the cost of the appointment.
+  /// [patientRemoved] is the date the patient was removed from the appointment.
+  /// [dermatologistRemoved] is the date the dermatologist was removed from the appointment.
+  /// [patientCancelled] is the date the patient cancelled the appointment.
+  /// [dermatologistCancelled] is the date the dermatologist cancelled the appointment.
+  /// [extraInfo] is the extra information of the appointment.
+  /// [diagnosis] is the diagnosis of the appointment.
+  /// [slot] is the slot of the appointment.
+  /// Returns a new instance of the Appointment class.
   Appointment({
     this.id,
     required this.dermatologist,
@@ -42,6 +60,9 @@ class Appointment {
     this.slot
   });
 
+  /// Creates an Appointment from json.
+  /// [json] is the JSON map to convert.
+  /// Returns a Appointment.
   factory Appointment.fromJson(Map<String, dynamic> json) {
     return Appointment(
       id: json['id'],
@@ -62,6 +83,8 @@ class Appointment {
     );
   }
 
+  /// Converts an Appointment to json.
+  /// Returns a JSON map.
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -82,6 +105,7 @@ class Appointment {
     };
   }
 
+  /// Returns the Appointment with copied values.
   Appointment copyWith({
     int? id,
     Dermatologist? dermatologist,

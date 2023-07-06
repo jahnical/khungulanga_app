@@ -10,10 +10,14 @@ import '../api_connection/api_client.dart';
 import '../api_connection/con_options.dart';
 import '../util/common.dart';
 
+/// Repository class for managing diagnoses.
 class DiagnosisRepository {
   final Dio _dio = APIClient.dio;
   List<Diagnosis> diagnoses = [];
 
+  /// Fetches a list of all diagnoses.
+  ///
+  /// Returns a list of [Diagnosis] objects representing the diagnoses.
   Future<List<Diagnosis>> fetchDiagnoses() async {
     try {
       final response = await _dio.get("$DIAGNOSIS_URL/", options: getOptions());
@@ -26,6 +30,11 @@ class DiagnosisRepository {
     }
   }
 
+  /// Performs a diagnosis based on the provided data.
+  ///
+  /// [data] represents the data for the diagnosis.
+  /// [cancelToken] represents the cancel token for cancelling the request.
+  /// Returns a [Diagnosis] object representing the diagnosis result.
   Future<Diagnosis> diagnose(FormData data, CancelToken cancelToken) async {
     final dio = Dio();
 
@@ -33,10 +42,10 @@ class DiagnosisRepository {
 
     try {
       final Response response = await dio.post(
-        "$DIAGNOSIS_URL/",
-        options: postOptions(),
-        data: data,
-        cancelToken: cancelToken
+          "$DIAGNOSIS_URL/",
+          options: postOptions(),
+          data: data,
+          cancelToken: cancelToken
       );
       if (response.statusCode == 200) {
         return Diagnosis.fromJson(response.data);
@@ -57,6 +66,10 @@ class DiagnosisRepository {
     }
   }
 
+  /// Updates a diagnosis.
+  ///
+  /// [diagnosis] represents the diagnosis to be updated.
+  /// Returns a [Diagnosis] object representing the updated diagnosis.
   Future<Diagnosis> updateDiagnosis(Diagnosis diagnosis) async {
     final response = await _dio.put('$DIAGNOSIS_URL/${diagnosis.id}', options: putOptions(), data: jsonEncode(diagnosis.toJson()));
 
@@ -69,16 +82,24 @@ class DiagnosisRepository {
     }
   }
 
+  /// Deletes a diagnosis.
+  ///
+  /// [diagnosis] represents the diagnosis to be deleted.
+  /// Returns `true` if the deletion is successful.
   Future<bool> delete(Diagnosis diagnosis) async {
     try {
       await _dio.delete("$DIAGNOSIS_URL/${diagnosis.id}", options: getOptions());
       diagnoses.remove(diagnosis);
       return true;
-    } on DioError catch (e) {
+    } on DioError catch (e){
       throw Exception(e.message);
     }
   }
 
+  /// Updates a prediction.
+  ///
+  /// [prediction] represents the prediction to be updated.
+  /// Returns a [Prediction] object representing the updated prediction.
   Future<Prediction> updatePrediction(Prediction prediction) async {
     final response = await _dio.put('$PREDICTION_URL/${prediction.id}/', options: putOptions(), data: jsonEncode(prediction.toJson()));
 
@@ -91,6 +112,10 @@ class DiagnosisRepository {
     }
   }
 
+  /// Retrieves a diagnosis by its ID.
+  ///
+  /// [id] represents the ID of the diagnosis.
+  /// Returns a [Diagnosis] object representing the diagnosis.
   getDiagnosis(int id) {
     return diagnoses.firstWhere((diagnosis) => diagnosis.id == id);
   }

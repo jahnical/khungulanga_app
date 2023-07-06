@@ -15,7 +15,7 @@ import '../profile/patient_profile.dart';
 import '../refreshable_widget.dart';
 import '../scan/scan_page.dart';
 
-// home page
+/// The home page widget.
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -23,16 +23,24 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+/// The state class for the HomePage widget.
 class _HomePageState extends State<HomePage> {
   final List<String> _titles = ['History', 'Scan', 'Dermatologists'];
 
-  final List<Widget> _pages = [HistoryPage(), ScanPage(), DermatologistList(userLocation: [0.0, 0.0],),];
+  final List<Widget> _pages = [
+    HistoryPage(),
+    ScanPage(),
+    DermatologistList(
+      userLocation: [0.0, 0.0],
+    ),
+  ];
 
   late final NotificationRepository? notificationRepository;
 
   @override
   void initState() {
-    notificationRepository = RepositoryProvider.of<NotificationRepository?>(context);
+    notificationRepository =
+        RepositoryProvider.of<NotificationRepository?>(context);
     super.initState();
   }
 
@@ -46,11 +54,12 @@ class _HomePageState extends State<HomePage> {
               actions: [
                 IconButton(
                   icon: StreamBuilder<List<NotificationModel>>(
-                    stream: NotificationRepository.notificationsStream,
-                    builder: (context, snapshot) {
-                      return Icon(notificationRepository?.hasUnread() == true? Icons.notifications_active : Icons.notifications);
-                    }
-                  ),
+                      stream: NotificationRepository.notificationsStream,
+                      builder: (context, snapshot) {
+                        return Icon(notificationRepository?.hasUnread() == true
+                            ? Icons.notifications_active
+                            : Icons.notifications);
+                      }),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => NotificationsPage(),
@@ -70,10 +79,10 @@ class _HomePageState extends State<HomePage> {
             body: _pages[_getCurrentIndex()],
             bottomNavigationBar: _buildBottomNavigation(),
           );
-        }
-    );
+        });
   }
 
+  /// Builds the drawer widget for the side navigation.
   _buildDrawer() {
     return Drawer(
       child: ListView(
@@ -85,12 +94,12 @@ class _HomePageState extends State<HomePage> {
             ),
             child: const Center(
               child: Text(
-                  'KhunguLanga',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  )
+                'KhunguLanga',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ),
@@ -213,6 +222,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   final events = [NavigateToHistory(), NavigateToScan(), NavigateToDermatologists()];
+
+  /// Builds the bottom navigation bar.
   _buildBottomNavigation() {
     return BottomNavigationBar(
       currentIndex: _getCurrentIndex(),
@@ -241,8 +252,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  /// Returns the current index of the bottom navigation bar.
   int _getCurrentIndex() {
-    return context.read<HomeNavigationBloc>().state is HomeNavigationHistory? 0
-        : context.read<HomeNavigationBloc>().state is HomeNavigationScan? 1 : 2;
+    return context.read<HomeNavigationBloc>().state is HomeNavigationHistory
+        ? 0
+        : context.read<HomeNavigationBloc>().state is HomeNavigationScan
+        ? 1
+        : 2;
   }
 }

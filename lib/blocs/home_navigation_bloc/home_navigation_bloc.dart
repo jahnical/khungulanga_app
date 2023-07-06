@@ -6,6 +6,7 @@ import 'package:meta/meta.dart';
 part 'home_navigation_event.dart';
 part 'home_navigation_state.dart';
 
+/// Bloc that manages the state of the home navigation.
 class HomeNavigationBloc extends Bloc<HomeNavigationEvent, HomeNavigationState> {
   HomeNavigationBloc() : super(HomeNavigationHistory()) {
     on<HomeNavigationEvent>((event, emit) {

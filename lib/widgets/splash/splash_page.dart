@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// A splash screen page displayed while the app is loading.
 class SplashPage extends StatelessWidget {
+  /// Constructs a SplashPage.
   const SplashPage({Key? key});
 
   @override

@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:khungulanga_app/blocs/diagnosis_bloc/diagnosis_bloc.dart';
 import 'package:khungulanga_app/widgets/diagnosis/diagnoses_list.dart';
 import 'package:khungulanga_app/widgets/refreshable_widget.dart';
-
 import '../../repositories/notifications_repository.dart';
 
+/// A page that displays the results of the diagnosis.
 class ResultsPage extends RefreshableWidget {
   ResultsPage({Key? key}) : super(key: key);
 
@@ -23,11 +23,14 @@ class _ResultsPageState extends RefreshableWidgetState<ResultsPage> {
     _diagnosisBloc.add(FetchDiagnoses()); // Initial load of diagnoses
 
     final notRepo = RepositoryProvider.of<NotificationRepository>(context);
+
+    // Listen for notification updates and fetch diagnoses if there are unread diagnosis feedback
     NotificationRepository.notificationsStream?.listen((event) {
       if (notRepo.hasUnreadDiagnosisFeedback()) _diagnosisBloc.add(FetchDiagnoses());
     });
   }
 
+  /// Triggers a refresh of the diagnoses.
   Future<void> _refreshDiagnoses() async {
     _diagnosisBloc.add(FetchDiagnoses()); // Trigger reload of diagnoses
   }

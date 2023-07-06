@@ -5,9 +5,13 @@ import 'package:khungulanga_app/api_connection/con_options.dart';
 
 import '../api_connection/api_client.dart';
 
+/// Repository class for managing diseases.
 class DiseaseRepository {
   final Dio _dio = APIClient.dio;
 
+  /// Retrieves a list of all diseases.
+  ///
+  /// Returns a list of [Disease] objects representing the diseases.
   Future<List<Disease>> getDiseases() async {
     final response = await _dio.get('$DISEASES_URL/', options: getOptions());
     final diseasesJson = response.data as List<dynamic>;
@@ -17,6 +21,10 @@ class DiseaseRepository {
     return diseases;
   }
 
+  /// Retrieves a disease by its ID.
+  ///
+  /// [id] represents the ID of the disease.
+  /// Returns a [Disease] object representing the disease.
   Future<Disease> getDiseaseById(int id) async {
     final response = await _dio.get('$DISEASES_URL/$id/', options: getOptions());
     final diseaseJson = response.data as Map<String, dynamic>;
@@ -37,10 +45,16 @@ class DiseaseRepository {
         data: jsonEncode(disease.toJson()));
   }*/
 
+  /// Deletes a disease by its ID.
+  ///
+  /// [id] represents the ID of the disease to be deleted.
   Future<void> deleteDisease(int id) async {
     await _dio.delete('$DISEASES_URL/$id');
   }
 
+  /// Retrieves a list of severe diseases.
+  ///
+  /// Returns a list of [Disease] objects representing the severe diseases.
   Future<List<Disease>> getSevereDiseases() async {
     final response = await _dio.get('$DISEASES_URL/severe', options: getOptions());
     final diseasesJson = response.data as List<dynamic>;

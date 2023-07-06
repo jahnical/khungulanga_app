@@ -9,6 +9,7 @@ import 'package:khungulanga_app/widgets/dermatologists/dermatologists_page.dart'
 import 'package:khungulanga_app/widgets/diseases/disease_page.dart';
 import '../../blocs/diagnosis_bloc/diagnosis_bloc.dart';
 
+/// A page for viewing a diagnosis.
 class DiagnosisPage extends StatefulWidget {
   final Diagnosis diagnosis;
   final bool fromAppointment;
@@ -20,6 +21,7 @@ class DiagnosisPage extends StatefulWidget {
   _DiagnosisPageState createState() => _DiagnosisPageState(this.diagnosis, this.fromAppointment);
 }
 
+/// The state for the DiagnosisPage.
 class _DiagnosisPageState extends State<DiagnosisPage> {
   bool _isDeleting = false;
   final Diagnosis diagnosis;
@@ -146,6 +148,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
     );
   }
 
+  /// Shows dialog to confirm deletion of a diagnosis.
   void _confirmDelete(Diagnosis diagnosis, BuildContext context, DiagnosisBloc bloc) async {
     setState(() {
       _isDeleting = false;
@@ -185,6 +188,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
     }
   }
 
+  /// Returns an ellipsized version of the description.
   String _getEllipsizedDescription(String description) {
     if (description.length > 100) {
       return description.substring(0, 100) + '...';
@@ -193,6 +197,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
     }
   }
 
+  /// Shows the main prediction. Either the first approved prediction or the first prediction.
   _mainPrediction(Prediction prediction, BuildContext context) {
     return Column(
       children: [
@@ -230,21 +235,6 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
             style: TextStyle(fontSize: 16),
           ),
         ),
-        /*Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            ViewMoreButton(onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) => DiseaseDetailPage(
-                    disease: prediction.disease,
-                  ),
-                ),
-              );
-            }),
-            SizedBox(width: 16),
-          ],
-        ),*/
         SizedBox(height: 16.0),
         if (diagnosis.approved)
           Column(
@@ -283,6 +273,7 @@ class _DiagnosisPageState extends State<DiagnosisPage> {
     );
   }
 
+  /// Shows the other possible predictions.
   _infoForNotApprove() {
     return Column(
       children: [
@@ -421,6 +412,7 @@ class ViewMoreButton extends StatelessWidget {
   }
 }
 
+/// Shows the treatment recommendation and doctor notes.
 class DiagnosisAction extends StatelessWidget {
   final Diagnosis diagnosis;
 

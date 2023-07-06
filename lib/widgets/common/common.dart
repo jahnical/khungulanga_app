@@ -2,12 +2,14 @@ import '../../models/slot.dart';
 
 export './loading_indicator.dart';
 
+/// Formats a [DateTime] object to a string.
 String formatStartTime(DateTime startTime) {
   String hour = startTime.hour.toString().padLeft(2, '0');
   String minute = startTime.minute.toString().padLeft(2, '0');
   return '$hour:$minute';
 }
 
+/// Converts a string to a corresponding day number.
 int getDayNumber(String day) {
   switch (day) {
     case 'Monday':
@@ -29,6 +31,7 @@ int getDayNumber(String day) {
   }
 }
 
+/// Calculates the next date of a slot.
 DateTime calculateNextSlotDate(Slot slot) {
   var now = DateTime.now();
   var nextSlotDate = DateTime.now().copyWith(hour: slot.startTime.hour, minute: slot.startTime.minute);

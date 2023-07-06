@@ -5,15 +5,19 @@ import 'package:khungulanga_app/widgets/common/common.dart';
 import 'package:khungulanga_app/models/slot.dart';
 import 'package:khungulanga_app/repositories/slot_repository.dart';
 
+/// A page for creating or editing a slot.
 class SlotDetailPage extends StatefulWidget {
   final Slot? slot;
   final Future<void> Function() callback;
+
+  /// Constructs a SlotDetailPage.
   const SlotDetailPage({Key? key, this.slot, required this.callback}) : super(key: key);
 
   @override
   _SlotDetailPageState createState() => _SlotDetailPageState();
 }
-// slot details
+
+/// The state for the SlotDetailPage.
 class _SlotDetailPageState extends State<SlotDetailPage> {
   final _formKey = GlobalKey<FormState>();
   late TimeOfDay _startTime;
@@ -38,6 +42,7 @@ class _SlotDetailPageState extends State<SlotDetailPage> {
     }
   }
 
+  /// Shows a time picker dialog.
   Future<void> _showTimePicker() async {
     final TimeOfDay? selectedTime = await showTimePicker(
       context: context,
@@ -51,6 +56,7 @@ class _SlotDetailPageState extends State<SlotDetailPage> {
     }
   }
 
+  /// Saves the slot.
   void _saveSlot() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -222,8 +228,7 @@ class _SlotDetailPageState extends State<SlotDetailPage> {
               SizedBox(height: 32.0),
               ElevatedButton(
                 onPressed: _saveSlot,
-                child: Text(
-                    widget.slot != null ? 'Save Changes' : 'Create Slot'),
+                child: Text(widget.slot != null ? 'Save Changes' : 'Create Slot'),
               ),
             ],
           ),

@@ -14,6 +14,10 @@ class AppointmentList extends RefreshableWidget {
   final bool completed;
   bool cancelled = false;
 
+  /// Constructs an instance of [AppointmentList].
+  ///
+  /// [completed] specifies whether to display completed appointments.
+  /// [cancelled] specifies whether to display cancelled appointments (default is false).
   AppointmentList({required this.completed, this.cancelled = false});
 
   @override
@@ -36,6 +40,7 @@ class _AppointmentListState extends RefreshableWidgetState<AppointmentList> {
     });
   }
 
+  /// Loads the appointments.
   void _loadAppointments() {
     setState(() {
       _appointmentsFuture = widget.appointmentRepository.getAppointments(
@@ -46,6 +51,7 @@ class _AppointmentListState extends RefreshableWidgetState<AppointmentList> {
     });
   }
 
+  /// Builds the list of appointment widgets.
   List<Widget> _buildAppointmentList(List<Appointment> appointments) {
     List<Widget> appointmentWidgets = [];
 
@@ -187,6 +193,7 @@ class _AppointmentListState extends RefreshableWidgetState<AppointmentList> {
     );
   }
 
+  /// Displays a confirmation dialog for removing the appointment.
   Future<void> showRemoveConfirmationDialog(Appointment appointment) async {
     return showDialog<void>(
       context: context,
@@ -215,6 +222,7 @@ class _AppointmentListState extends RefreshableWidgetState<AppointmentList> {
     );
   }
 
+  /// Displays a confirmation dialog for cancelling the appointment.
   Future<void> showCancelConfirmationDialog(Appointment appointment) async {
     return showDialog<void>(
       context: context,
@@ -243,6 +251,7 @@ class _AppointmentListState extends RefreshableWidgetState<AppointmentList> {
     );
   }
 
+  /// Updates the appointment by marking it as removed or cancelled.
   Future<void> updateAppointment(Appointment appointment, bool isRemove) async {
     setState(() {
       _isUpdating = true;
@@ -251,7 +260,7 @@ class _AppointmentListState extends RefreshableWidgetState<AppointmentList> {
     try {
       if (isRemove) {
         if (_isPatient) {
-          appointment.patientRemoved = DateTime.now();
+          appointment.patientRemoved =DateTime.now();
         } else {
           appointment.dermatologistRemoved = DateTime.now();
         }

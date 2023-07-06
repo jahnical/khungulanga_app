@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:khungulanga_app/models/disease.dart';
 import 'package:khungulanga_app/util/common.dart';
 
+/// A page that displays detailed information about a specific disease.
 class DiseaseDetailPage extends StatelessWidget {
   final Disease disease;
 
@@ -17,6 +18,7 @@ class DiseaseDetailPage extends StatelessWidget {
     );
   }
 
+  /// Builds the body of the disease detail page.
   Widget _buildBody() {
     return SingleChildScrollView(
       padding: EdgeInsets.all(16.0),

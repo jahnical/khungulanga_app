@@ -1,11 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:khungulanga_app/models/auth_user.dart';
 import 'package:khungulanga_app/api_connection/endpoints.dart';
 
-
+/// Retrieves a token for the specified user login credentials.
+/// Returns a [Token] object containing the token information.
+/// Throws an exception if the request fails.
 Future<Token> getToken(UserLogin userLogin) async {
   final dio = Dio();
 
@@ -27,6 +30,8 @@ Future<Token> getToken(UserLogin userLogin) async {
   }
 }
 
+/// Registers a user with the provided registration information.
+/// Throws an exception if the registration fails.
 Future<void> registerUser(UserRegister userRegister) async {
   final dio = Dio();
 
@@ -48,6 +53,9 @@ Future<void> registerUser(UserRegister userRegister) async {
   }
 }
 
+/// Registers a dermatologist user with the provided registration information.
+/// The qualification document is sent as a multipart file.
+/// Throws an exception if the registration fails.
 Future<void> registerDermUser(DermUserRegister userRegister) async {
   final dio = Dio();
 
@@ -69,4 +77,3 @@ Future<void> registerDermUser(DermUserRegister userRegister) async {
     throw Exception(response.data.toString());
   }
 }
-
